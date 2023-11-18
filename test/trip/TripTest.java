@@ -1,0 +1,14 @@
+package trip;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class TripTest {
+
+	@Test
+	void test() {
+		fail("Not yet implemented");
+	}
+
+}
