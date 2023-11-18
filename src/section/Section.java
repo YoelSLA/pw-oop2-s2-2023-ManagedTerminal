@@ -34,4 +34,8 @@ public class Section {
 		return time;
 	}
 
+	public boolean isItHasATerminal(Terminal terminal) {
+		return destiny.equals(terminal) || getOrigin().equals(terminal);
+	}
+
 }
