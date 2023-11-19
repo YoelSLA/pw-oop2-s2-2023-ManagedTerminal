@@ -1,6 +1,6 @@
 package phase;
 
-public final class Departing extends Phase {
+public final class Departing implements Phase {
 
 	@Override
 	public Outbound nextPhase() {
