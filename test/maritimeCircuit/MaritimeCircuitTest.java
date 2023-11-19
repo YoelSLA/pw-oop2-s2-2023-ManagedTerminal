@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import section.Section;
-import terminal.ManagedTerminal;
 import terminal.Terminal;
 
 class MaritimeCircuitTest {
@@ -25,9 +24,9 @@ class MaritimeCircuitTest {
 
 	@BeforeEach
 	void setUp() {
-		terminalBuenosAires = mock(ManagedTerminal.class);
-		terminalMontevideo = mock(ManagedTerminal.class);
-		terminalRioDeJaneiro = mock(ManagedTerminal.class);
+		terminalBuenosAires = mock(Terminal.class);
+		terminalMontevideo = mock(Terminal.class);
+		terminalRioDeJaneiro = mock(Terminal.class);
 		sectionBuenosAiresMontevideo = new Section(terminalBuenosAires, terminalMontevideo, 50.0, Duration.ofHours(2));
 		sectionMontevideoBuenosAires = new Section(terminalMontevideo, terminalBuenosAires, 20.0, Duration.ofHours(4));
 
