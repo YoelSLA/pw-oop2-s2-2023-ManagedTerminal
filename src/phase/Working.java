@@ -7,3 +7,4 @@ public final class Working implements Phase {
 		return new Departing();
 	}
 }
+

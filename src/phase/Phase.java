@@ -8,8 +8,7 @@ package phase;
  * Elegimos implementar las clases hijas como 'final' ya que en este dominio no nos interesa que los estados tengan herencia
  * */
 
-
 public interface Phase {
-	
+
 	public abstract Phase nextPhase();
 }

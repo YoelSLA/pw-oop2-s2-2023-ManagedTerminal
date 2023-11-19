@@ -7,3 +7,4 @@ public final class Departing implements Phase {
 		return new Outbound();
 	}
 }
+
