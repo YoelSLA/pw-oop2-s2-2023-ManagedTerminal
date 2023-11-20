@@ -1,46 +1,48 @@
 package service;
 
-import load.Load;
+import order.Order;
 
+/**
+ * Clase que representa al servicio de Lavado.
+ * 
+ * Hereda de la clase abstracta Service.
+ * 
+ * @author Gabriela Fascetta
+ */
 public class Washed extends Service {
 	
-	/**
-	 * Clase que representa al servicio de Lavado
-	 * aplicado a una carga en una terminal.
-	 * 
-	 * Hereda de la clase abstracta Service.
-	 * 
-	 * @author Gabriela Fascetta
-	 */
+	//en metros cubicos
+	private final int maxVolumePerMinimumFee = 70;
 	
 	/**
 	 * Constructor de la clase Lavado.
 	 * 
 	 * Crea una instancia de la clase Lavado.
 	 * 
-	 * @param price precio fijo de referencia por la aplicación del servicio Lavado.
-	 * k
-	 * @author Gabriela Fascetta
+	 * @param order la orden que conoce la carga a la que se aplicará el servicio. Una instancia tipo Order.
 	 */
-
-	public Washed(Double price) {
+	public Washed(Double price, Double extraPrice) {
 		super(price);
+		this.secondPrice = extraPrice;
 	}
 	
 	/**
-	 *getPriceTo(load)
+	 *getPriceFor(order)
 	 *
 	 * Permite calcular el precio total que se cobrará al servicio de Lavado
-	 * aplicado a determinada carga.
+	 * aplicado por una orden dada a determinada carga.
 	 *
-	 * @param load la carga a la que se aplicará el servicio. Una instancia de tipo Load.
-	 * 
-	 * @author Gabriela Fascetta
+	 * @param order la orden que conoce la carga a la que se aplicará el servicio. Una instancia tipo Order.
 	 */
-	
 	@Override
-	public Double getPriceTo(Load load) {
-		return 0.0; //TODO: implementar!
+	public Double getPriceFor(Order order) {
+		if (order.getLoadVolume() <= maxVolumePerMinimumFee) {
+			return price;
+		} else return secondPrice;
+	}
+
+	public Double getBigVolumePrice() {
+		return secondPrice;
 	}
 
 }

@@ -69,4 +69,12 @@ public abstract class Order {
 		this.dateTruck = dateTruck;
 	}
 
+	public Double getLoadEnergyConsumption() {
+		return load.getEnergyConsumption();
+	}
+	
+	public Double getLoadVolume() {
+		return load.getVolume();
+	}
+
 }

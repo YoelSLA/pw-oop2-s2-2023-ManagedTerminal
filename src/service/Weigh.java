@@ -1,49 +1,43 @@
 package service;
 
 import load.Load;
+import order.Order;
 
+/**
+ * Clase que representa al servicio de pesado.
+ * 
+ * Hereda de la clase abstracta Service.
+ * 
+ * @author Gabriela Fascetta
+ */
 public class Weigh extends Service {
-	/**
-	 * Clase que representa al servicio de pesado
-	 * aplicado a una carga en una terminal.
-	 * 
-	 * Hereda de la clase abstracta Service.
-	 * 
-	 * @author Gabriela Fascetta
-	 */
 	
 	/**
 	 * Constructor de la clase Pesado.
 	 * 
 	 * Crea una instancia de la clase Pesado.
 	 * 
-	 * @param price precio fijo de referencia por kilo/tonelada?.
-	 * k
-	 * @author Gabriela Fascetta
+	 * @param price precio fijo de referencia por tonelada;
 	 */
-	
 	public Weigh(Double price) {
 		super(price);
 	}
-	
+		
+	public Double weighOn(Load load) {
+		return load.getWeight();
+	}
+
 	/**
 	 *getPriceTo(load)
 	 *
 	 * Permite calcular el precio total que se cobrará al servicio de Pesado
-	 * aplicado a determinada carga.
+	 * aplicado a una carga dada.
 	 *
-	 * @param load la carga a la que se aplicará el servicio. Una instancia de tipo Load.
+	 * @param order la orden que conoce la carga a la que se aplicará el servicio. Una instancia tipo Order.
 	 * 
-	 * @author Gabriela Fascetta
 	 */
-	
 	@Override
-	public Double getPriceTo(Load load) {
-		return 0.0; //TODO: implementar!
+	public Double getPriceFor(Order order) {
+		return price;
 	}
-	
-	public Double weighOn(Load load) {
-		return 0.0; //TODO: implementar!
-	}
-
 }

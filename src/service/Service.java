@@ -1,6 +1,7 @@
 package service;
 
 import load.Load;
+import order.Order;
 
 /**
  * Clase que representa un servicio.
@@ -15,22 +16,28 @@ import load.Load;
 public abstract class Service {
 
 	protected Double price;
+	protected Double secondPrice;
+	
+	public Service(Double price, Double extraPrice) {
+		this.price = price;
+		this.secondPrice = 0.0;
+	}
 	
 	public Service(Double price) {
-		// DUDA: es necesario? si es una clase abstracta que no se instancia
 		this.price = price;
 	}
+
+	public Double getPrice() {return price;}
 	
 	/**
 	 * Este método es necesario que sea implementado por las subclases.
 	 *
 	 * Permite calcular el precio total que se cobrará al servicio aplicado a determinada carga.
 	 *
-	 * @param load la carga a la que se aplicará el servicio. Una instancia de tipo Load.
+	 * @param order la orden que conoce la carga a la que se aplicará el servicio. Una instancia tipo Order.
 	 * 
-	 * @author Gabriela Fascetta
 	 */
 	
-	public abstract Double getPriceTo(Load load);
+	public abstract Double getPriceFor(Order order);
 
 }

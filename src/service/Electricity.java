@@ -1,23 +1,21 @@
 package service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import order.Order;
 
-import load.Load;
-
+/**
+ * Clase que representa al servicio de electricidad.
+ * 
+ * Hereda de la clase abstracta Service e implementa metodo getPriceTo(unaLoad).
+ * 
+ * @author Gabriela Fascetta
+ */
 public class Electricity extends Service{
-	/**
-	 * Clase que representa al servicio de electricidad.
-	 * 
-	 * Hereda de la clase abstracta Service.
-	 * 
-	 * @author Gabriela Fascetta
-	 */
+		
 	
-	
-	private Date startConnection;
-
-
-	private Date endConnection;	
+	private LocalDateTime startConnection;
+	private LocalDateTime endConnection;	
 	
 	
 	/**
@@ -29,41 +27,35 @@ public class Electricity extends Service{
 	 * @param startConnection  La fecha en que se conecta la carga a la terminal.
 	 * @param endConnection La fecha en que se desconecta la carga de la terminal.
 	 *
-	 * @author Gabriela Fascetta
 	 */
-	
-	public Electricity(Double price, Date startConnection, Date endConnection) {
+	public Electricity(Double price, LocalDateTime startConnection, LocalDateTime endConnection) {
 		super(price);
 		this.startConnection = startConnection;
 		this.endConnection = endConnection;
 	}
 	
 	/**
-	 *getPriceTo(load)
+	 *getPriceFor(order)
 	 *
 	 * Permite calcular el precio total que se cobrará al servicio de electricidad
-	 * aplicado a determinada carga.
+	 * aplicado a la carga dada.
 	 *
-	 * @param load la carga a la que se aplicará el servicio. Una instancia de tipo Load.
+	 * @param order la orden que conoce la carga a la que se aplicará el servicio. Una instancia tipo Order.
 	 * 
-	 * @author Gabriela Fascetta
 	 */
-	
 	@Override
-	public Double getPriceTo(Load load) {
-		return null; //TODO: implementar!
+	public Double getPriceFor(Order order) {
+		// TODO: validar si es contenedor reefer?
+		
+		Double hoursConnected = (double) ChronoUnit.HOURS.between(startConnection, endConnection);
+		return order.getLoadEnergyConsumption() * price * hoursConnected; 
 	}
 	
-	
-	public void startConnection() {}
-	
-	public void endConnection() {}
-	
-	public Date getStartConnection() {
+	public LocalDateTime getStartConnection() {
 		return startConnection;
 	}
 
-	public Date getEndConnection() {
+	public LocalDateTime getEndConnection() {
 		return endConnection;
 	}
 	

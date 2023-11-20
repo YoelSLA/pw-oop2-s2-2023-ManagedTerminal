@@ -56,5 +56,11 @@ public class Load {
 	public Double getVolume() {
 		return width * height * length;
 	}
+
+
+	public Double getEnergyConsumption() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
