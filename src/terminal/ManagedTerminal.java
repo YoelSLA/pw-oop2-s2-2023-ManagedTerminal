@@ -40,6 +40,11 @@ public class ManagedTerminal extends Terminal {
 		this.truckTransportCompanies = new ArrayList<TruckTransportCompany>();
 	}
 
+	public void assignShiftFor(ExportOrder exportOrder, LocalDateTime dateToArrive) {
+		exportOrder.setDateTruck(dateToArrive);
+
+	}
+
 	public List<Consignee> getConsignees() {
 		return consignees;
 	}
@@ -82,11 +87,6 @@ public class ManagedTerminal extends Terminal {
 
 	}
 
-	public void assignShiftFor(ExportOrder exportOrder, LocalDateTime dateToArrive) {
-		exportOrder.setDateTruck(dateToArrive);
-
-	}
-
 	public boolean isItRegistered(Driver driver) {
 		return registredDrivers().contains(driver);
 	}
@@ -113,6 +113,10 @@ public class ManagedTerminal extends Terminal {
 
 	public void setRouting(Routing routing) {
 		this.routing = routing;
+	}
+
+	public void truckArrivedWithLoad(Driver driver, ExportOrder exportOrder, Truck truck, LocalDateTime arrivalDate) {
+		ExportValidation.validateTruckEntry(driver, exportOrder, truck, arrivalDate);
 	}
 
 	private List<Driver> registredDrivers() {

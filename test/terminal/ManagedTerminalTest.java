@@ -27,7 +27,9 @@ class ManagedTerminalTest {
 	private ExportOrder exportOrderOfYoel; // DOC
 	private Shipper yoel; // DOC
 	private Truck scaniaR; // DOC
+	private Truck scaniaS; // DOC
 	private Driver carlos; // DOC
+	private Driver juan; // DOC
 	private TruckTransportCompany monroySchiavon;
 
 	@BeforeEach
@@ -37,7 +39,9 @@ class ManagedTerminalTest {
 		exportOrderOfYoel = mock(ExportOrder.class);
 		yoel = mock(Shipper.class);
 		scaniaR = mock(Truck.class);
+		scaniaS = mock(Truck.class);
 		carlos = mock(Driver.class);
+		juan = mock(Driver.class);
 		monroySchiavon = mock(TruckTransportCompany.class);
 
 		when(exportOrderOfYoel.getShipper()).thenReturn(yoel);
@@ -67,7 +71,7 @@ class ManagedTerminalTest {
 		// Assert
 		assertThrows(RuntimeException.class, () -> {
 			terminalBuenosAires.hireExportService(exportOrderOfYoel);
-		});
+		}, "El chofer no esta registrado en la terminal gestionada.");
 	}
 
 	@Test
@@ -77,7 +81,7 @@ class ManagedTerminalTest {
 		// Assert
 		assertThrows(RuntimeException.class, () -> {
 			terminalBuenosAires.hireExportService(exportOrderOfYoel);
-		});
+		}, "El camión no esta registrado en la terminal gestionada.");
 	}
 
 	@Test
@@ -93,6 +97,56 @@ class ManagedTerminalTest {
 		// Assert
 		assertEquals(exportOrderOfYoel, terminalBuenosAires.getExportOrders().get(0));
 		assertEquals(exportOrderOfYoel.getDateTruck(), terminalBuenosAires.getExportOrders().get(0).getDateTruck());
+	}
+
+	@Test
+	void testTheTruckCannotEnterBecauseItIsNotTheDriverInformedByTheShipper() {
+		// SetUp
+		when(exportOrderOfYoel.getDriver()).thenReturn(carlos);
+		when(exportOrderOfYoel.getTruck()).thenReturn(scaniaR);
+		when(monroySchiavon.getDrivers()).thenReturn(List.of(carlos));
+		when(monroySchiavon.getTrucks()).thenReturn(List.of(scaniaR));
+		terminalBuenosAires.registerTruckTransportCompany(monroySchiavon);
+		terminalBuenosAires.hireExportService(exportOrderOfYoel);
+		// Assert
+		assertThrows(RuntimeException.class, () -> {
+			terminalBuenosAires.truckArrivedWithLoad(juan, exportOrderOfYoel, scaniaR, LocalDateTime.now());
+		}, "El chofer no es el informado por el shipper.");
+
+	}
+
+	@Test
+	void testTheTruckCannotEnterBecauseItIsNotTheTruckInformedByTheShipper() {
+		// SetUp
+		when(exportOrderOfYoel.getDriver()).thenReturn(carlos);
+		when(exportOrderOfYoel.getTruck()).thenReturn(scaniaR);
+		when(monroySchiavon.getDrivers()).thenReturn(List.of(carlos));
+		when(monroySchiavon.getTrucks()).thenReturn(List.of(scaniaR));
+		terminalBuenosAires.registerTruckTransportCompany(monroySchiavon);
+		terminalBuenosAires.hireExportService(exportOrderOfYoel);
+		// Assert
+		assertThrows(RuntimeException.class, () -> {
+			terminalBuenosAires.truckArrivedWithLoad(juan, exportOrderOfYoel, scaniaS, LocalDateTime.now());
+		}, "El camión no es el informado por el shipper.");
+	}
+
+	@Test
+	void testTheTruckCannotEnterBecauseTheScheduleExceeds3Hours() {
+		// Set Up
+		final LocalDateTime dateTobeAssigned = LocalDateTime.of(2023, Month.FEBRUARY, 1, 11, 40);
+		when(exportOrderOfYoel.getDriver()).thenReturn(carlos);
+		when(exportOrderOfYoel.getTruck()).thenReturn(scaniaR);
+		when(monroySchiavon.getDrivers()).thenReturn(List.of(carlos));
+		when(monroySchiavon.getTrucks()).thenReturn(List.of(scaniaR));
+		terminalBuenosAires.registerTruckTransportCompany(monroySchiavon);
+		terminalBuenosAires.hireExportService(exportOrderOfYoel);
+		terminalBuenosAires.assignShiftFor(exportOrderOfYoel, dateTobeAssigned);
+		// Assert
+
+		assertThrows(RuntimeException.class, () -> {
+			terminalBuenosAires.truckArrivedWithLoad(carlos, exportOrderOfYoel, scaniaR,
+					LocalDateTime.of(2023, Month.FEBRUARY, 1, 20, 40));
+		}, "x"); // TODO: REVISAR
 	}
 
 }
