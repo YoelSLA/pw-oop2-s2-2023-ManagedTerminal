@@ -2,11 +2,11 @@ package order;
 
 import client.Shipper;
 
-public class Export extends Order {
+public class ExportOrder extends Order {
 	
 	private Shipper shipper;
 
-	public static Export create() {
+	public static ExportOrder create() {
 		// TODO Auto-generated method stub
 		return null;
 	}
