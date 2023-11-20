@@ -1,15 +1,20 @@
 package terminal;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import client.Consignee;
 import client.Shipper;
+import driver.Driver;
 import geographicalPosition.GeographicalPosition;
 import order.ExportOrder;
 import order.ImportOrder;
+import orderValidation.ExportValidation;
 import routing.Routing;
 import shippingCompany.ShippingCompany;
+import truck.Truck;
 import truckTransportCompany.TruckTransportCompany;
 
 public class ManagedTerminal extends Terminal {
@@ -33,22 +38,6 @@ public class ManagedTerminal extends Terminal {
 		this.shippers = new ArrayList<Shipper>();
 		this.shippingCompanies = new ArrayList<ShippingCompany>();
 		this.truckTransportCompanies = new ArrayList<TruckTransportCompany>();
-	}
-
-	public void addConsignee(Consignee consignee) {
-		consignees.add(consignee);
-	}
-
-	public void addShipper(Shipper shipper) {
-		shippers.add(shipper);
-	}
-
-	public void addShippingCompany(ShippingCompany shippingCompany) {
-		shippingCompanies.add(shippingCompany);
-	}
-
-	public void addTruckTransportCompany(TruckTransportCompany truckTransportCompany) {
-		truckTransportCompanies.add(truckTransportCompany);
 	}
 
 	public List<Consignee> getConsignees() {
@@ -83,8 +72,57 @@ public class ManagedTerminal extends Terminal {
 		return truckTransportCompanies;
 	}
 
+	public void hireExportService(ExportOrder exportOrder) {
+		if (!shippers.contains(exportOrder.getShipper())) {
+			shippers.add(exportOrder.getShipper());
+		}
+		ExportValidation.validateOrderFor(exportOrder, this);
+		assignShiftFor(exportOrder, LocalDateTime.now());
+		exportOrders.add(exportOrder);
+
+	}
+
+	public void assignShiftFor(ExportOrder exportOrder, LocalDateTime dateToArrive) {
+		exportOrder.setDateTruck(dateToArrive);
+
+	}
+
+	public boolean isItRegistered(Driver driver) {
+		return registredDrivers().contains(driver);
+	}
+
+	public boolean isItRegistered(Truck truck) {
+		return registredTrucks().contains(truck);
+	}
+
+	public void registerConsignee(Consignee consignee) {
+		consignees.add(consignee);
+	}
+
+	public void registerShipper(Shipper shipper) {
+		shippers.add(shipper);
+	}
+
+	public void registerShippingCompany(ShippingCompany shippingCompany) {
+		shippingCompanies.add(shippingCompany);
+	}
+
+	public void registerTruckTransportCompany(TruckTransportCompany truckTransportCompany) {
+		truckTransportCompanies.add(truckTransportCompany);
+	}
+
 	public void setRouting(Routing routing) {
 		this.routing = routing;
+	}
+
+	private List<Driver> registredDrivers() {
+		return truckTransportCompanies.stream().flatMap(t -> t.getDrivers().stream()).distinct()
+				.collect(Collectors.toList());
+	}
+
+	private List<Truck> registredTrucks() {
+		return truckTransportCompanies.stream().flatMap(t -> t.getTrucks().stream()).distinct()
+				.collect(Collectors.toList());
 	}
 
 }
