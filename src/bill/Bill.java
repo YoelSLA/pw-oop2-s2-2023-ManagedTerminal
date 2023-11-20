@@ -1,7 +1,5 @@
 package bill;
 
-import java.util.Date;
-
 import order.Order;
 
 /**
@@ -12,19 +10,18 @@ import order.Order;
  * @author Gabriela Fascetta
  */
 public class Bill {
-	//private Date broadcastDate;
-	private Double totalAmount= 0.0;
+	// private Date broadcastDate;
+	private Double totalAmount = 0.0;
 	private Order order;
-	
-	
+
 	public Bill(Order order) {
-		//this.broadcastDate = ;
+		// this.broadcastDate = ;
 		this.order = order;
 	}
-	
+
 	public Double getTotalAmount() {
-		//TODO: revisar este metodo y responsabilidades de los obj xq esta MUY feo
-		return order.getServices().mapToDouble(serv -> serv.getPriceTo(order.getLoad())).sum();
+		// TODO: revisar este metodo y responsabilidades de los obj xq esta MUY feo
+		return order.getServices().stream().mapToDouble(serv -> serv.getPriceTo(order.getLoad())).sum();
 	}
-	
+
 }
