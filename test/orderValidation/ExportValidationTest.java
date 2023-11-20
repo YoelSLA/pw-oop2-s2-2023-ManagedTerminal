@@ -1,15 +1,16 @@
 package orderValidation;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
-import orderValidation.ExportValidation;
 
 class ExportValidationTest {
 
+	private ExportValidation exportValidation;
+
 	@Test
-	void test() {
-		fail("Not yet implemented");
+	void setUp() {
+		exportValidation = mock(ExportValidation.class);
 	}
 
 }
