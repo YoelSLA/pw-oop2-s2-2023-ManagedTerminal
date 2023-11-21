@@ -52,7 +52,6 @@ class TripTest {
 	@Test
 	void getNextTerminalFrom() {
 		//Exercise
-		
 		maritimeCircuit.addSection(sectionBuenosAiresMontevideo);
 		
 		// Verify
