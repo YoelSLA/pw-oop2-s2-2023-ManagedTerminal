@@ -21,9 +21,8 @@ public class Washed extends Service {
 	 * 
 	 * @param order la orden que conoce la carga a la que se aplicará el servicio. Una instancia tipo Order.
 	 */
-	public Washed(Double price, Double extraPrice) {
-		super(price);
-		this.secondPrice = extraPrice;
+	public Washed(Double price, Double optionalPrice) {
+		super(price, optionalPrice);
 	}
 	
 	/**
@@ -38,11 +37,11 @@ public class Washed extends Service {
 	public Double getPriceFor(Order order) {
 		if (order.getLoadVolume() <= maxVolumePerMinimumFee) {
 			return price;
-		} else return secondPrice;
+		} else return optionalPrice;
 	}
 
 	public Double getBigVolumePrice() {
-		return secondPrice;
+		return optionalPrice;
 	}
 
 }

@@ -33,13 +33,13 @@ class ReeferTest {
 		assertEquals(heightA, reeferA.getHeight());
 		assertEquals(lengthA, reeferA.getLength());
 		assertEquals(weightA, reeferA.getWeight());
-		assertEquals((double)energyA, reeferA.getEnergyConsumption());
+		assertEquals(energyA, reeferA.getEnergyConsumption());
 		//reeferB
 		assertEquals(widthB, reeferB.getWidth());
 		assertEquals(heightB, reeferB.getHeight());
 		assertEquals(lengthB, reeferB.getLength());
 		assertEquals(weightB, reeferB.getWeight());
-		assertEquals((double)energyB, reeferB.getEnergyConsumption());
+		assertEquals(energyB, reeferB.getEnergyConsumption());
 		
 	}
 	

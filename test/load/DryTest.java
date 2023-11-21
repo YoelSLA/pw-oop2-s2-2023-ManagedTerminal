@@ -31,11 +31,13 @@ class DryTest {
 		assertEquals(heightA, dryA.getHeight());
 		assertEquals(lengthA, dryA.getLength());
 		assertEquals(weightA, dryA.getWeight());
+		assertEquals(0, dryA.getEnergyConsumption());
 		//reeferB
 		assertEquals(widthB, dryB.getWidth());
 		assertEquals(heightB, dryB.getHeight());
 		assertEquals(lengthB, dryB.getLength());
 		assertEquals(weightB, dryB.getWeight());
+		assertEquals(0, dryB.getEnergyConsumption());
 	}
 	
 	@Test

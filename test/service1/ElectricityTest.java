@@ -53,7 +53,7 @@ class ElectricityTest {
 	@Test
 	void testPriceForConsumptionForAGivenLoad() {
 		orderA = mock(Order.class);
-		Double energyConsumptionA = 2.0;
+		int energyConsumptionA = 2;
 		when(orderA.getLoadEnergyConsumption()).thenReturn(energyConsumptionA);
 		Double expectedPrice = hoursA * energyConsumptionA * electricityA.getPrice();
 		assertEquals(expectedPrice, electricityA.getPriceFor(orderA));

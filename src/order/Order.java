@@ -28,7 +28,7 @@ public abstract class Order {
 		this.driver = driver;
 		Order.number = number++;
 		this.load = load;
-		this.services = new ArrayList<Service>(List.of(new Washed(100.0)));
+		this.services = new ArrayList<Service>(List.of(new Washed(100.0, 150.0)));
 		this.truck = truck;
 		this.trip = trip;
 	}
@@ -69,7 +69,7 @@ public abstract class Order {
 		this.dateTruck = dateTruck;
 	}
 
-	public Double getLoadEnergyConsumption() {
+	public int getLoadEnergyConsumption() {
 		return load.getEnergyConsumption();
 	}
 	

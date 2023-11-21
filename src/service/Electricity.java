@@ -45,10 +45,8 @@ public class Electricity extends Service{
 	 */
 	@Override
 	public Double getPriceFor(Order order) {
-		// TODO: validar si es contenedor reefer?
-		
 		Double hoursConnected = (double) ChronoUnit.HOURS.between(startConnection, endConnection);
-		return order.getLoadEnergyConsumption() * price * hoursConnected; 
+		return order.getLoadEnergyConsumption() * price * hoursConnected;
 	}
 	
 	public LocalDateTime getStartConnection() {

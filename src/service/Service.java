@@ -16,11 +16,11 @@ import order.Order;
 public abstract class Service {
 
 	protected Double price;
-	protected Double secondPrice;
+	protected Double optionalPrice;
 	
-	public Service(Double price, Double extraPrice) {
+	public Service(Double price, Double optionalPrice) {
 		this.price = price;
-		this.secondPrice = 0.0;
+		this.optionalPrice = optionalPrice;
 	}
 	
 	public Service(Double price) {

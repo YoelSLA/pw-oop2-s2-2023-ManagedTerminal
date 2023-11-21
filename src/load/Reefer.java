@@ -8,8 +8,6 @@ package load;
  **/
 public class Reefer extends Load {
 	
-	private int energyConsumption;
-	
 	/**
 	 * Constructor de la clase Reefer.
 	 * 
@@ -22,9 +20,5 @@ public class Reefer extends Load {
 	public Reefer(Double width, Double height, Double length, Double weight, int energyConsumption) {
 		super(width, height, length, weight);
 		this.energyConsumption = energyConsumption;
-	}
-
-	public Double getEnergyConsumption() {
-		return (double) energyConsumption;
 	}
 }

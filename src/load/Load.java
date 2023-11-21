@@ -15,6 +15,7 @@ public abstract class Load {
 	private final Double height;
 	private final Double length;
 	private final Double weight;
+	protected int energyConsumption;
 	
 	/**
 	 * Constructor de la clase Load.
@@ -29,6 +30,7 @@ public abstract class Load {
 		this.height = height;
 		this.length = length;
 		this.weight = weight;
+		this.energyConsumption = 0;
 	}
 	
 	
@@ -49,7 +51,12 @@ public abstract class Load {
 	 * Metodo que calcula el volumen de la carga.
 	 * Retorna una cantidad en metros cubicos.
 	 */
-	public Double getVolume() {
+	public final Double getVolume() {
 		return width * height * length;
-	}	
+	}
+	
+	public int getEnergyConsumption() {
+		return energyConsumption;
+	}
+	
 }

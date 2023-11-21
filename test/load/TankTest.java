@@ -31,11 +31,13 @@ class TankTest {
 		assertEquals(heightA, tankA.getHeight());
 		assertEquals(lengthA, tankA.getLength());
 		assertEquals(weightA, tankA.getWeight());
+		assertEquals(0, tankA.getEnergyConsumption());
 		//reeferB
 		assertEquals(widthB, tankB.getWidth());
 		assertEquals(heightB, tankB.getHeight());
 		assertEquals(lengthB, tankB.getLength());
 		assertEquals(weightB, tankB.getWeight());
+		assertEquals(0, tankB.getEnergyConsumption());
 	}
 	
 	@Test
