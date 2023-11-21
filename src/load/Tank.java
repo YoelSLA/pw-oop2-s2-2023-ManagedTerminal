@@ -16,7 +16,6 @@ public class Tank extends Load{
 	 * @param length La longitud de la carga en metros.
 	 * @param weight El peso de la carga en toneladas.
 	 * 
-	 * @author Gabriela Fascetta
 	 */
 	public Tank(Double width, Double height, Double length, Double weight) {
 		super(width, height, length, weight);

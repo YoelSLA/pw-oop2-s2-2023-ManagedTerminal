@@ -11,10 +11,10 @@ package load;
  */
 public class Load {
 
-	private Double width;
-	private Double height;
-	private Double length;
-	private Double weight;
+	private final Double width;
+	private final Double height;
+	private final Double length;
+	private final Double weight;
 	
 	/**
 	 * Constructor de la clase Load.
@@ -23,8 +23,6 @@ public class Load {
 	 * @param height  La altura de la carga en metros.
 	 * @param length La longitud de la carga en metros.
 	 * @param weight El peso de la carga en toneladas.
-	 * 
-	 * @author Gabriela Fascetta
 	 */
 	public Load(Double width, Double height, Double length, Double weight) {
 		this.width = width;
@@ -50,17 +48,8 @@ public class Load {
 	/**
 	 * Metodo que calcula el volumen de la carga.
 	 * Retorna una cantidad en metros cubicos.
-	 * 
-	 * @author Gabriela Fascetta
 	 */
 	public Double getVolume() {
 		return width * height * length;
-	}
-
-
-	public Double getEnergyConsumption() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+	}	
 }
