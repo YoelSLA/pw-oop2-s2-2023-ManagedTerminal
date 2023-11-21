@@ -1,10 +1,15 @@
-package filteredSearch;
+package filteredSearch.criteria;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class OrTest {
+class ArrivalDateTest {
+
+	@BeforeEach
+	void setUp() throws Exception {
+	}
 
 	@Test
 	void test() {

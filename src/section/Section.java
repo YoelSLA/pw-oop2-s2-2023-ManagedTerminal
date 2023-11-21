@@ -1,6 +1,7 @@
 package section;
 
 import java.time.Duration;
+import java.util.Objects;
 
 import terminal.Terminal;
 
@@ -38,4 +39,21 @@ public class Section {
 		return destiny.equals(terminal) || getOrigin().equals(terminal);
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(destiny, origin, price, time);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Section other = (Section) obj;
+		return Objects.equals(destiny, other.destiny) && Objects.equals(origin, other.origin)
+				&& Objects.equals(price, other.price) && Objects.equals(time, other.time);
+	}
 }
