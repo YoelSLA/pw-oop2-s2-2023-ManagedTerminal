@@ -23,6 +23,7 @@ public class Washed extends Service {
 	 */
 	public Washed(Double price, Double optionalPrice) {
 		super(price, optionalPrice);
+		this.name = "Washed";
 	}
 	
 	/**

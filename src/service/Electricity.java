@@ -32,6 +32,7 @@ public class Electricity extends Service{
 		super(price);
 		this.startConnection = startConnection;
 		this.endConnection = endConnection;
+		this.name = "Electricity";
 	}
 	
 	/**

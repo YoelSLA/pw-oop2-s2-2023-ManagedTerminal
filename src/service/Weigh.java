@@ -21,6 +21,7 @@ public class Weigh extends Service {
 	 */
 	public Weigh(Double price) {
 		super(price);
+		this.name = "Weigh";
 	}
 		
 	public Double weighOn(Load load) {

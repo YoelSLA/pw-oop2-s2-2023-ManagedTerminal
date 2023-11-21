@@ -13,18 +13,57 @@ import order.Order;
  * @author Gabriela Fascetta
  */
 public class Bill {
-	// private Date broadcastDate;
-	private Double totalAmount = 0.0;
+	private LocalDateTime broadcastDate;
+	private Double totalAmount;
 	private Order order;
 
 	public Bill(Order order) {
-		// this.broadcastDate = ;
 		this.order = order;
+		this.broadcastDate = LocalDateTime.now();
+		this.totalAmount = 0.0;		
 	}
 
-	public Double getTotalAmount() {
-		// TODO: revisar este metodo y responsabilidades de los obj xq esta MUY feo
-		return order.getServices().stream().mapToDouble(serv -> serv.getPriceTo(order.getLoad())).sum();
+	public Double getTotalAmountPerServices() {
+		return order.getServices()
+					.stream()
+					.mapToDouble(serv -> serv.getPriceFor(order))
+					.sum();
 	}
-
+	
+	public Double getTotalAmountPerTrip() {
+		return 0.0; //TODO: implementar
+	}
+	
+	public Double getTotalAmountToPay() {
+		return getTotalAmountPerServices() + getTotalAmountPerTrip();
+	}
+	
+	public void printInvoice() {
+		//la factura tiene el desgloce de servicios aplicados
+		// fecha y monto -->  DUDA: la fecha de cada serv o una sola de emision de factura???
+		// monto total servicios
+		// monto total viaje
+		// total total
+		StringBuilder sb = new StringBuilder("ServiceName,Date,Price\r\n");
+		order.getServices()
+			.stream()
+			.forEach( serv -> sb.append(
+								String.format("%s,%s,%s\r\n",
+											serv.getName(), broadcastDate, serv.getPriceFor(order)
+								)
+						)
+			);
+		sb.append("\r\n Trip: ");
+		sb.append(this.getTotalAmountPerTrip().toString());
+		sb.append("\r\n Total: ");
+		sb.append(this.getTotalAmountToPay().toString());
+		
+		System.out.println(sb.toString());
+	}
+	
+	
+	
+	public Order getOrderToProcess() {
+		return this.order;
+	}
 }

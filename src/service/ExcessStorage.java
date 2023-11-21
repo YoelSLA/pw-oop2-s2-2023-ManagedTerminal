@@ -25,6 +25,7 @@ public class ExcessStorage extends Service{
 	 */
 	public ExcessStorage(Double price) {
 		super(price);
+		this.name = "ExcessStorage";
 	}
 	
 	/**
