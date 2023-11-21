@@ -9,7 +9,7 @@ package load;
  * 
  * @author Gabriela Fascetta
  */
-public class Load {
+public abstract class Load {
 
 	private final Double width;
 	private final Double height;
