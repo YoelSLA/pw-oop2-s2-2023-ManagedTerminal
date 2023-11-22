@@ -40,11 +40,6 @@ public class ExcessStorage extends Service{
 	@Override
 	public Double getPriceFor(Order order) {
 		int extraDays = (int) Math.abs((int) ChronoUnit.DAYS.between(LocalDate.now(), order.getDateTruck()));
-		if (extraDays != 0) {
-			return price * extraDays;
-		} else return 0.0;
+		return price * extraDays;
 	}
-
-
-
 }

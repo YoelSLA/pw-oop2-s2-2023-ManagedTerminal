@@ -31,19 +31,22 @@ public class Bill {
 	}
 	
 	public Double getTotalAmountPerTrip() {
+		
 		return 0.0; //TODO: implementar
 	}
 	
 	public Double getTotalAmountToPay() {
-		return getTotalAmountPerServices() + getTotalAmountPerTrip();
+		totalAmount = getTotalAmountPerServices() + getTotalAmountPerTrip();
+		return totalAmount;
 	}
 	
 	public void printInvoice() {
-		//la factura tiene el desgloce de servicios aplicados
-		// fecha y monto -->  DUDA: la fecha de cada serv o una sola de emision de factura???
-		// monto total servicios
-		// monto total viaje
-		// total total
+		/* La factura contiene el desgloce de conceptos:
+		fecha y monto -->  DUDA: la fecha de cada serv o una sola de emision de factura???
+		monto total servicios
+		monto total viaje
+		total total
+		*/
 		StringBuilder sb = new StringBuilder("ServiceName,Date,Price\r\n");
 		order.getServices()
 			.stream()

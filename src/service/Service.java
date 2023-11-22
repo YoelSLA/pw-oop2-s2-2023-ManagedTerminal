@@ -38,7 +38,6 @@ public abstract class Service {
 	 * @param order la orden que conoce la carga a la que se aplicará el servicio. Una instancia tipo Order.
 	 * 
 	 */
-	
 	public abstract Double getPriceFor(Order order);
 	
 	public final String getName() {return this.name;}
