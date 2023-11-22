@@ -1,6 +1,7 @@
 package trip;
 import java.time.Duration;
 import java.util.Date;
+import java.util.NoSuchElementException;
 
 import ship.Ship;
 import maritimeCircuit.MaritimeCircuit;
@@ -65,8 +66,12 @@ public class Trip {
 		
 	
 	public Terminal nextTerminalFrom(Terminal terminal) {
-		return this.getMaritimeCircuit().getSections().stream()
-				.filter(section -> section.getOrigin().equals(terminal)) //parametrizo el metodo para poder usarla en el schedule() 
-				.findFirst().get().getDestiny();
+		Section nextTerminal = this.getMaritimeCircuit().getSections().stream()
+				.filter(section -> section.getOrigin().equals(terminal))
+	            .findFirst().orElseThrow(() -> new NoSuchElementException("No se encontró una sección con el terminal de origen proporcionado."));
+		return nextTerminal.getDestiny();
 	}
+	
+	//.filter(section -> section.getOrigin().equals(terminal)) //parametrizo el metodo para poder usarla en el schedule() 
+	//	.findFirst().get().getDestiny();
 }

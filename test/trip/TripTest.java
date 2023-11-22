@@ -55,7 +55,7 @@ class TripTest {
 		maritimeCircuit.addSection(sectionBuenosAiresMontevideo);
 		
 		// Verify
-		assertEquals(terminalMontevideo, trip.nextTerminalFrom(terminalBuenosAires));
+		assertEquals(terminalBuenosAires, trip.nextTerminalFrom(terminalMontevideo));
 	}
 
 }
