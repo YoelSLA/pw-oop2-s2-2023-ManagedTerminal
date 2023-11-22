@@ -10,13 +10,13 @@ import geographicalPosition.GeographicalPosition;
  */
 
 public class Ship {
-
+	
 	private String name;
 	private Phase phase;
 	private GeographicalPosition geographicalPosition;
 	/**
 	 * @author alejandrabesel
-	 * Un codigo identificador de un buque generado por el String "IMO-" seguido de 7 letras (IMO-XXXXXXX)
+	 * Un codigo identificador de un buque generado por el String "IMO-" seguido de 7 letras (IMOXXXXXXX)
 	 */
 	private String imo;
 	
@@ -28,18 +28,21 @@ public class Ship {
 	 * 
 	 * @param name  El nombre del buque.
 	 * @param imo  El codigo indetificador del buque en formato "IMO-XXXXXXX".
+	 * @param phase La fase en la que se encuentra el buque.
 	 * 
 	 */
-	public Ship(String name, String imo) {
+	public Ship(String name, String imo, Phase phase, GeographicalPosition geographicalPosition) {
 		setName(name);
 		setImo(imo);
+		setPhase(phase);
+		setPosition(geographicalPosition);
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	private void setName(String name) {
 		this.name = name;
 	}
 
@@ -47,10 +50,13 @@ public class Ship {
 		return imo;
 	}
 
-	public void setImo(String imo) {
+	private void setImo(String imo) {
 		this.imo = imo;
 	}
 	
+	private void setPhase(Phase phase) {
+		this.phase = phase;
+	}
 	/**
 	 * Devuelve la fase en la que se encuentra el buque.
 	 */
@@ -64,11 +70,12 @@ public class Ship {
 	public GeographicalPosition getPosition() {
 		return geographicalPosition;
 	}
-
+	
 	/**
 	 * Setea la nueva posicion geografica del buque que le devuelve dicho gps. 
+	 * Observacion: la dejo en private porque entiendo que el buque se setea su propia posicion
 	 */
-	public void setPosition(GeographicalPosition newPosition) {
+	private void setPosition(GeographicalPosition newPosition) {
 		this.geographicalPosition = newPosition;
 	}
 }
