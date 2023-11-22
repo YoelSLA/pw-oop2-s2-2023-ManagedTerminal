@@ -1,6 +1,6 @@
 package trip;
 import java.time.Duration;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
 import ship.Ship;
@@ -18,16 +18,16 @@ import section.Section;
 
 public class Trip {
 
-	private Date startDate;
+	private LocalDate startDate;
 	private Ship ship;
 	private MaritimeCircuit maritimeCircuit;
 	private Terminal managedTerminal;
 
-	public Trip(MaritimeCircuit maritimeCircuit, Ship ship, Date startDate) {
+	public Trip(MaritimeCircuit maritimeCircuit, Ship ship, LocalDate startDate, Terminal managedTerminal) {
 		this.maritimeCircuit = maritimeCircuit;
 		this.ship = ship;
 		this.startDate = startDate;
-		this.managedTerminal = new ManagedTerminal();
+		this.managedTerminal = managedTerminal;
 	}
 	
 	/** @author alejandrabesel
@@ -47,7 +47,7 @@ public class Trip {
 	/** @author alejandrabesel
 	 * return Devuelve el dia de inicio del viaje
 	 * */
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 		
@@ -57,7 +57,7 @@ public class Trip {
 	 * */
 	public void schedule() {
 		Section startSection = maritimeCircuit.getSections().stream().filter(section -> section.getOrigin().equals(this.managedTerminal)).findFirst().get();
-		Date currentDate = new Date(this.startDate.getTime());
+		LocalDate currentDate = startDate;
 		System.out.print("Section Start Date:" + this.startDate + "Origin Terminal:" + this.managedTerminal);
 		this.maritimeCircuit.getSections().forEach(section -> {
 			System.out.print("Section End Date:" + currentDate + "Destination Terminal:" + this.nextTerminalFrom(managedTerminal)); // no se como sumarle a un objeto de tipo Date un objeto de tipo Duration

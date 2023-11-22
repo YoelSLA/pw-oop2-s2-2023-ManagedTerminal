@@ -5,12 +5,14 @@ import terminal.ManagedTerminal;
 import section.Section;
 import ship.Ship;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.sql.Date;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,13 +28,13 @@ class TripTest {
 	
 	@BeforeEach
 	void setUp() {
-		Date fechaActual = new Date(24, 5, 23);
+		LocalDate fechaActual = LocalDate.of(2023, 5, 24);
 		maritimeCircuit = mock(MaritimeCircuit.class);
 		ship = mock(Ship.class);
 		terminalBuenosAires = mock(Terminal.class);
 		terminalMontevideo = mock(Terminal.class);
 		sectionBuenosAiresMontevideo = new Section(terminalBuenosAires, terminalMontevideo, 50.0, Duration.ofHours(2));
-		trip = new Trip(maritimeCircuit, ship, fechaActual);
+		trip = new Trip(maritimeCircuit, ship, fechaActual, terminalBuenosAires);
 		
 	}
 	
@@ -51,9 +53,10 @@ class TripTest {
 	
 	@Test
 	void getNextTerminalFrom() {
+		List<Section> sectionsBAM = new ArrayList<Section>();
+		sectionsBAM.add(sectionBuenosAiresMontevideo);
 		//Exercise
-		maritimeCircuit.addSection(sectionBuenosAiresMontevideo);
-		
+		when(maritimeCircuit.getSections()).thenReturn(sectionsBAM);
 		// Verify
 		assertEquals(terminalBuenosAires, trip.nextTerminalFrom(terminalMontevideo));
 	}
