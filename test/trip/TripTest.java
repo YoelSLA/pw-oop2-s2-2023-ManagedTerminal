@@ -1,7 +1,6 @@
 package trip;
 import maritimeCircuit.MaritimeCircuit;
 import terminal.Terminal;
-import terminal.ManagedTerminal;
 import section.Section;
 import ship.Ship;
 
@@ -60,5 +59,17 @@ class TripTest {
 		// Verify
 		assertEquals(terminalBuenosAires, trip.nextTerminalFrom(terminalMontevideo));
 	}
+	
+	/*
+	@Test
+	void getCost() {
+		List<Section> sectionsBAM = new ArrayList<Section>();
+		sectionsBAM.add(sectionBuenosAiresMontevideo);
+		
+		when(sectionBuenosAiresMontevideo.getOrigin()).thenReturn(terminalBuenosAires);
+		when(sectionBuenosAiresMontevideo.getPrice()).thenReturn(1000.0);
+		assertEquals(1000.0, trip.getCost());
+	}
+	*/
 
 }
