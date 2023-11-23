@@ -1,14 +1,21 @@
 package filteredSearch.criteria;
 
-import java.lang.Object.Criteria;
+import java.time.LocalDate;
 import java.util.List;
 
 import maritimeCircuit.MaritimeCircuit;
 
+/**
+ * Clase que representa el criterio de filtro por fecha de llegada, implementa interfaz Criteria.
+ * Permite filtrar circuitos maritimos.
+ * @author Gabriela Fascetta.
+ * */
 public class ArrivalDate implements Criteria {
-
-	public ArrivalDate() {
-		// TODO Auto-generated constructor stub
+	
+	private LocalDate searchedDate;
+	
+	public ArrivalDate(LocalDate date) {
+		this.searchedDate = date;
 	}
 
 	@Override
@@ -16,5 +23,6 @@ public class ArrivalDate implements Criteria {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	public LocalDate getSearchedDate() {return searchedDate;}
 }
