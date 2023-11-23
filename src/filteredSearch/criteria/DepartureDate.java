@@ -3,7 +3,6 @@ package filteredSearch.criteria;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import maritimeCircuit.MaritimeCircuit;
 import shippingCompany.ShippingCompany;
@@ -32,11 +31,12 @@ public class DepartureDate implements Criteria {
 		List<MaritimeCircuit> searchedCircuits = new ArrayList<>();
 				
 		for(ShippingCompany sc: terminal.getShippingCompanies()) {
-			sc.getCircuitsWithTripsThatStartOn(searchedDate);
+			searchedCircuits.addAll(sc.getCircuitsWithTripsThatStartOn(searchedDate));
 		}
 		
 		return searchedCircuits;
 	}
 	
 	public LocalDate getSearchedDate() {return searchedDate;}
+	public ManagedTerminal getManagedTerminal() {return terminal;}
 }
