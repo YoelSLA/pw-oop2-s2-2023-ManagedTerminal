@@ -46,11 +46,9 @@ class BillTest {
 	
 	@Test
 	void testTotalAmountPerTrip() {
-		// costoTripA = 100;
-		// TODO: como calcular la sumatoria de secciones para un viaje con inicio y fin??
-		//assertEquals(100, billA.getTotalAmountPerTrip());
+		Double priceTripA = 100.0;
+		when(orderA.getTripCost()).thenReturn(priceTripA);
+		assertEquals(priceTripA, billA.getTotalAmountPerTrip());
 	}
-	
-	
 
 }

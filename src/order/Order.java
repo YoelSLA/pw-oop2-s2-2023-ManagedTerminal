@@ -76,5 +76,9 @@ public abstract class Order {
 	public Double getLoadVolume() {
 		return load.getVolume();
 	}
+	
+	public Double getTripCost() {
+		return trip.getCost();
+	}
 
 }

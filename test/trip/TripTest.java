@@ -34,7 +34,7 @@ class TripTest {
 		terminalBuenosAires = mock(Terminal.class);
 		terminalMontevideo = mock(Terminal.class);
 		sectionBuenosAiresMontevideo = new Section(terminalBuenosAires, terminalMontevideo, 50.0, Duration.ofHours(2));
-		trip = new Trip(maritimeCircuit, ship, fechaActual, terminalBuenosAires);
+		trip = new Trip(maritimeCircuit, ship, fechaActual, terminalBuenosAires, terminalMontevideo);
 		
 	}
 	

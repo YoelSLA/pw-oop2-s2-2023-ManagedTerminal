@@ -1,7 +1,10 @@
 package trip;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import ship.Ship;
 import maritimeCircuit.MaritimeCircuit;
@@ -21,13 +24,15 @@ public class Trip {
 	private LocalDate startDate;
 	private Ship ship;
 	private MaritimeCircuit maritimeCircuit;
-	private Terminal managedTerminal;
+	private Terminal firstTerminal;
+	private Terminal lastTerminal;
 
-	public Trip(MaritimeCircuit maritimeCircuit, Ship ship, LocalDate startDate, Terminal managedTerminal) {
+	public Trip(MaritimeCircuit maritimeCircuit, Ship ship, LocalDate startDate, Terminal firstTerminal, Terminal lastTerminal) {
 		this.maritimeCircuit = maritimeCircuit;
 		this.ship = ship;
 		this.startDate = startDate;
-		this.managedTerminal = managedTerminal;
+		this.firstTerminal = firstTerminal;
+		this.lastTerminal = lastTerminal;
 	}
 	
 	/** @author alejandrabesel
@@ -56,11 +61,11 @@ public class Trip {
 	 * 
 	 * */
 	public void schedule() {
-		Section startSection = maritimeCircuit.getSections().stream().filter(section -> section.getOrigin().equals(this.managedTerminal)).findFirst().get();
+		Section startSection = maritimeCircuit.getSections().stream().filter(section -> section.getOrigin().equals(this.firstTerminal)).findFirst().get();
 		LocalDate currentDate = startDate;
-		System.out.print("Section Start Date:" + this.startDate + "Origin Terminal:" + this.managedTerminal);
+		System.out.print("Section Start Date:" + this.startDate + "Origin Terminal:" + this.firstTerminal);
 		this.maritimeCircuit.getSections().forEach(section -> {
-			System.out.print("Section End Date:" + currentDate + "Destination Terminal:" + this.nextTerminalFrom(managedTerminal)); // no se como sumarle a un objeto de tipo Date un objeto de tipo Duration
+			System.out.print("Section End Date:" + currentDate + "Destination Terminal:" + this.nextTerminalFrom(firstTerminal)); // no se como sumarle a un objeto de tipo Date un objeto de tipo Duration
 		});
 	};
 		
@@ -74,4 +79,28 @@ public class Trip {
 	
 	//.filter(section -> section.getOrigin().equals(terminal)) //parametrizo el metodo para poder usarla en el schedule() 
 	//	.findFirst().get().getDestiny();
+	
+	public Double getCost() {
+		Double price = 0.0;
+		for (Section s: sectionsInThisTrip()) {
+			if(! s.getOrigin().equals(lastTerminal)) {
+				price += s.getPrice();
+			}
+		}
+		return price;
+	}
+	
+	public List<Section> sectionsInThisTrip(){
+		
+		List<Section> allSections = maritimeCircuit.getSections();
+		List<Section> sectionsAhead = new ArrayList<>();
+		List<Terminal> terminalsInCircuit = allSections.stream().map(s-> s.getOrigin()).collect(Collectors.toList());
+		int indexFirstTerminal = terminalsInCircuit.indexOf(firstTerminal);
+		int indexLastTerminal = terminalsInCircuit.indexOf(lastTerminal);
+		for (int i = indexFirstTerminal; i < indexLastTerminal; i++) {
+		    sectionsAhead.add(allSections.get(i));
+		}
+		
+		return sectionsAhead;
+	}
 }

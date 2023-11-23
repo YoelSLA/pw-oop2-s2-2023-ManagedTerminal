@@ -32,12 +32,12 @@ public class Bill {
 	
 	public Double getTotalAmountPerTrip() {
 		
-		return 0.0; //TODO: implementar
+		return order.getTripCost();
 	}
 	
 	public Double getTotalAmountToPay() {
-		totalAmount = getTotalAmountPerServices() + getTotalAmountPerTrip();
-		return totalAmount;
+		
+		return getTotalAmountPerServices() + getTotalAmountPerTrip();;
 	}
 	
 	public void printInvoice() {
