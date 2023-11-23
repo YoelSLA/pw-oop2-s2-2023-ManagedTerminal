@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bill.Bill;
+import client.Consignee;
 import driver.Driver;
 import load.Load;
 import service.Service;
@@ -32,7 +33,13 @@ public abstract class Order {
 		this.truck = truck;
 		this.trip = trip;
 	}
-
+	
+	public Order(List<Service> servicesList, Load load, Trip trip) {
+		this.services = servicesList;
+		this.load = load;
+		this.trip = trip;
+	}
+	
 	public Bill getBill() {
 		return bill;
 	}
