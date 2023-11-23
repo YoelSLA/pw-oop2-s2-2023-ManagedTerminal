@@ -12,6 +12,7 @@ import trip.Trip;
 import truck.Truck;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ExportOrderTest {
 	private ExportOrder exportOrder;
@@ -57,4 +58,9 @@ class ExportOrderTest {
 		assertEquals(truck, exportOrder.getTruck());
 	}
 	
+	@Test
+	void getTripCost() {
+		when(trip.getCost()).thenReturn(100.0);
+		assertEquals(100.0, exportOrder.getTripCost());
+	}
 }

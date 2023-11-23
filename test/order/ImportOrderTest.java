@@ -11,7 +11,7 @@ import load.Load;
 import service.*;
 import trip.Trip;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +58,12 @@ class ImportOrderTest {
 	@Test
 	void getTrip() {
 		assertEquals(trip, importOrder.getTrip());
+	}
+	
+	@Test
+	void getTripCost() {
+		when(trip.getCost()).thenReturn(100.0);
+		assertEquals(100.0, importOrder.getTripCost());
 	}
 
 }
