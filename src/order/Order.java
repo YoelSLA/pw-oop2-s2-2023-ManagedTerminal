@@ -27,7 +27,7 @@ public abstract class Order {
 	public Order(Driver driver, Load load, Trip trip, Truck truck) {
 		this.bill = new Bill(this);
 		this.driver = driver;
-		Order.number = number++;
+		Order.number = (number != null) ? number + 1 : 0;
 		this.load = load;
 		this.services = new ArrayList<Service>(List.of(new Washed(100.0, 150.0)));
 		this.truck = truck;

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import client.Consignee;
+import load.Dry;
 import load.Load;
 import service.*;
 import trip.Trip;
@@ -21,7 +22,7 @@ class ImportOrderTest {
 	private Electricity electricityService;
 	private Weigh weighService;
 	private List<Service> services;
-	private Load load;
+	private Dry load;
 	private Trip trip;
 	
 	@BeforeEach
@@ -29,7 +30,7 @@ class ImportOrderTest {
 		consignee = mock(Consignee.class);
 		electricityService = mock(Electricity.class);
 		weighService = mock(Weigh.class);
-		load = mock(Load.class);
+		load = mock(Dry.class);
 		trip = mock(Trip.class);
 		services = new ArrayList<>();
 		
@@ -38,9 +39,25 @@ class ImportOrderTest {
 		
 		importOrder = new ImportOrder(services, load, consignee, trip);
 	}
+
 	@Test
 	void getCosignee() {
 		assertEquals(consignee, importOrder.getConsignee());
+	}
+	
+	@Test
+	void getServices() {
+		assertEquals(services, importOrder.getServices());
+	}
+	
+	@Test
+	void getLoad() {
+		assertEquals(load, importOrder.getLoad());
+	}
+	
+	@Test
+	void getTrip() {
+		assertEquals(trip, importOrder.getTrip());
 	}
 
 }

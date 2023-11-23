@@ -18,6 +18,6 @@ public class ImportOrder extends Order {
 	
 	public Consignee getConsignee() {
 		return consignee;
-	}
+	}	
 	
 }
