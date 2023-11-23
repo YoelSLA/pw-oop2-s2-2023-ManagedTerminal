@@ -34,7 +34,7 @@ class ManagedTerminalTest {
 
 	@BeforeEach
 	void setUp() {
-		terminalBuenosAires = new ManagedTerminal("Puerto de Buenos Aires", new GeographicalPosition(),
+		terminalBuenosAires = new ManagedTerminal("Puerto de Buenos Aires", new GeographicalPosition(65, 30),
 				new TimeRouting());
 		exportOrderOfYoel = mock(ExportOrder.class);
 		yoel = mock(Shipper.class);
@@ -81,7 +81,7 @@ class ManagedTerminalTest {
 		// Assert
 		assertThrows(RuntimeException.class, () -> {
 			terminalBuenosAires.hireExportService(exportOrderOfYoel);
-		}, "El camión no esta registrado en la terminal gestionada.");
+		}, "El camiï¿½n no esta registrado en la terminal gestionada.");
 	}
 
 	@Test
@@ -127,7 +127,7 @@ class ManagedTerminalTest {
 		// Assert
 		assertThrows(RuntimeException.class, () -> {
 			terminalBuenosAires.truckArrivedWithLoad(juan, exportOrderOfYoel, scaniaS, LocalDateTime.now());
-		}, "El camión no es el informado por el shipper.");
+		}, "El camiï¿½n no es el informado por el shipper.");
 	}
 
 	@Test

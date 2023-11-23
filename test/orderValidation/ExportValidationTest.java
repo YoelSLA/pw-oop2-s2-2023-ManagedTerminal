@@ -10,7 +10,7 @@ class ExportValidationTest {
 
 	@Test
 	void setUp() {
-		exportValidation = mock(ExportValidation.class);
+		//exportValidation = mock(ExportValidation.class);
 	}
 
 }

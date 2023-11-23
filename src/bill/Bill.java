@@ -37,7 +37,9 @@ public class Bill {
 	
 	public Double getTotalAmountToPay() {
 		
-		return getTotalAmountPerServices() + getTotalAmountPerTrip();;
+		totalAmount = getTotalAmountPerServices() + getTotalAmountPerTrip();
+		
+		return totalAmount;
 	}
 	
 	public void printInvoice() {
