@@ -2,13 +2,23 @@ package phase;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class InboundTest {
 
-	@Test
-	void test() {
-		fail("Not yet implemented");
+	private Inbound currentPhase; //SUT
+	private Arrived nextPhase; //DOC
+	
+	
+	@BeforeEach
+	void setUp() {
+		currentPhase = new Inbound();
+		nextPhase = new Arrived();
 	}
-
+	
+	@Test
+	void getNextPhase() {
+		assertEquals(nextPhase.getClass(), currentPhase.nextPhase().getClass());  
+	}
 }
