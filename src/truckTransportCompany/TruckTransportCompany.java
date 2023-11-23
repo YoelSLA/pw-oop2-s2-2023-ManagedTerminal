@@ -1,3 +1,4 @@
+
 package truckTransportCompany;
 
 import java.util.ArrayList;
@@ -8,19 +9,27 @@ import truck.Truck;
 
 public class TruckTransportCompany {
 
-	private Integer cuit;
+	private String cuit;
 	private List<Driver> drivers;
 	private String name;
 	private List<Truck> trucks;
 
-	public TruckTransportCompany(Integer cuit, String name) {
+	public TruckTransportCompany(String cuit, String name) {
 		this.cuit = cuit;
 		this.drivers = new ArrayList<Driver>();
 		this.name = name;
 		this.trucks = new ArrayList<Truck>();
 	}
+	
+	public void addDriver(Driver driver) {
+		drivers.add(driver);
+	}
+	
+	public void addTruck(Truck truck) {
+		trucks.add(truck);
+	}
 
-	public Integer getCuit() {
+	public String getCuit() {
 		return cuit;
 	}
 
