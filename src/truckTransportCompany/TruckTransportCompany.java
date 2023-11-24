@@ -21,11 +21,11 @@ public class TruckTransportCompany {
 		this.trucks = new ArrayList<Truck>();
 	}
 	
-	public void addDriver(Driver driver) {
+	public void registerDriver(Driver driver) {
 		drivers.add(driver);
 	}
 	
-	public void addTruck(Truck truck) {
+	public void registerTruck(Truck truck) {
 		trucks.add(truck);
 	}
 

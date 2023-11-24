@@ -1,51 +1,52 @@
 package truckTransportCompany;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import driver.Driver;
 import truck.Truck;
 
 class TruckTransportCompanyTest {
 
-	private Driver yoel; // DOC
-	private Truck volvoTruck; // DOC
-	private TruckTransportCompany truckTransportCompany; // SUT
+	@Mock private Driver yoel; // DOC
+	@Mock private Truck volvoTruck; // DOC
+	 private TruckTransportCompany transporteVesprini; // SUT
 	
 	@BeforeEach
 	void setUp() {
-		
-		yoel = mock(Driver.class);
-		volvoTruck = mock(Truck.class);
-		
-		truckTransportCompany = new TruckTransportCompany("42341174", "Transport");
+		transporteVesprini = new TruckTransportCompany("24678729716", "Transporte Vesprini");
 	}
 	
 	@Test
-	void testATruckTransportCompanyCreation() {
+	void testATruckTransportCompanyIsCreated() {
+		// Assert
+		assertEquals("24678729716", transporteVesprini.getCuit());
+		assertEquals(0, transporteVesprini.getDrivers().size());
+		assertEquals("Transporte Vesprini", transporteVesprini.getName());
+		assertEquals(0, transporteVesprini.getTrucks().size());
 		
-		assertEquals("42341174", truckTransportCompany.getCuit());
-		assertEquals(0, truckTransportCompany.getDrivers().size());
-		assertEquals("Transport", truckTransportCompany.getName());
-		assertEquals(0, truckTransportCompany.getTrucks().size());
 	}
 	
 	@Test
-	void testATruckTransportCompanyHasADriver() {
-
-		truckTransportCompany.addDriver(yoel);
-		assertEquals(1, truckTransportCompany.getDrivers().size());
-	
+	void testATruckTransportCompanyRegistersADriver() {
+		// Exercise
+		transporteVesprini.registerDriver(yoel);
+		// Assert
+		assertEquals(1, transporteVesprini.getDrivers().size());
+		assertTrue(transporteVesprini.getDrivers().contains(yoel));
 	}
 	
 	@Test
-	void testATruckTransportCompanyHasATruck() {
-
-		truckTransportCompany.addTruck(volvoTruck);
-		assertEquals(1, truckTransportCompany.getTrucks().size());
+	void testATruckTransportCompanyRegistersATruck() {
+		// Exercise
+		transporteVesprini.registerTruck(volvoTruck);
+		// Assert
+		assertEquals(1, transporteVesprini.getTrucks().size());
+		assertTrue(transporteVesprini.getTrucks().contains(volvoTruck));
 	}
 
 }
