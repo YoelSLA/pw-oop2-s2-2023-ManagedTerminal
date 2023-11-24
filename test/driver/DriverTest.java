@@ -1,27 +1,24 @@
 package driver;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import truck.Truck;
-
 class DriverTest {
-
-	private Driver driver;
 	
+	private Driver yoel;
+
 	@BeforeEach
 	void setUp() {
-		driver = new Driver(21345856, "Dario Paz");	
+		yoel = new Driver("42341174", "Yoel");
 	}
-	
-	void getDni() {
-		assertEquals(21345856, driver.getDni());
-	}
-	
-	void getName() {
-		assertEquals("Dario Paz", driver.getName());
+
+	@Test
+	void testADriverIsCreated() {
+		// Assert
+		assertEquals("42341174", yoel.getDni());
+		assertEquals("Yoel", yoel.getName());
 	}
 
 }

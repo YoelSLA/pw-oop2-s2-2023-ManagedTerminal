@@ -1,15 +1,15 @@
 package driver;
 
 public class Driver {
-	private int dni;
+	private String dni;
 	private String name;
 	
-	public Driver(int dni, String name) {
+	public Driver(String dni, String name) {
 		this.dni = dni;
 		this.name = name;
 	}
 	
-	public int getDni() {
+	public String getDni() {
 		return dni;
 	}
 	public String getName() {
