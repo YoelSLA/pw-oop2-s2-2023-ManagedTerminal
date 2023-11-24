@@ -7,26 +7,18 @@ import org.junit.jupiter.api.Test;
 
 class TruckTest {
 
-	private Truck truck;
+	private Truck scaniaR;
 	
 	@BeforeEach
 	void setUp() {
-		truck = new Truck("Ford", "Fiesta","ABC123");	
+		scaniaR = new Truck("R", "Scania","ABC123");	
 	}
 	
 	@Test
-	void getBrand() {
-		assertEquals("Ford", truck.getBrand());
-	}
-	
-	@Test
-	void getModel() {
-		assertEquals("Fiesta", truck.getModel());
-	}
-	
-	@Test
-	void getPatent() {
-		assertEquals("ABC123", truck.getPatent());
+	void testATruckIsCreated() {
+		assertEquals("R", scaniaR.getBrand());
+		assertEquals("Scania", scaniaR.getModel());
+		assertEquals("ABC123", scaniaR.getPatent());
 	}
 
 }
