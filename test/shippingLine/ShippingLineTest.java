@@ -1,6 +1,9 @@
 package shippingLine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,12 +15,14 @@ import trip.Trip;
 class ShippingLineTest {
 
 	private ShippingLine apmMaersk; // SUT
-	private Trip trip;
-	private Ship nautilus;
-	private MaritimeCircuit buenosAiresToRoma;
+	private Trip trip; // DOC
+	private Ship nautilus; // DOC
+	private MaritimeCircuit buenosAiresToRoma; // DOC
 
 	@BeforeEach
 	void setUp() {
+		trip = mock(Trip.class);
+
 		apmMaersk = new ShippingLine("30234051497", "APM Maersk");
 
 	}
@@ -48,4 +53,40 @@ class ShippingLineTest {
 		assertEquals(1, apmMaersk.getMaritimeCircuits().size());
 	}
 
+	@Test
+	void testAShippingLineRegistersATrip() {
+		// SetUp
+		apmMaersk.registerMaritimeCircuit(buenosAiresToRoma);
+		apmMaersk.registerShip(nautilus);
+		when(trip.getMaritimeCircuit()).thenReturn(buenosAiresToRoma);
+		when(trip.getShip()).thenReturn(nautilus);
+		// Excerise
+		apmMaersk.registerTrip(trip);
+		// Assert
+		assertEquals(1, apmMaersk.getTrips().size());
+	}
+
+	@Test
+	void testAShippingLineCannotRegisterTheShipBecauseItIsNotRegistered() {
+		// SetUp
+		apmMaersk.registerMaritimeCircuit(buenosAiresToRoma);
+		when(trip.getMaritimeCircuit()).thenReturn(buenosAiresToRoma);
+		when(trip.getShip()).thenReturn(nautilus);
+		// Assert
+		assertThrows(RuntimeException.class, () -> {
+			apmMaersk.registerTrip(trip);
+		}, "The ship is not registered in the shipping line.");
+	}
+
+	@Test
+	void testAShippingLineCannotRegisterTheMaritimeCircuitBecauseItIsNotRegistered() {
+		// SetUp
+		apmMaersk.registerShip(nautilus);
+		when(trip.getMaritimeCircuit()).thenReturn(buenosAiresToRoma);
+		when(trip.getShip()).thenReturn(nautilus);
+		// Assert
+		assertThrows(RuntimeException.class, () -> {
+			apmMaersk.registerTrip(trip);
+		}, "The maritime circuit is not registered in the shipping line.");
+	}
 }
