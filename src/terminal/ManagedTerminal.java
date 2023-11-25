@@ -13,7 +13,7 @@ import order.ExportOrder;
 import order.ImportOrder;
 import orderValidation.ExportValidation;
 import routing.Routing;
-import shippingCompany.ShippingCompany;
+import shippingLine.ShippingLine;
 import truck.Truck;
 import truckTransportCompany.TruckTransportCompany;
 
@@ -25,7 +25,7 @@ public class ManagedTerminal extends Terminal {
 	private List<ImportOrder> importOrders;
 	private Routing routing;
 	private List<Shipper> shippers;
-	private List<ShippingCompany> shippingCompanies;
+	private List<ShippingLine> shippingCompanies;
 	private List<TruckTransportCompany> truckTransportCompanies;
 
 	public ManagedTerminal(String name, GeographicalPosition geographicalPosition, Routing routing) {
@@ -36,7 +36,7 @@ public class ManagedTerminal extends Terminal {
 		this.importOrders = new ArrayList<ImportOrder>();
 		this.routing = routing;
 		this.shippers = new ArrayList<Shipper>();
-		this.shippingCompanies = new ArrayList<ShippingCompany>();
+		this.shippingCompanies = new ArrayList<ShippingLine>();
 		this.truckTransportCompanies = new ArrayList<TruckTransportCompany>();
 	}
 
@@ -69,7 +69,7 @@ public class ManagedTerminal extends Terminal {
 		return shippers;
 	}
 
-	public List<ShippingCompany> getShippingCompanies() {
+	public List<ShippingLine> getShippingCompanies() {
 		return shippingCompanies;
 	}
 
@@ -103,7 +103,7 @@ public class ManagedTerminal extends Terminal {
 		shippers.add(shipper);
 	}
 
-	public void registerShippingCompany(ShippingCompany shippingCompany) {
+	public void registerShippingCompany(ShippingLine shippingCompany) {
 		shippingCompanies.add(shippingCompany);
 	}
 

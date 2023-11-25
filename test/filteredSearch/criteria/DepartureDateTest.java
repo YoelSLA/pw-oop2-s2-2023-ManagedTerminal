@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import maritimeCircuit.MaritimeCircuit;
-import shippingCompany.ShippingCompany;
+import shippingLine.ShippingLine;
 import terminal.ManagedTerminal;
 
 /**
@@ -47,8 +47,8 @@ class DepartureDateTest {
 		//set up
 		MaritimeCircuit mc1 = mock(MaritimeCircuit.class);
 		MaritimeCircuit mc2 = mock(MaritimeCircuit.class);
-		ShippingCompany sc1 = mock(ShippingCompany.class);
-		ShippingCompany sc2 = mock(ShippingCompany.class);
+		ShippingLine sc1 = mock(ShippingLine.class);
+		ShippingLine sc2 = mock(ShippingLine.class);
 		
 		
 		List<MaritimeCircuit> listMC = new ArrayList<MaritimeCircuit>();
@@ -65,7 +65,7 @@ class DepartureDateTest {
 		expectedListA.add(mc1);
 		expectedListA.add(mc2);
 		
-		List<ShippingCompany> companies = new ArrayList<>();
+		List<ShippingLine> companies = new ArrayList<>();
 		companies.add(sc1);
 		companies.add(sc2);
 		
