@@ -26,11 +26,11 @@ public class ShippingLine {
 		this.trips = new ArrayList<Trip>();
 	}
 
-	public void addMaritimeCircuit(MaritimeCircuit maritimeCircuit) {
+	public void registerMaritimeCircuit(MaritimeCircuit maritimeCircuit) {
 		maritimeCircuits.add(maritimeCircuit);
 	}
 
-	public void addShip(Ship ship) {
+	public void registerShip(Ship ship) {
 		ships.add(ship);
 	}
 

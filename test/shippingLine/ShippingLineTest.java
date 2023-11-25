@@ -32,4 +32,20 @@ class ShippingLineTest {
 		assertEquals(0, apmMaersk.getTrips().size());
 	}
 
+	@Test
+	void testAShippingLineRegistersAShip() {
+		// Excerise
+		apmMaersk.registerShip(nautilus);
+		// Assert
+		assertEquals(1, apmMaersk.getShips().size());
+	}
+
+	@Test
+	void testAShippingLineRegistersAMaritimeCircuit() {
+		// Excerise
+		apmMaersk.registerMaritimeCircuit(buenosAiresToRoma);
+		// Assert
+		assertEquals(1, apmMaersk.getMaritimeCircuits().size());
+	}
+
 }
