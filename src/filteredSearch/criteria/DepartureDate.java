@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import maritimeCircuit.MaritimeCircuit;
-import shippingCompany.ShippingCompany;
+import shippingLine.ShippingLine;
 import terminal.ManagedTerminal;
 
 /**
@@ -30,7 +30,7 @@ public class DepartureDate implements Criteria {
 		 * */
 		List<MaritimeCircuit> searchedCircuits = new ArrayList<>();
 				
-		for(ShippingCompany sc: terminal.getShippingCompanies()) {
+		for(ShippingLine sc: terminal.getShippingCompanies()) {
 			searchedCircuits.addAll(sc.getCircuitsWithTripsThatStartOn(searchedDate));
 		}
 		

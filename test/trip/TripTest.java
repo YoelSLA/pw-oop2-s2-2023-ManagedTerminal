@@ -1,9 +1,8 @@
 package trip;
 import maritimeCircuit.MaritimeCircuit;
 import terminal.Terminal;
-import section.Section;
 import ship.Ship;
-
+import stretch.Stretch;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -22,7 +21,7 @@ class TripTest {
 	private MaritimeCircuit maritimeCircuit; //DOC
 	private Terminal terminalBuenosAires; //DOC
 	private Terminal terminalMontevideo; //DOC
-	private Section sectionBuenosAiresMontevideo; //DOC
+	private Stretch sectionBuenosAiresMontevideo; //DOC
 	private Ship ship; //DOC
 	
 	@BeforeEach
@@ -32,7 +31,7 @@ class TripTest {
 		ship = mock(Ship.class);
 		terminalBuenosAires = mock(Terminal.class);
 		terminalMontevideo = mock(Terminal.class);
-		sectionBuenosAiresMontevideo = new Section(terminalBuenosAires, terminalMontevideo, 50.0, Duration.ofHours(2));
+		sectionBuenosAiresMontevideo = new Stretch(terminalBuenosAires, terminalMontevideo, 50.0, Duration.ofHours(2));
 		trip = new Trip(maritimeCircuit, ship, fechaActual, terminalBuenosAires, terminalMontevideo);
 		
 	}
@@ -52,7 +51,7 @@ class TripTest {
 	
 	@Test
 	void getNextTerminalFrom() {
-		List<Section> sectionsBAM = new ArrayList<Section>();
+		List<Stretch> sectionsBAM = new ArrayList<Stretch>();
 		sectionsBAM.add(sectionBuenosAiresMontevideo);
 		//Exercise
 		when(maritimeCircuit.getSections()).thenReturn(sectionsBAM);

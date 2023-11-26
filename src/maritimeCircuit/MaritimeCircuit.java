@@ -1,50 +1,51 @@
 package maritimeCircuit;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import section.Section;
+import stretch.Stretch;
 import terminal.Terminal;
 
 public class MaritimeCircuit {
 
-	private List<Section> sections;
+	private List<Stretch> stretchs;
 
-	public MaritimeCircuit() {
-		this.sections = new ArrayList<Section>();
-	}
-
-	public void addSection(Section section) {
-		sections.add(section);
+	public MaritimeCircuit(List<Stretch> stretchs) {
+		this.stretchs = stretchs;
 	}
 
 	public Double getPrice() {
-		return sections.stream().mapToDouble(Section::getPrice).sum();
+		return getStretchs().stream().mapToDouble(Stretch::getPrice).sum();
 	}
 
-	public List<Section> getSections() {
-		return sections;
+	public List<Stretch> getStretchs() {
+		return stretchs;
 	}
 
-	public boolean itHasASectionWhereItIs(Terminal terminal) {
-		return sections.stream().anyMatch(section -> section.isItHasATerminal(terminal));
+	private Integer originNumberTerminal(Terminal origin) {
+		return getStretchs()
+				.indexOf(getStretchs().stream().filter(s -> s.getOrigin().equals(origin)).findFirst().get());
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(sections);
+	private Integer destinyNumberTerminal(Terminal destiny) {
+		return getStretchs()
+				.indexOf(getStretchs().stream().filter(s -> s.getOrigin().equals(destiny)).findFirst().get());
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		MaritimeCircuit other = (MaritimeCircuit) obj;
-		return Objects.equals(sections, other.sections);
+	public boolean areTheTerminalsThere(Terminal origin, Terminal destiny) {
+		return isTheOriginTerminal(origin) && isTheDestinyTerminal(destiny)
+				&& isTheOriginTerminalBeforeDestinationTerminal(origin, destiny);
 	}
+
+	public boolean isTheDestinyTerminal(Terminal destiny) {
+		return getStretchs().stream().anyMatch(s -> s.getDestiny().equals(destiny));
+	}
+
+	public boolean isTheOriginTerminal(Terminal origin) {
+		return getStretchs().stream().anyMatch(s -> s.getOrigin().equals(origin));
+	}
+
+	public boolean isTheOriginTerminalBeforeDestinationTerminal(Terminal origin, Terminal destiny) {
+		return originNumberTerminal(origin) < destinyNumberTerminal(destiny);
+	}
+
 }

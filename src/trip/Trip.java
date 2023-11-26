@@ -7,10 +7,10 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import ship.Ship;
+import stretch.Stretch;
 import maritimeCircuit.MaritimeCircuit;
 import terminal.Terminal;
 import terminal.ManagedTerminal;
-import section.Section;
 /**
  * @author alejandrabesel
  * Clase que representa a un viaje.
@@ -61,7 +61,7 @@ public class Trip {
 	 * 
 	 * */
 	public void schedule() {
-		Section startSection = maritimeCircuit.getSections().stream().filter(section -> section.getOrigin().equals(this.firstTerminal)).findFirst().get();
+		Stretch startSection = maritimeCircuit.getSections().stream().filter(section -> section.getOrigin().equals(this.firstTerminal)).findFirst().get();
 		LocalDate currentDate = startDate;
 		System.out.print("Section Start Date:" + this.startDate + "Origin Terminal:" + this.firstTerminal);
 		this.maritimeCircuit.getSections().forEach(section -> {
@@ -71,7 +71,7 @@ public class Trip {
 		
 	
 	public Terminal nextTerminalFrom(Terminal terminal) {
-		Section nextTerminal = this.getMaritimeCircuit().getSections().stream()
+		Stretch nextTerminal = this.getMaritimeCircuit().getSections().stream()
 				.filter(section -> section.getOrigin().equals(terminal))
 	            .findFirst().orElseThrow(() -> new NoSuchElementException("No se encontró una sección con el terminal de origen proporcionado."));
 		return nextTerminal.getDestiny();
@@ -82,7 +82,7 @@ public class Trip {
 	
 	public Double getCost() {
 		Double price = 0.0;
-		for (Section s: sectionsInThisTrip()) {
+		for (Stretch s: sectionsInThisTrip()) {
 			if(! s.getOrigin().equals(lastTerminal)) {
 				price += s.getPrice();
 			}
@@ -90,10 +90,10 @@ public class Trip {
 		return price;
 	}
 	
-	public List<Section> sectionsInThisTrip(){
+	public List<Stretch> sectionsInThisTrip(){
 		
-		List<Section> allSections = maritimeCircuit.getSections();
-		List<Section> sectionsAhead = new ArrayList<>();
+		List<Stretch> allSections = maritimeCircuit.getSections();
+		List<Stretch> sectionsAhead = new ArrayList<>();
 		List<Terminal> terminalsInCircuit = allSections.stream().map(s-> s.getOrigin()).collect(Collectors.toList());
 		int indexFirstTerminal = terminalsInCircuit.indexOf(firstTerminal);
 		int indexLastTerminal = terminalsInCircuit.indexOf(lastTerminal);
