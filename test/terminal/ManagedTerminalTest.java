@@ -17,7 +17,7 @@ import client.Shipper;
 import driver.Driver;
 import geographicalPosition.GeographicalPosition;
 import order.ExportOrder;
-import routing.TimeRouting;
+import routing.ShorterTime;
 import truck.Truck;
 import truckTransportCompany.TruckTransportCompany;
 
@@ -35,7 +35,7 @@ class ManagedTerminalTest {
 	@BeforeEach
 	void setUp() {
 		terminalBuenosAires = new ManagedTerminal("Puerto de Buenos Aires", new GeographicalPosition(65, 30),
-				new TimeRouting());
+				new ShorterTime());
 		exportOrderOfYoel = mock(ExportOrder.class);
 		yoel = mock(Shipper.class);
 		scaniaR = mock(Truck.class);
