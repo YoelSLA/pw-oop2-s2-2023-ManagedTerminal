@@ -15,16 +15,14 @@ import stretch.Stretch;
 import terminal.ManagedTerminal;
 import terminal.Terminal;
 
-// EJEMPLO
+//maritimeCircuitOne 
+//(Buenos Aires - Santiago (100) | Santiago - Quito (200) | Quito - Lima (300) | Lima - Caracas (400) | Caracas - Buenos Aires (500) ) -> 4 intemerdias
+//maritimeCircuitTwo
+//(Buenos Aires - Santiago (100) | Santiago - Lima | Lima - Caracas (400) | Caracas -Buenos Aires (500) ) -> 3 intemerdias
 
-// maritimeCircuitOne 
-// (Buenos Aires - Santiago | Santiago - Quito | Quito - Lima | Lima - Caracas | Caracas - Buenos Aires ) -> 4 intemerdias
-// maritimeCircuitTwo
-//(Buenos Aires - Santiago | Santiago - Lima | Lima - Caracas | Caracas -Buenos Aires ) -> 3 intemerdias
+class LowerPriceTest {
 
-class FewerIntemediateTerminals {
-
-	private FewerIntermediateTerminals fewerIntermediateTerminals;
+	private LowerPrice lowerPrice;
 	private ManagedTerminal buenosAires;
 	private Terminal caracas;
 	private MaritimeCircuit maritimeCircuitOne;
@@ -32,7 +30,7 @@ class FewerIntemediateTerminals {
 
 	@BeforeEach
 	void setUp() {
-		fewerIntermediateTerminals = new FewerIntermediateTerminals();
+		lowerPrice = new LowerPrice();
 		configureMocks();
 	}
 
@@ -53,16 +51,23 @@ class FewerIntemediateTerminals {
 
 		when(buenosAiresSantiago.getOrigin()).thenReturn(buenosAires);
 		when(buenosAiresSantiago.getDestiny()).thenReturn(santiago);
+		when(buenosAiresSantiago.getPrice()).thenReturn(100.0);
 		when(santiagoQuito.getOrigin()).thenReturn(santiago);
 		when(santiagoQuito.getDestiny()).thenReturn(quito);
+		when(santiagoQuito.getPrice()).thenReturn(200.0);
 		when(quitoLima.getOrigin()).thenReturn(quito);
 		when(quitoLima.getDestiny()).thenReturn(lima);
+		when(quitoLima.getPrice()).thenReturn(300.0);
 		when(limaCaracas.getOrigin()).thenReturn(lima);
 		when(limaCaracas.getDestiny()).thenReturn(caracas);
+		when(limaCaracas.getPrice()).thenReturn(400.0);
 		when(caracasBuenosAires.getOrigin()).thenReturn(caracas);
 		when(caracasBuenosAires.getDestiny()).thenReturn(buenosAires);
+		when(caracasBuenosAires.getPrice()).thenReturn(500.0);
 		when(santiagoLima.getOrigin()).thenReturn(buenosAires);
 		when(santiagoLima.getDestiny()).thenReturn(buenosAires);
+		when(caracasBuenosAires.getPrice()).thenReturn(1000.0);
+
 		when(maritimeCircuitOne.getStretchs()).thenReturn(
 				Arrays.asList(buenosAiresSantiago, santiagoQuito, quitoLima, limaCaracas, caracasBuenosAires));
 		when(maritimeCircuitTwo.getStretchs())
@@ -70,15 +75,15 @@ class FewerIntemediateTerminals {
 	}
 
 	@Test
-	void testBestCircuitWithFewestIntermediates() {
-		assertEquals(maritimeCircuitTwo, fewerIntermediateTerminals.bestCircuitBetween(buenosAires, caracas,
+	void testBestCircuitWithLowerPrice() {
+		assertEquals(maritimeCircuitOne, lowerPrice.bestCircuitBetween(buenosAires, caracas,
 				Arrays.asList(maritimeCircuitOne, maritimeCircuitTwo)));
 	}
 
 	@Test
 	void testCannotFindBestCircuitBecauseDestinyTerminalNotInMaritimeCircuits() {
 		assertThrows(RuntimeException.class, () -> {
-			fewerIntermediateTerminals.bestCircuitBetween(buenosAires, mock(Terminal.class),
+			lowerPrice.bestCircuitBetween(buenosAires, mock(Terminal.class),
 					Arrays.asList(maritimeCircuitOne, maritimeCircuitTwo));
 		});
 	}
@@ -86,8 +91,8 @@ class FewerIntemediateTerminals {
 	@Test
 	void testCannotFindBestCircuitBecauseTheOriginTerminalHasNotCircuits() {
 		assertThrows(RuntimeException.class, () -> {
-			fewerIntermediateTerminals.bestCircuitBetween(buenosAires, caracas,
-					Arrays.asList(mock(MaritimeCircuit.class)));
+			lowerPrice.bestCircuitBetween(buenosAires, caracas, Arrays.asList(mock(MaritimeCircuit.class)));
 		});
 	}
+
 }
