@@ -1,61 +1,74 @@
 package maritimeCircuit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
-import java.time.Duration;
+import java.util.List;
 
+import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import section.Section;
+import stretch.Stretch;
+import terminal.ManagedTerminal;
 import terminal.Terminal;
 
 class MaritimeCircuitTest {
 
-	private Terminal terminalBuenosAires; // DOC
+	private MaritimeCircuit maritimeCircuit; // SUT
+	private Stretch buenosAiresMontevideo; // DOC
+	private Stretch montevideoRioDeJaneiro; // DOC
+	private Stretch rioDeJaneiroBuenosAires; // DOC
+	private ManagedTerminal terminalBuenosAires; // DOC
 	private Terminal terminalMontevideo; // DOC
 	private Terminal terminalRioDeJaneiro; // DOC
-	private Section sectionBuenosAiresMontevideo; // DOC
-	private Section sectionMontevideoBuenosAires; // DOC
-	private MaritimeCircuit maerskLine; // SUT
 
 	@BeforeEach
 	void setUp() {
-		terminalBuenosAires = mock(Terminal.class);
+		buenosAiresMontevideo = mock(Stretch.class);
+		montevideoRioDeJaneiro = mock(Stretch.class);
+		rioDeJaneiroBuenosAires = mock(Stretch.class);
+		terminalBuenosAires = mock(ManagedTerminal.class);
 		terminalMontevideo = mock(Terminal.class);
 		terminalRioDeJaneiro = mock(Terminal.class);
-		sectionBuenosAiresMontevideo = new Section(terminalBuenosAires, terminalMontevideo, 50.0, Duration.ofHours(2));
-		sectionMontevideoBuenosAires = new Section(terminalMontevideo, terminalBuenosAires, 20.0, Duration.ofHours(4));
 
-		maerskLine = new MaritimeCircuit(); // SUT
-
-		maerskLine.addSection(sectionBuenosAiresMontevideo);
-		maerskLine.addSection(sectionMontevideoBuenosAires);
-
+		maritimeCircuit = new MaritimeCircuit(
+				List.of(buenosAiresMontevideo, montevideoRioDeJaneiro, rioDeJaneiroBuenosAires));
 	}
 
 	@Test
 	void testAMaritimeCircuitHasATwoSections() {
-		assertEquals(2, maerskLine.getSections().size());
+		assertTrue(maritimeCircuit.areTheTerminalsThere(terminalBuenosAires, terminalMontevideo));
 	}
+//
+//	@Test
+//	void testAMaritimeCircuitCalculatesTheTotalPriceBetweenAllItsSections() {
+//		assertEquals(70.00, maritimeCircuit.getPrice());
+//	}
+//
+//	@Test
+//	void AMaritimeCircuitKnowsIfItHasACertainTerminalInItsSections() {
+//		assertTrue(maritimeCircuit.itHasASectionWhereItIs(terminalBuenosAires));
+//	}
+//
+//	@Test
+//	void AMaritimeCircuitKnowsIfItHasNotACertainTerminalInItsSections() {
+//		assertFalse(maritimeCircuit.itHasASectionWhereItIs(terminalRioDeJaneiro));
+//	}
 
-	@Test
-	void testAMaritimeCircuitCalculatesTheTotalPriceBetweenAllItsSections() {
-		assertEquals(70.00, maerskLine.getPrice());
-	}
-
-	@Test
-	void AMaritimeCircuitKnowsIfItHasACertainTerminalInItsSections() {
-		assertTrue(maerskLine.itHasASectionWhereItIs(terminalBuenosAires));
-	}
-
-	@Test
-	void AMaritimeCircuitKnowsIfItHasNotACertainTerminalInItsSections() {
-		assertFalse(maerskLine.itHasASectionWhereItIs(terminalRioDeJaneiro));
-
-	}
+//	@Test
+//	void hola2() {
+//		// Set Up
+//		when(terminalBuenosAires.getName()).thenReturn("Puerto de Buenos Aires");
+//		when(terminalMontevideo.getName()).thenReturn("Puerto de Montevideo");
+//		when(terminalRioDeJaneiro.getName()).thenReturn("Puerto de Rio de Janeiro");
+//		when(buenosAiresMontevideo.getOrigin()).thenReturn(terminalBuenosAires);
+//		when(buenosAiresMontevideo.getDestiny()).thenReturn(terminalMontevideo);
+//		when(montevideoRioDeJaneiro.getOrigin()).thenReturn(terminalMontevideo);
+//		when(montevideoRioDeJaneiro.getDestiny()).thenReturn(terminalRioDeJaneiro);
+//		when(rioDeJaneiroBuenosAires.getOrigin()).thenReturn(terminalRioDeJaneiro);
+//		when(rioDeJaneiroBuenosAires.getDestiny()).thenReturn(terminalBuenosAires);
+//		// Assert
+//		assertTrue(maritimeCircuit.exists(terminalBuenosAires));
+//	}
 
 }

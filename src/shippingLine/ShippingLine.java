@@ -26,20 +26,6 @@ public class ShippingLine {
 		this.trips = new ArrayList<Trip>();
 	}
 
-	public void registerMaritimeCircuit(MaritimeCircuit maritimeCircuit) {
-		maritimeCircuits.add(maritimeCircuit);
-	}
-
-	public void registerShip(Ship ship) {
-		ships.add(ship);
-	}
-
-	public void registerTrip(Trip trip) {
-		validateShipRegistrationIn(trip);
-		validateMaritimeCircuitRegistrationIn(trip);
-		trips.add(trip);
-	}
-
 	public String getCuit() {
 		return cuit;
 	}
@@ -60,9 +46,41 @@ public class ShippingLine {
 		return trips;
 	}
 
-	public List<MaritimeCircuit> maritimeCircuitsWhereTheTerminal(Terminal terminal) {
-		return maritimeCircuits.stream().filter(m -> m.itHasASectionWhereItIs(terminal)).collect(Collectors.toList());
+	public List<MaritimeCircuit> maritimeCircuitsContaining(Terminal origin, Terminal destiny) {
+		return getMaritimeCircuits().stream()
+				.filter(m -> m.getStretchs().stream()
+						.anyMatch(s -> s.getOrigin().equals(origin) && s.getDestiny().equals(destiny)))
+				.collect(Collectors.toList());
 	}
+
+	public List<MaritimeCircuit> maritimeCircuitsContaining3(Terminal origin, Terminal destiny) {
+		return getMaritimeCircuits().stream()
+				.filter(m -> m.isTheOriginTerminal(origin) && m.isTheDestinyTerminal(destiny)
+						&& m.isTheOriginTerminalBeforeDestinationTerminal(origin, destiny))
+				.collect(Collectors.toList());
+	}
+
+	public List<MaritimeCircuit> maritimeCircuitsContaining2(Terminal origin, Terminal destiny) {
+		return getMaritimeCircuits().stream().filter(m -> m.areTheTerminalsThere(origin, destiny)).toList();
+	}
+
+	public void registerMaritimeCircuit(MaritimeCircuit maritimeCircuit) {
+		maritimeCircuits.add(maritimeCircuit);
+	}
+
+	public void registerShip(Ship ship) {
+		ships.add(ship);
+	}
+
+	public void registerTrip(Trip trip) throws Exception {
+		validateShipRegistrationIn(trip);
+		validateMaritimeCircuitRegistrationIn(trip);
+		trips.add(trip);
+	}
+
+//	public List<MaritimeCircuit> maritimeCircuitsWhereTheTerminal(Terminal terminal) {
+//		return maritimeCircuits.stream().filter(m -> m.itHasASectionWhereItIs(terminal)).collect(Collectors.toList());
+//	}
 
 	/**
 	 * Metodo que retorna la lista de viajes que comienzan en la fecha dada.
@@ -90,13 +108,13 @@ public class ShippingLine {
 		return circuits;
 	}
 
-	private void validateMaritimeCircuitRegistrationIn(Trip trip) {
+	private void validateMaritimeCircuitRegistrationIn(Trip trip) throws Exception {
 		if (!getMaritimeCircuits().contains(trip.getMaritimeCircuit())) {
 			throw new RuntimeException("The maritime circuit is not registered in the shipping line.");
 		}
 	}
 
-	private void validateShipRegistrationIn(Trip trip) {
+	private void validateShipRegistrationIn(Trip trip) throws Exception {
 		if (!getShips().contains(trip.getShip())) {
 			throw new RuntimeException("The ship is not registered in the shipping line.");
 		}

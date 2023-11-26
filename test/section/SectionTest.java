@@ -9,6 +9,7 @@ import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import stretch.Stretch;
 import terminal.Terminal;
 
 class SectionTest {
@@ -16,16 +17,16 @@ class SectionTest {
 	private Terminal terminalBuenosAires; // DOC
 	private Terminal terminalMontevideo; // DOC
 	private Terminal terminalRioDeJaneiro; // DOC
-	private Section sectionBuenosAiresMontevideo; // SUT
-	private Section sectionMontevideoRioDeJainero; // SUT
+	private Stretch sectionBuenosAiresMontevideo; // SUT
+	private Stretch sectionMontevideoRioDeJainero; // SUT
 
 	@BeforeEach
 	void setUp() {
 		terminalBuenosAires = mock(Terminal.class);
 		terminalMontevideo = mock(Terminal.class);
 		terminalRioDeJaneiro = mock(Terminal.class);
-		sectionBuenosAiresMontevideo = new Section(terminalBuenosAires, terminalMontevideo, 50.0, Duration.ofHours(2));
-		sectionMontevideoRioDeJainero = new Section(terminalMontevideo, terminalRioDeJaneiro, 20.0,
+		sectionBuenosAiresMontevideo = new Stretch(terminalBuenosAires, terminalMontevideo, 50.0, Duration.ofHours(2));
+		sectionMontevideoRioDeJainero = new Stretch(terminalMontevideo, terminalRioDeJaneiro, 20.0,
 				Duration.ofHours(4));
 
 	}
