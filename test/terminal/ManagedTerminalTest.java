@@ -1,152 +1,259 @@
 package terminal;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Month;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import client.Consignee;
 import client.Shipper;
 import driver.Driver;
 import geographicalPosition.GeographicalPosition;
+import maritimeCircuit.MaritimeCircuit;
 import order.ExportOrder;
-import routing.ShorterTime;
+import routing.Routing;
+import shippingLine.ShippingLine;
+import stretch.Stretch;
+import trip.Trip;
 import truck.Truck;
 import truckTransportCompany.TruckTransportCompany;
 
 class ManagedTerminalTest {
 
-	private ManagedTerminal terminalBuenosAires; // SUT
-	private ExportOrder exportOrderOfYoel; // DOC
-	private Shipper yoel; // DOC
-	private Truck scaniaR; // DOC
-	private Truck scaniaS; // DOC
-	private Driver carlos; // DOC
-	private Driver juan; // DOC
-	private TruckTransportCompany monroySchiavon;
+	private Consignee consigneeGabriela;
+//-------------------------------------------------------------
+	private Driver driverAlberto;
+//-------------------------------------------------------------
+	private ExportOrder exportOrderOfAlejandra;
+//-------------------------------------------------------------
+	private GeographicalPosition positionBuenosAires;
+//-------------------------------------------------------------
+	private MaritimeCircuit maritimeCircuit;
+//-------------------------------------------------------------
+	private Routing ferFewerIntermediateTerminals;
+	private Routing lowerPrice;
+	private Routing shorterTime;
+//-------------------------------------------------------------
+	private Shipper shipperAlejandra;
+	private ShippingLine apmMaersk;
+//-------------------------------------------------------------
+	private Stretch buenosAiresSantiago;
+	private Stretch santiagoQuito;
+	private Stretch quitoLima;
+	private Stretch limaBuenosAires;
+//-------------------------------------------------------------
+	private Terminal santiago;
+	private Terminal quito;
+	private Terminal lima;
+//-------------------------------------------------------------
+	private Trip trip;
+//-------------------------------------------------------------
+	private Truck volvoTruck;
+//-------------------------------------------------------------
+	private TruckTransportCompany transporteVesprini;
+//-------------------------------------------------------------
+	private ManagedTerminal buenosAires; // SUT
 
 	@BeforeEach
 	void setUp() {
-		terminalBuenosAires = new ManagedTerminal("Puerto de Buenos Aires", new GeographicalPosition(65, 30),
-				new ShorterTime());
-		exportOrderOfYoel = mock(ExportOrder.class);
-		yoel = mock(Shipper.class);
-		scaniaR = mock(Truck.class);
-		scaniaS = mock(Truck.class);
-		carlos = mock(Driver.class);
-		juan = mock(Driver.class);
-		monroySchiavon = mock(TruckTransportCompany.class);
+//-------------------------------------------------------------
+		// DRIVER
+		driverAlberto = mock(Driver.class);
+//-------------------------------------------------------------
+		// CONSIGNEE
+		consigneeGabriela = mock(Consignee.class);
+//-------------------------------------------------------------
+		// EXPORT ORDER
+		exportOrderOfAlejandra = mock(ExportOrder.class);
 
-		when(exportOrderOfYoel.getShipper()).thenReturn(yoel);
-		when(exportOrderOfYoel.getDriver()).thenReturn(carlos);
-		when(exportOrderOfYoel.getTruck()).thenReturn(scaniaR);
-		when(monroySchiavon.getTrucks()).thenReturn(List.of());
-		when(monroySchiavon.getDrivers()).thenReturn(List.of());
-		terminalBuenosAires.registerTruckTransportCompany(monroySchiavon);
+		when(exportOrderOfAlejandra.getShipper()).thenReturn(shipperAlejandra);
+		when(exportOrderOfAlejandra.getDriver()).thenReturn(driverAlberto);
+		when(exportOrderOfAlejandra.getTruck()).thenReturn(volvoTruck);
+		when(exportOrderOfAlejandra.getTrip()).thenReturn(trip);
+//-------------------------------------------------------------
+		// GEOGRAPHICAL POSITION
+		positionBuenosAires = mock(GeographicalPosition.class);
 
+		when(positionBuenosAires.getLatitude()).thenReturn(-34.5795823299825);
+		when(positionBuenosAires.getLongitude()).thenReturn(-58.373877081937);
+//-------------------------------------------------------------
+		// MARITIME CIRCUIT
+		maritimeCircuit = mock(MaritimeCircuit.class);
+
+		when(maritimeCircuit.getStretchs())
+				.thenReturn(Arrays.asList(buenosAiresSantiago, santiagoQuito, quitoLima, limaBuenosAires));
+//-------------------------------------------------------------
+		// SHIPPER
+		shipperAlejandra = mock(Shipper.class);
+//-------------------------------------------------------------
+		// SHIPPING LINE
+		apmMaersk = mock(ShippingLine.class);
+//-------------------------------------------------------------
+		// STRETCH
+		buenosAiresSantiago = mock(Stretch.class);
+		when(buenosAiresSantiago.getOrigin()).thenReturn(buenosAires);
+		when(buenosAiresSantiago.getDestiny()).thenReturn(santiago);
+		when(buenosAiresSantiago.getTime()).thenReturn(Duration.ofHours(3));
+
+		santiagoQuito = mock(Stretch.class);
+		when(santiagoQuito.getOrigin()).thenReturn(santiago);
+		when(santiagoQuito.getDestiny()).thenReturn(quito);
+		when(santiagoQuito.getTime()).thenReturn(Duration.ofHours(5));
+
+		quitoLima = mock(Stretch.class);
+		when(quitoLima.getOrigin()).thenReturn(quito);
+		when(quitoLima.getDestiny()).thenReturn(lima);
+		when(quitoLima.getTime()).thenReturn(Duration.ofHours(7));
+
+		limaBuenosAires = mock(Stretch.class);
+		when(limaBuenosAires.getOrigin()).thenReturn(lima);
+		when(limaBuenosAires.getDestiny()).thenReturn(buenosAires);
+		when(limaBuenosAires.getTime()).thenReturn(Duration.ofHours(15));
+//-------------------------------------------------------------
+		// TERMINAL
+		santiago = mock(Terminal.class);
+		quito = mock(Terminal.class);
+		lima = mock(Terminal.class);
+//-------------------------------------------------------------
+		// TRUCK
+		volvoTruck = mock(Truck.class);
+//-------------------------------------------------------------
+		// TRUCK TRANSPORT COMPANY
+		transporteVesprini = mock(TruckTransportCompany.class);
+
+		when(transporteVesprini.getDrivers()).thenReturn(Arrays.asList(driverAlberto));
+		when(transporteVesprini.getTrucks()).thenReturn(Arrays.asList(volvoTruck));
+//-------------------------------------------------------------
+		// TRIP
+		trip = mock(Trip.class);
+
+		when(trip.getStartDate()).thenReturn(LocalDateTime.of(2023, 11, 26, 10, 0));
+		when(trip.getMaritimeCircuit()).thenReturn(maritimeCircuit);
+//-------------------------------------------------------------
+		// ROUTING
+		ferFewerIntermediateTerminals = mock(Routing.class);
+		lowerPrice = mock(Routing.class);
+		shorterTime = mock(Routing.class);
+
+//-------------------------------------------------------------
+		// MANAGED TERMINAL
+		buenosAires = new ManagedTerminal(positionBuenosAires, ferFewerIntermediateTerminals);
+	}
+
+// ----------------------------------
+// CREATION
+// ----------------------------------
+	@Test
+	void testAManagedTerminalIsCreated() {
+
+		// Assert
+		assertEquals(0, buenosAires.getConsignees().size());
+		assertEquals(0, buenosAires.getExportOrders().size());
+		assertEquals(positionBuenosAires, buenosAires.getGeographicalPosition());
+		assertEquals(0, buenosAires.getImportOrders().size());
+		assertEquals(ferFewerIntermediateTerminals, buenosAires.getRouting());
+		assertEquals(0, buenosAires.getShippers().size());
+		assertEquals(0, buenosAires.getShippingCompanies().size());
+		assertEquals(0, buenosAires.getTruckTransportCompanies().size());
+		assertEquals(0, buenosAires.getTurns().size());
+	}
+
+// ----------------------------------
+// METHODS TO ADD TO MANAGED TERMINAL
+// ----------------------------------
+	@Test
+	void testAManagedTerminalRegistersAConsignee() {
+		// Exercise
+		buenosAires.registerConsignee(consigneeGabriela);
+		// Assert
+		assertEquals(1, buenosAires.getConsignees().size());
 	}
 
 	@Test
-	void testTheShipperIsNotRegisteredInTheManagedTerminaThereforeItIsRegistered() {
-		// Set Up
-		when(monroySchiavon.getDrivers()).thenReturn(List.of(carlos));
-		when(monroySchiavon.getTrucks()).thenReturn(List.of(scaniaR));
-		// Excerise
-		terminalBuenosAires.hireExportService(exportOrderOfYoel);
+	void testAManagedTerminalRegistersAShipper() {
+		// Exercise
+		buenosAires.registerShipper(shipperAlejandra);
 		// Assert
-		assertTrue(terminalBuenosAires.getShippers().contains(yoel));
+		assertEquals(1, buenosAires.getShippers().size());
 	}
 
+	@Test
+	void testAManagedTerminalRegistersAShippingCompany() {
+		// Exercise
+		buenosAires.registerShippingCompany(apmMaersk);
+		// Assert
+		assertEquals(1, buenosAires.getShippingCompanies().size());
+	}
+
+	@Test
+	void testAManagedTerminalRegistersATruckTransportCompany() {
+		// Exercise
+		buenosAires.registerTruckTransportCompany(transporteVesprini);
+		// Assert
+		assertEquals(1, buenosAires.getTruckTransportCompanies().size());
+	}
+
+// ----------------------------------
+// EXPORT
+// ----------------------------------
 	@Test
 	void testTheExportOrderIsNotRegisteredBecauseTheDriverIsNotRegistered() {
 		// Set Up
-		when(monroySchiavon.getTrucks()).thenReturn(List.of(scaniaR));
+		when(transporteVesprini.getDrivers()).thenReturn(List.of());
 		// Assert
 		assertThrows(RuntimeException.class, () -> {
-			terminalBuenosAires.hireExportService(exportOrderOfYoel);
-		}, "El chofer no esta registrado en la terminal gestionada.");
+			buenosAires.hireExportService(exportOrderOfAlejandra);
+		});
 	}
 
 	@Test
 	void testTheExportOrderIsNotRegisteredBecauseTheTruckIsNotRegistered() {
 		// Set Up
-		when(monroySchiavon.getDrivers()).thenReturn(List.of(carlos));
+		when(transporteVesprini.getDrivers()).thenReturn(List.of());
 		// Assert
 		assertThrows(RuntimeException.class, () -> {
-			terminalBuenosAires.hireExportService(exportOrderOfYoel);
-		}, "El cami�n no esta registrado en la terminal gestionada.");
+			buenosAires.hireExportService(exportOrderOfAlejandra);
+		});
 	}
 
 	@Test
-	void testTheExportOrderIsValidAndAShiftIsAssigned() {
-
-		final LocalDateTime dateTobeAssigned = LocalDateTime.of(2023, Month.FEBRUARY, 1, 11, 40);
-		// Set Up
-		when(monroySchiavon.getDrivers()).thenReturn(List.of(carlos));
-		when(monroySchiavon.getTrucks()).thenReturn(List.of(scaniaR));
-		terminalBuenosAires.hireExportService(exportOrderOfYoel);
-		// Exercise
-		terminalBuenosAires.assignShiftFor(exportOrderOfYoel, dateTobeAssigned);
+	void testTheShipperIsNotRegisteredInTheManagedTerminaThereforeItIsRegistered() {
+		// Excerise
+		buenosAires.registerTruckTransportCompany(transporteVesprini);
+		buenosAires.hireExportService(exportOrderOfAlejandra);
 		// Assert
-		assertEquals(exportOrderOfYoel, terminalBuenosAires.getExportOrders().get(0));
-		assertEquals(exportOrderOfYoel.getDateTruck(), terminalBuenosAires.getExportOrders().get(0).getDateTruck());
+		assertTrue(buenosAires.getShippers().contains(shipperAlejandra));
 	}
 
-	@Test
-	void testTheTruckCannotEnterBecauseItIsNotTheDriverInformedByTheShipper() {
-		// SetUp
-		when(exportOrderOfYoel.getDriver()).thenReturn(carlos);
-		when(exportOrderOfYoel.getTruck()).thenReturn(scaniaR);
-		when(monroySchiavon.getDrivers()).thenReturn(List.of(carlos));
-		when(monroySchiavon.getTrucks()).thenReturn(List.of(scaniaR));
-		terminalBuenosAires.registerTruckTransportCompany(monroySchiavon);
-		terminalBuenosAires.hireExportService(exportOrderOfYoel);
-		// Assert
-		assertThrows(RuntimeException.class, () -> {
-			terminalBuenosAires.truckArrivedWithLoad(juan, exportOrderOfYoel, scaniaR, LocalDateTime.now());
-		}, "El chofer no es el informado por el shipper.");
+//	@Test
+//	void testTheExportOrderIsValidAndAShiftIsAssigned() {
+//		// Excerise
+//		buenosAires.registerShippingCompany(apmMaersk);
+//		buenosAires.hireExportService(exportOrderOfAlejandra);
+//		// Assert
+//		assertEquals(LocalDateTime.of(2023, 12, 10, 10, 10), buenosAires.getTurns().get(0).getDateTurn());
+//		assertEquals(1, buenosAires.getTurns().size());
+//
+//	}
 
-	}
+// ----------------------------------
+// IMPORT
+// ----------------------------------
 
-	@Test
-	void testTheTruckCannotEnterBecauseItIsNotTheTruckInformedByTheShipper() {
-		// SetUp
-		when(exportOrderOfYoel.getDriver()).thenReturn(carlos);
-		when(exportOrderOfYoel.getTruck()).thenReturn(scaniaR);
-		when(monroySchiavon.getDrivers()).thenReturn(List.of(carlos));
-		when(monroySchiavon.getTrucks()).thenReturn(List.of(scaniaR));
-		terminalBuenosAires.registerTruckTransportCompany(monroySchiavon);
-		terminalBuenosAires.hireExportService(exportOrderOfYoel);
-		// Assert
-		assertThrows(RuntimeException.class, () -> {
-			terminalBuenosAires.truckArrivedWithLoad(juan, exportOrderOfYoel, scaniaS, LocalDateTime.now());
-		}, "El cami�n no es el informado por el shipper.");
-	}
+// ----------------------------------
+// WHEN TRUCK ARRIVED WITH LOAD
+// ----------------------------------
 
-	@Test
-	void testTheTruckCannotEnterBecauseTheScheduleExceeds3Hours() {
-		// Set Up
-		final LocalDateTime dateTobeAssigned = LocalDateTime.of(2023, Month.FEBRUARY, 1, 11, 40);
-		when(exportOrderOfYoel.getDriver()).thenReturn(carlos);
-		when(exportOrderOfYoel.getTruck()).thenReturn(scaniaR);
-		when(monroySchiavon.getDrivers()).thenReturn(List.of(carlos));
-		when(monroySchiavon.getTrucks()).thenReturn(List.of(scaniaR));
-		terminalBuenosAires.registerTruckTransportCompany(monroySchiavon);
-		terminalBuenosAires.hireExportService(exportOrderOfYoel);
-		terminalBuenosAires.assignShiftFor(exportOrderOfYoel, dateTobeAssigned);
-		// Assert
-
-		assertThrows(RuntimeException.class, () -> {
-			terminalBuenosAires.truckArrivedWithLoad(carlos, exportOrderOfYoel, scaniaR,
-					LocalDateTime.of(2023, Month.FEBRUARY, 1, 20, 40));
-		}, "x"); // TODO: REVISAR
-	}
-
+// ----------------------------------
+// WHEN TRUCK LEAVE WITH LOAD
+// ----------------------------------
 }

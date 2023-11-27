@@ -20,14 +20,6 @@ public class TruckTransportCompany {
 		this.name = name;
 		this.trucks = new ArrayList<Truck>();
 	}
-	
-	public void registerDriver(Driver driver) {
-		drivers.add(driver);
-	}
-	
-	public void registerTruck(Truck truck) {
-		trucks.add(truck);
-	}
 
 	public String getCuit() {
 		return cuit;
@@ -43,6 +35,14 @@ public class TruckTransportCompany {
 
 	public List<Truck> getTrucks() {
 		return trucks;
+	}
+
+	public void registerDriver(Driver driver) {
+		drivers.add(driver);
+	}
+
+	public void registerTruck(Truck truck) {
+		trucks.add(truck);
 	}
 
 }

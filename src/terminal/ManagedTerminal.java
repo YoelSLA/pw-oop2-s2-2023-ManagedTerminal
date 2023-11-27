@@ -17,7 +17,7 @@ import shippingLine.ShippingLine;
 import truck.Truck;
 import truckTransportCompany.TruckTransportCompany;
 
-public class ManagedTerminal extends Terminal {
+public class ManagedTerminal implements Terminal {
 
 	private List<Consignee> consignees;
 	private List<ExportOrder> exportOrders;
@@ -28,8 +28,7 @@ public class ManagedTerminal extends Terminal {
 	private List<ShippingLine> shippingCompanies;
 	private List<TruckTransportCompany> truckTransportCompanies;
 
-	public ManagedTerminal(String name, GeographicalPosition geographicalPosition, Routing routing) {
-		super(name);
+	public ManagedTerminal(String name, Routing routing) {
 		this.consignees = new ArrayList<Consignee>();
 		this.exportOrders = new ArrayList<ExportOrder>();
 		this.geographicalPosition = geographicalPosition;
@@ -127,6 +126,16 @@ public class ManagedTerminal extends Terminal {
 	private List<Truck> registredTrucks() {
 		return truckTransportCompanies.stream().flatMap(t -> t.getTrucks().stream()).distinct()
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public String getName() {
+		return "Puerto de Buenos Aires";
+	}
+
+	@Override
+	public GeographicalPosition getPosition() {
+		return new GeographicalPosition(-34.5795823299825, -58.373877081937);
 	}
 
 }
