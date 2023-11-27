@@ -1,6 +1,8 @@
 package trip;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -76,19 +78,6 @@ public class Trip {
 		this.maritimeCircuit.getSections().forEach(section -> {
 			System.out.print(
 					"Section End Date:" + currentDate + "Destination Terminal:" + this.nextTerminalFrom(firstTerminal)); // no
-																															// se
-																															// como
-																															// sumarle
-																															// a
-																															// un
-																															// objeto
-																															// de
-																															// tipo
-																															// Date
-																															// un
-																															// objeto
-																															// de
-																															// tipo
 																															// Duration
 		});
 	};
@@ -127,5 +116,24 @@ public class Trip {
 		}
 
 		return sectionsAhead;
+	}
+
+	public boolean hasADestinyTerminal(Terminal destiny) {
+		System.out.println("Terminals in Maritime Circuit: "
+				+ maritimeCircuit.getStretchs().stream().map(s -> s.getDestiny()).collect(Collectors.toList()));
+		System.out.println("Destiny1: " + destiny); // Verifica que el terminal de destino sea el correcto
+		return maritimeCircuit.hasADestinyTerminal(destiny);
+
+	}
+
+	public LocalDateTime dateArrivedToDestiny(Terminal destiny) {
+
+		System.out
+				.println(maritimeCircuit.getStretchs().stream().map(s -> s.getOrigin()).map(s -> s.getName()).toList());
+		System.out.println("OriginMetodo: " + maritimeCircuit.originTerminal());
+		Integer durationOfHours = maritimeCircuit.calculateTimeBetween(maritimeCircuit.originTerminal(), destiny);
+		System.out.println(durationOfHours);
+
+		return startDate.plus(durationOfHours, ChronoUnit.HOURS);
 	}
 }
