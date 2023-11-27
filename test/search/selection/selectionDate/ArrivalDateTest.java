@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import maritimeCircuit.MaritimeCircuit;
-import search.criteria.ArrivalDate;
 import search.criteria.Criteria;
 import stretch.Stretch;
 import terminal.ManagedTerminal;
