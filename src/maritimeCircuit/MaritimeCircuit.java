@@ -1,6 +1,9 @@
 package maritimeCircuit;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import stretch.Stretch;
 import terminal.Terminal;
@@ -13,6 +16,17 @@ public class MaritimeCircuit {
 		this.stretchs = stretchs;
 	}
 
+	public Integer calculateTimeBetween(Terminal origin, Terminal destiny) {
+		Long totalNanos = getStretchs().subList(getPositionOf(origin), getPositionOf(destiny)).stream()
+				.mapToLong(s -> s.getTime().toNanos()).sum();
+		return (int) Math.round(totalNanos / (double) Duration.ofHours(1).toNanos());
+	}
+
+	public Integer getPositionOf(Terminal terminal) {
+		Optional<Stretch> stretch = stretchs.stream().filter(s -> s.getOrigin().equals(terminal)).findFirst();
+		return stretch.map(s -> stretchs.indexOf(s)).orElse(-1);
+	}
+
 	public Double getPrice() {
 		return getStretchs().stream().mapToDouble(Stretch::getPrice).sum();
 	}
@@ -21,31 +35,17 @@ public class MaritimeCircuit {
 		return stretchs;
 	}
 
-	private Integer originNumberTerminal(Terminal origin) {
-		return getStretchs()
-				.indexOf(getStretchs().stream().filter(s -> s.getOrigin().equals(origin)).findFirst().get());
+	public boolean hasATerminal(Terminal destiny) {
+		return originTerminals().stream().anyMatch(t -> t.equals(destiny));
 	}
 
-	private Integer destinyNumberTerminal(Terminal destiny) {
-		return getStretchs()
-				.indexOf(getStretchs().stream().filter(s -> s.getOrigin().equals(destiny)).findFirst().get());
+	public Terminal originTerminal() {
+		return getStretchs().get(0).getOrigin();
 	}
 
-	public boolean areTheTerminalsThere(Terminal origin, Terminal destiny) {
-		return isTheOriginTerminal(origin) && isTheDestinyTerminal(destiny)
-				&& isTheOriginTerminalBeforeDestinationTerminal(origin, destiny);
+	public List<Terminal> originTerminals() {
+		List<Terminal> origins = new ArrayList<>(stretchs.stream().map(Stretch::getOrigin).toList());
+		origins.add(stretchs.get(0).getOrigin());
+		return origins;
 	}
-
-	public boolean isTheDestinyTerminal(Terminal destiny) {
-		return getStretchs().stream().anyMatch(s -> s.getDestiny().equals(destiny));
-	}
-
-	public boolean isTheOriginTerminal(Terminal origin) {
-		return getStretchs().stream().anyMatch(s -> s.getOrigin().equals(origin));
-	}
-
-	public boolean isTheOriginTerminalBeforeDestinationTerminal(Terminal origin, Terminal destiny) {
-		return originNumberTerminal(origin) < destinyNumberTerminal(destiny);
-	}
-
 }
