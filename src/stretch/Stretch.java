@@ -11,10 +11,10 @@ public class Stretch {
 	private Double price;
 	private Duration time;
 
-	public Stretch(Terminal destiny, Terminal origin, Double price, Duration time) {
-		this.destiny = destiny;
+	public Stretch(Terminal origin, Terminal destiny, Double price, Duration time) throws Exception {
 		this.origin = origin;
-		this.price = price;
+		this.destiny = destiny;
+		setPrice(price);
 		this.time = time;
 	}
 
@@ -34,7 +34,19 @@ public class Stretch {
 		return time;
 	}
 
-	public boolean isItHasATerminal(Terminal terminal) {
-		return destiny.equals(terminal) || getOrigin().equals(terminal);
+	public Boolean hasATerminal(Terminal terminal) {
+		return origin.equals(terminal) || destiny.equals(terminal);
 	}
+
+	public void setTime(Duration time) {
+		this.time = time;
+	}
+
+	public void setPrice(Double price) throws Exception {
+		if (price < 0) {
+			throw new RuntimeException("Te price muste be positive.");
+		}
+		this.price = price;
+	}
+
 }
