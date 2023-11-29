@@ -10,42 +10,51 @@ import terminal.Terminal;
 
 public class MaritimeCircuit {
 
-	private List<Stretch> stretchs;
+	private List<Stretch> stretches;
 
-	public MaritimeCircuit(List<Stretch> stretchs) {
-		this.stretchs = stretchs;
+	public MaritimeCircuit(List<Stretch> stretches) {
+		this.stretches = stretches;
 	}
 
-	public Integer calculateTimeBetween(Terminal origin, Terminal destiny) {
-		Long totalNanos = getStretchs().subList(getPositionOf(origin), getPositionOf(destiny)).stream()
+	public Integer calculateTotalHoursBetweenTerminals(Terminal origin, Terminal destiny) {
+		final Long totalNanos = stretches.subList(getPositionOf(origin), getPositionOf(destiny)).stream()
 				.mapToLong(s -> s.getTime().toNanos()).sum();
-		return (int) Math.round(totalNanos / (double) Duration.ofHours(1).toNanos());
+		return calculateHoursRounded(Duration.ofNanos(totalNanos));
 	}
 
 	public Integer getPositionOf(Terminal terminal) {
-		Optional<Stretch> stretch = stretchs.stream().filter(s -> s.getOrigin().equals(terminal)).findFirst();
-		return stretch.map(s -> stretchs.indexOf(s)).orElse(-1);
+		Optional<Stretch> stretch = stretches.stream().filter(s -> s.getOrigin().equals(terminal)).findFirst();
+		return stretch.map(s -> stretches.indexOf(s)).orElse(-1);
 	}
 
 	public Double getPrice() {
-		return getStretchs().stream().mapToDouble(Stretch::getPrice).sum();
+		return stretches.stream().mapToDouble(Stretch::getPrice).sum();
 	}
 
-	public List<Stretch> getStretchs() {
-		return stretchs;
+	public Integer getTime() {
+		return stretches.stream().mapToInt(s -> calculateHoursRounded(s.getTime())).sum();
 	}
 
-	public boolean hasATerminal(Terminal destiny) {
+	public List<Stretch> getStretches() {
+		return stretches;
+	}
+
+	public Boolean hasATerminal(Terminal destiny) {
 		return originTerminals().stream().anyMatch(t -> t.equals(destiny));
 	}
 
 	public Terminal originTerminal() {
-		return getStretchs().get(0).getOrigin();
+		return stretches.get(0).getOrigin();
 	}
 
 	public List<Terminal> originTerminals() {
-		List<Terminal> origins = new ArrayList<>(stretchs.stream().map(Stretch::getOrigin).toList());
-		origins.add(stretchs.get(0).getOrigin());
+		List<Terminal> origins = new ArrayList<>(stretches.stream().map(Stretch::getOrigin).toList());
+		origins.add(stretches.get(0).getOrigin());
 		return origins;
 	}
+
+	private Integer calculateHoursRounded(Duration time) {
+		return (int) Math.round(time.toNanos() / (double) Duration.ofHours(1).toNanos());
+	}
+
 }
