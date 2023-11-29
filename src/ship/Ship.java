@@ -23,6 +23,7 @@ public class Ship {
 	 */
 	private String imo;
 	private Trip trip;
+	private boolean isOnTrip;
 
 	/**
 	 * @author alejandrabesel Constructor de la clase Ship.
@@ -92,5 +93,14 @@ public class Ship {
 
 	public Trip getTrip() {
 		return trip;
+	}
+
+	public boolean getIsOnTrip() {
+		return isOnTrip;
+	}
+
+	public void startTrip() {
+		// TODO Auto-generated method stub
+
 	}
 }
