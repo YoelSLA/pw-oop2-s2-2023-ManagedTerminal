@@ -1,5 +1,6 @@
 package maritimeCircuit;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -17,10 +18,10 @@ import terminal.Terminal;
 
 class MaritimeCircuitTest {
 
-	ManagedTerminal buenosAires = mock(ManagedTerminal.class);
+	private ManagedTerminal buenosAires;
 //-------------------------------------------------------------
-	Terminal montevideo = mock(Terminal.class);
-	Terminal rioDeJaneiro = mock(Terminal.class);
+	private Terminal montevideo;
+	private Terminal rioDeJaneiro;
 //-------------------------------------------------------------
 	private Stretch buenosAiresMontevideo;
 	private Stretch montevideoRioDeJaniero;
@@ -32,32 +33,25 @@ class MaritimeCircuitTest {
 	void setUp() {
 		// MANAGED TERMINAL
 		buenosAires = mock(ManagedTerminal.class);
-		when(buenosAires.getName()).thenReturn("Puerto de Buenos Aires");
 //-------------------------------------------------------------		
 		// TERMINAL
 		montevideo = mock(Terminal.class);
-		when(montevideo.getName()).thenReturn("Puerto de Montevideo");
-
 		rioDeJaneiro = mock(Terminal.class);
-		when(rioDeJaneiro.getName()).thenReturn("Puerto de Rio de Janeiro");
 //-------------------------------------------------------------		
 		// STRETCH
 		buenosAiresMontevideo = mock(Stretch.class);
 		when(buenosAiresMontevideo.getOrigin()).thenReturn(buenosAires);
 		when(buenosAiresMontevideo.getDestiny()).thenReturn(montevideo);
-		when(buenosAiresMontevideo.getPrice()).thenReturn(500.0);
 		when(buenosAiresMontevideo.getTime()).thenReturn(Duration.ofHours(3));
 
 		montevideoRioDeJaniero = mock(Stretch.class);
 		when(montevideoRioDeJaniero.getOrigin()).thenReturn(montevideo);
 		when(montevideoRioDeJaniero.getDestiny()).thenReturn(rioDeJaneiro);
-		when(montevideoRioDeJaniero.getPrice()).thenReturn(800.0);
 		when(montevideoRioDeJaniero.getTime()).thenReturn(Duration.ofHours(8));
 
 		rioDeJaneiroBuenosAires = mock(Stretch.class);
 		when(rioDeJaneiroBuenosAires.getOrigin()).thenReturn(rioDeJaneiro);
 		when(rioDeJaneiroBuenosAires.getDestiny()).thenReturn(buenosAires);
-		when(rioDeJaneiroBuenosAires.getPrice()).thenReturn(1500.0);
 		when(rioDeJaneiroBuenosAires.getTime()).thenReturn(Duration.ofHours(16));
 //-------------------------------------------------------------		
 		// MARITIME CIRCUIT
@@ -66,9 +60,14 @@ class MaritimeCircuitTest {
 	}
 
 	@Test
-	void getStretchs_ShouldReturnCorrectStretchs_ForCircuitBuenosAiresRioDeJaneiro() {
+	void getStretches_ShouldReturnCorrectStretchs_ForCircuitBuenosAiresRioDeJaneiro() {
 		assertEquals(List.of(buenosAiresMontevideo, montevideoRioDeJaniero, rioDeJaneiroBuenosAires),
-				circuitBuenosAiresRioDeJaniero.getStretchs());
+				circuitBuenosAiresRioDeJaniero.getStretches());
+	}
+
+	@Test
+	void hasATerminal_ShouldReturnFalse_ForMockedTerminal_InCircuitBuenosAiresRioDeJaneiro() {
+		assertFalse(circuitBuenosAiresRioDeJaniero.hasATerminal(mock(Terminal.class)));
 	}
 
 	@Test
@@ -77,8 +76,13 @@ class MaritimeCircuitTest {
 	}
 
 	@Test
-	void calculateTimeBetween_ShouldReturnCorrectHours_ForCircuitBuenosAiresRioDeJaneiro() {
-		assertEquals(11, circuitBuenosAiresRioDeJaniero.calculateTimeBetween(buenosAires, rioDeJaneiro));
+	void calculateTotalHoursBetweenTerminals_ShouldReturnCorrectHours_ForCircuitBuenosAiresRioDeJaneiro() {
+		assertEquals(11, circuitBuenosAiresRioDeJaniero.calculateTotalHoursBetweenTerminals(buenosAires, rioDeJaneiro));
+	}
+
+	@Test
+	void getTime_ShouldReturnCorrectTime_ForCircuitBuenosAiresRioDeJaneiro() {
+		assertEquals(27, circuitBuenosAiresRioDeJaniero.getTime());
 	}
 
 	@Test
@@ -88,6 +92,11 @@ class MaritimeCircuitTest {
 
 	@Test
 	void getPrice_ShouldReturnCorrectPrice_ForCircuitBuenosAiresRioDeJaneiro() {
+		// Exercise
+		when(buenosAiresMontevideo.getPrice()).thenReturn(500.0);
+		when(montevideoRioDeJaniero.getPrice()).thenReturn(800.0);
+		when(rioDeJaneiroBuenosAires.getPrice()).thenReturn(1500.0);
+		// Assert
 		assertEquals(2800.00, circuitBuenosAiresRioDeJaniero.getPrice());
 	}
 
