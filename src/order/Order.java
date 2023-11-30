@@ -75,10 +75,6 @@ public abstract class Order {
 	public void setDateTruck(LocalDateTime dateTruck) {
 		this.dateTruck = dateTruck;
 	}
-
-	public int getLoadEnergyConsumption() {
-		return load.getEnergyConsumption();
-	}
 	
 	public Double getLoadVolume() {
 		return load.getVolume();

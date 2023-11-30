@@ -4,10 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-/**
- * Test de unidad para la clase Tank (SUT).
- * @author Gabriela Fascetta
- */
 class TankTest {
 
 	Double widthA = 5.0;

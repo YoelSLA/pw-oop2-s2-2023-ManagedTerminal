@@ -4,11 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-/**
- * Test de unidad para la clase Reefer (SUT).
- * 
- * @author Gabriela Fascetta
- */
 class ReeferTest {
 
 	Double widthA = 5.0;

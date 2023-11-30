@@ -15,8 +15,6 @@ import service.Service;
 /**
  * Test de la clase Bill (factura) (SUT)
  * Interactua con clases: Order, service (DOCs)
- * 
- * @author Gabriela Fascetta
  * */
 class BillTest {
 	
@@ -63,8 +61,8 @@ class BillTest {
 	void testGetTotalAmountToPay() {
 		when(orderA.getServices()).thenReturn(List.of(service1,service2));
 		when(orderA.getTripCost()).thenReturn(priceTripA);
-		
-		assertEquals(priceTripA + 10000, billA.getTotalAmountToPay());
+		Double expectedAmount = priceTripA + 10000;
+		assertEquals(expectedAmount, billA.getTotalAmountToPay());
 	}
 
 }

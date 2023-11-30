@@ -12,7 +12,6 @@ import service.Washed;
 /**
  * Test de unidad para la clase Washed (SUT).
  * Interactua con la clase Order(DOC);
- * @author Gabriela Fascetta
  */
 class WashedTest {
 	
@@ -38,6 +37,8 @@ class WashedTest {
 		assertEquals(priceAExtra, washedA.getBigVolumePrice());
 		assertEquals(priceB, washedB.getPrice());
 		assertEquals(priceBExtra, washedB.getBigVolumePrice());
+		assertEquals("Washed", washedA.getName());
+		assertEquals("Washed", washedB.getName());
 	}
 	@Test
 	void testRegularPriceForGivenOrdenWithSomeRegularLoad() {
@@ -58,7 +59,7 @@ class WashedTest {
 	@Test
 	void testRegularPriceForGivenOrdenWithLoadWithExactSameLimitVolumeForMinimumFee() {
 		orderA = mock(Order.class);
-		Double limitVolume = 70.0;//debe coincidir con el maxVolumePerMinimumFee
+		Double limitVolume = 70.0;//el maxVolumePerMinimumFee
 		when(orderA.getLoadVolume()).thenReturn(limitVolume);
 		assertEquals(priceA, washedA.getPriceFor(orderA));
 	}

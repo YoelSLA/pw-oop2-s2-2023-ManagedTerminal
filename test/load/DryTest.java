@@ -4,10 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-/**
- * Test de unidad para la clase Dry (SUT).
- * @author Gabriela Fascetta
- */
 class DryTest {
 
 	Double widthA = 5.0;
@@ -44,8 +40,8 @@ class DryTest {
 	void testVolume() {
 		Double expectedValueA = dryA.getWidth()*dryA.getLength()*dryA.getHeight();
 		assertEquals(expectedValueA, dryA.getVolume());
+		
 		Double expectedValueB = dryB.getWidth()*dryB.getLength()*dryB.getHeight();
 		assertEquals(expectedValueB, dryB.getVolume());
 	}
-
 }

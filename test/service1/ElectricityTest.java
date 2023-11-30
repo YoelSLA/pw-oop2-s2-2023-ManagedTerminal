@@ -17,7 +17,6 @@ import service.Electricity;
 /**
  * Test de unidad para la clase Electricity (SUT).
  * Interactua con la clase Load y Order(DOCs);
- * @author Gabriela Fascetta
  */
 class ElectricityTest {
 
@@ -48,15 +47,18 @@ class ElectricityTest {
 		assertEquals(startDateB, electricityB.getStartConnection());
 		assertEquals(endDateA, electricityA.getEndConnection());
 		assertEquals(endDateB, electricityB.getEndConnection());
+		assertEquals("Electricity", electricityA.getName());
+		assertEquals("Electricity", electricityB.getName());
 	}
 	
 	@Test
 	void testPriceForConsumptionForAGivenLoad() {
 		orderA = mock(Order.class);
+		loadA = mock(Load.class);
 		int energyConsumptionA = 2;
-		when(orderA.getLoadEnergyConsumption()).thenReturn(energyConsumptionA);
+		when(orderA.getLoad()).thenReturn(loadA);
+		when(loadA.getEnergyConsumption()).thenReturn(energyConsumptionA);
 		Double expectedPrice = hoursA * energyConsumptionA * electricityA.getPrice();
 		assertEquals(expectedPrice, electricityA.getPriceFor(orderA));
 	}
-
 }

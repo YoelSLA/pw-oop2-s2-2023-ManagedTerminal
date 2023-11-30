@@ -14,8 +14,6 @@ import service.Weigh;
 /**
  * Test de unidad para la clase Weigh (SUT).
  * Interactua con la clase Load (DOC);
- * 
- * @author Gabriela Fascetta
  */
 class WeighTest {
 	
@@ -39,6 +37,8 @@ class WeighTest {
 	void testWeighClassInitialization() {
 		assertEquals(priceA, weighA.getPrice());
 		assertEquals(priceB, weighB.getPrice());
+		assertEquals("Weigh", weighA.getName());
+		assertEquals("Weigh", weighB.getName());
 	}
 	
 	@Test

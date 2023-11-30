@@ -5,13 +5,6 @@ import java.time.temporal.ChronoUnit;
 
 import order.Order;
 
-/**
- * Clase que representa una Factura.
- * 
- * Esta clase gestiona la información de los servicios aplicados a la carga.
- * 
- * @author Gabriela Fascetta
- */
 public class Bill {
 	private LocalDateTime broadcastDate;
 	private Double totalAmount;
@@ -43,12 +36,7 @@ public class Bill {
 	}
 	
 	public void printInvoice() {
-		/* La factura contiene el desgloce de conceptos:
-		fecha y monto -->  DUDA: la fecha de cada serv o una sola de emision de factura???
-		monto total servicios
-		monto total viaje
-		total total
-		*/
+		// La factura contiene el desgloce de conceptos
 		StringBuilder sb = new StringBuilder("ServiceName,Date,Price\r\n");
 		order.getServices()
 			.stream()

@@ -15,8 +15,6 @@ import service.ExcessStorage;
 /**
  * Test de unidad para la clase ExcessStorage (SUT).
  * Interactua con la clase Order (DOC);
- * 
- * @author Gabriela Fascetta
  */
 class ExcessStorageTest {
 	
@@ -39,6 +37,8 @@ class ExcessStorageTest {
 	void testExcessStorageClassInitialization() {
 		assertEquals(priceA, storageA.getPrice());
 		assertEquals(priceB, storageB.getPrice());
+		assertEquals("ExcessStorage", storageA.getName());
+		assertEquals("ExcessStorage", storageB.getName());
 	}
 	
 	@Test
