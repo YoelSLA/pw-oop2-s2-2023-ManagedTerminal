@@ -75,13 +75,4 @@ public abstract class Order {
 	public void setDateTruck(LocalDateTime dateTruck) {
 		this.dateTruck = dateTruck;
 	}
-	
-	public Double getLoadVolume() {
-		return load.getVolume();
-	}
-	
-	public Double getTripCost() {
-		return trip.getCost();
-	}
-
 }

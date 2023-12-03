@@ -21,19 +21,17 @@ class TankTest {
 	
 	
 	@Test
-	void testInicializationClassReefer() {
-		//reeferA
+	void testInicializationClassTank() {
+		//TankA
 		assertEquals(widthA, tankA.getWidth());
 		assertEquals(heightA, tankA.getHeight());
 		assertEquals(lengthA, tankA.getLength());
 		assertEquals(weightA, tankA.getWeight());
-		assertEquals(0, tankA.getEnergyConsumption());
-		//reeferB
+		//TankB
 		assertEquals(widthB, tankB.getWidth());
 		assertEquals(heightB, tankB.getHeight());
 		assertEquals(lengthB, tankB.getLength());
 		assertEquals(weightB, tankB.getWeight());
-		assertEquals(0, tankB.getEnergyConsumption());
 	}
 	
 	@Test
