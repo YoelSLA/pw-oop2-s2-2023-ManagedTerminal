@@ -1,18 +1,12 @@
 package service;
 
-import order.Order;
+import load.Load;
 
 
 public abstract class Service {
 
 	protected Double price;
-	protected Double optionalPrice;
 	protected String name;
-	
-	public Service(Double price, Double optionalPrice) {
-		this.price = price;
-		this.optionalPrice = optionalPrice;
-	}
 	
 	public Service(Double price) {
 		this.price = price;
@@ -20,7 +14,7 @@ public abstract class Service {
 
 	public Double getPrice() {return price;}
 	
-	public abstract Double getPriceFor(Order order);
+	public abstract Double getPriceFor(Load load);
 	
 	public final String getName() {return this.name;}
 

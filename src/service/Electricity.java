@@ -2,6 +2,9 @@ package service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+
+import load.Load;
+import load.Reefer;
 import order.Order;
 
 public class Electricity extends Service{
@@ -17,10 +20,13 @@ public class Electricity extends Service{
 	}
 	
 	@Override
-	public Double getPriceFor(Order order) {
-		Double hoursConnected = (double) ChronoUnit.HOURS.between(startConnection, endConnection);
+	public Double getPriceFor(Load load) {
 		
-		return order.getLoad().getEnergyConsumption() * price * hoursConnected;		
+		Reefer reefer = (Reefer) load;
+		
+		Integer hoursConnected = (int) ChronoUnit.HOURS.between(startConnection, endConnection);
+		
+		return reefer.getConsumptionkWh() * price * hoursConnected;		
 	}
 	
 	public LocalDateTime getStartConnection() {

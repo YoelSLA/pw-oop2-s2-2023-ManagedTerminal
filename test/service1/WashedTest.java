@@ -6,12 +6,14 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import load.Load;
+import load.Tank;
 import order.Order;
 import service.Washed;
 
 /**
  * Test de unidad para la clase Washed (SUT).
- * Interactua con la clase Order(DOC);
+ * Interactua con la clase Load(DOC);
  */
 class WashedTest {
 	
@@ -23,7 +25,8 @@ class WashedTest {
 	Double priceB = 300.0;
 	Double priceBExtra = 450.0;
 	
-	Order orderA;
+	Load loadA = mock(Tank.class);
+	Load loadB = mock(Tank.class);
 
 	@BeforeEach
 	void setUp() {
@@ -34,33 +37,33 @@ class WashedTest {
 	@Test
 	void testWeighClassInitialization() {
 		assertEquals(priceA, washedA.getPrice());
-		assertEquals(priceAExtra, washedA.getBigVolumePrice());
+		assertEquals(priceAExtra, washedA.getCostPerBigLoad());
 		assertEquals(priceB, washedB.getPrice());
-		assertEquals(priceBExtra, washedB.getBigVolumePrice());
+		assertEquals(priceBExtra, washedB.getCostPerBigLoad());
 		assertEquals("Washed", washedA.getName());
 		assertEquals("Washed", washedB.getName());
 	}
 	@Test
-	void testRegularPriceForGivenOrdenWithSomeRegularLoad() {
-		orderA = mock(Order.class);
+	void testRegularPriceForGivenRegularLoad() {
+
 		Double volumeRegular = 50.0;
-		when(orderA.getLoadVolume()).thenReturn(volumeRegular);
-		assertEquals(priceA, washedA.getPriceFor(orderA));
+		when(loadA.getVolume()).thenReturn(volumeRegular);
+		assertEquals(priceA, washedA.getPriceFor(loadA));
 	}
 	
 	@Test
-	void testExtraPriceForGivenOrdenWithSomeBiggerLoad() {
-		orderA = mock(Order.class);
+	void testExtraPriceForGivenBiggerLoad() {
+	
 		Double biggerVolume = 100.0;
-		when(orderA.getLoadVolume()).thenReturn(biggerVolume);
-		assertEquals(priceAExtra, washedA.getPriceFor(orderA));
+		when(loadA.getVolume()).thenReturn(biggerVolume);
+		assertEquals(priceBExtra, washedB.getPriceFor(loadA));
 	}
 	
 	@Test
-	void testRegularPriceForGivenOrdenWithLoadWithExactSameLimitVolumeForMinimumFee() {
-		orderA = mock(Order.class);
+	void testRegularPriceForGivenLoadWithExactSameLimitVolumeForMinimumFee() {
+	
 		Double limitVolume = 70.0;//el maxVolumePerMinimumFee
-		when(orderA.getLoadVolume()).thenReturn(limitVolume);
-		assertEquals(priceA, washedA.getPriceFor(orderA));
+		when(loadA.getVolume()).thenReturn(limitVolume);
+		assertEquals(priceA, washedA.getPriceFor(loadA));
 	}
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import load.Load;
+import load.Tank;
 import order.Order;
 import service.Weigh;
 
@@ -24,8 +25,6 @@ class WeighTest {
 	Double priceB = 300.0;
 	
 	Load loadA;
-	
-	Order orderA;
 
 	@BeforeEach
 	void setUp() {
@@ -36,24 +35,16 @@ class WeighTest {
 	@Test
 	void testWeighClassInitialization() {
 		assertEquals(priceA, weighA.getPrice());
-		assertEquals(priceB, weighB.getPrice());
 		assertEquals("Weigh", weighA.getName());
+		assertEquals(priceB, weighB.getPrice());
 		assertEquals("Weigh", weighB.getName());
 	}
 	
 	@Test
-	void testWeighOnAGivenLoadReturnItsOwnWeight() {
-		loadA = mock(Load.class);
-		Double weightExpectedLoadA = 54.0;
-		when(loadA.getWeight()).thenReturn(weightExpectedLoadA);
-		assertEquals(weightExpectedLoadA, weighA.weighOn(loadA));
-	}
-	
-	@Test
 	void testWeighServiceForAGivenLoad() {
-		orderA = mock(Order.class);
+		loadA = mock(Tank.class);
 		Double priceExpectedLoadA = priceA;
-		assertEquals(priceExpectedLoadA, weighA.getPriceFor(orderA));
+		assertEquals(priceExpectedLoadA, weighA.getPriceFor(loadA));
 	}
 
 }

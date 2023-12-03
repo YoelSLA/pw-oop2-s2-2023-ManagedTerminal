@@ -9,6 +9,7 @@ public class Reefer extends Load {
 		this.energyConsumption = energyConsumption;
 	}
 	
-	@Override
-	public int getEnergyConsumption() {return energyConsumption;}
+	public Double getConsumptionkWh() {
+		return (double) energyConsumption;
+	}
 }

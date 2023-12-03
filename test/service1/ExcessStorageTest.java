@@ -9,54 +9,56 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import load.Load;
+import load.Tank;
 import order.Order;
 import service.ExcessStorage;
 
 /**
  * Test de unidad para la clase ExcessStorage (SUT).
- * Interactua con la clase Order (DOC);
+ * Interactua con la clase Load (DOC);
  */
 class ExcessStorageTest {
 	
 	ExcessStorage storageA;
 	Double priceA = 100.0;
+	Integer hoursA = 2;
 	
 	ExcessStorage storageB;
 	Double priceB = 300.0;
+	Integer hoursB = 48;
 	
-	Order orderOnTime;
-	Order orderDelayed;
+	Load loadA;
+	Load loadB;
 	
 	@BeforeEach
 	void setUp() {
-		storageA= new ExcessStorage(priceA);
-		storageB= new ExcessStorage(priceB);
+		storageA= new ExcessStorage(priceA, hoursA);
+		storageB= new ExcessStorage(priceB, hoursB);
 	}
 	
 	@Test
 	void testExcessStorageClassInitialization() {
 		assertEquals(priceA, storageA.getPrice());
-		assertEquals(priceB, storageB.getPrice());
 		assertEquals("ExcessStorage", storageA.getName());
+		assertEquals(hoursA, storageA.getHoursOfStay());
+		assertEquals(priceB, storageB.getPrice());
 		assertEquals("ExcessStorage", storageB.getName());
+		assertEquals(hoursB, storageB.getHoursOfStay());
 	}
 	
 	@Test
-	void testPriceForExcessStorageForAGivenOrdenWithLoadOnTime() {
-		orderOnTime = mock(Order.class);
-		LocalDateTime dateA = LocalDateTime.now().minusHours(4);
-		when(orderOnTime.getDateTruck()).thenReturn(dateA);
-		Double expectedPrice = 0.0;
-		assertEquals(expectedPrice, storageA.getPriceFor(orderOnTime));
+	void testPriceForExcessStorageForAGivenLoadOnTime() {
+		loadA = mock(Tank.class);
+		Double expectedPrice = priceA * hoursA;
+		assertEquals(expectedPrice, storageA.getPriceFor(loadA));
 	}
 	
 	@Test
-	void testPriceForExcessStorageForAGivenOrdenWithLoadDelayed() {
-		orderDelayed = mock(Order.class);
-		LocalDateTime dateA = LocalDateTime.now().minusDays(2);
-		when(orderDelayed.getDateTruck()).thenReturn(dateA);
-		Double expectedPrice = priceA * 2;
-		assertEquals(expectedPrice, storageA.getPriceFor(orderDelayed));
+	void testPriceForExcessStorageForAGivenLoadDelayed() {
+		loadB = mock(Tank.class);
+		Double expectedPrice = priceB * hoursB;
+		assertEquals(expectedPrice, storageB.getPriceFor(loadB));
 	}
 
 }

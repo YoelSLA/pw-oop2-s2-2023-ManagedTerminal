@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import load.Load;
+import load.Reefer;
 import order.Order;
 
 import static org.mockito.Mockito.*;
@@ -16,14 +17,14 @@ import service.Electricity;
 
 /**
  * Test de unidad para la clase Electricity (SUT).
- * Interactua con la clase Load y Order(DOCs);
+ * Interactua con la clase Load(DOC);
  */
 class ElectricityTest {
 
 	Electricity electricityA;
 	Electricity electricityB;
-	Order orderA;
-	Load loadA;
+	
+	Reefer loadA;
 	Double priceA = 100.0;
 	int hoursA = 10;
 	LocalDateTime startDateA = LocalDateTime.of(2023,11,9,9,40);
@@ -42,23 +43,21 @@ class ElectricityTest {
 	@Test
 	void testElecticityClassInitialization() {
 		assertEquals(priceA, electricityA.getPrice());
-		assertEquals(priceB, electricityB.getPrice());
 		assertEquals(startDateA, electricityA.getStartConnection());
-		assertEquals(startDateB, electricityB.getStartConnection());
 		assertEquals(endDateA, electricityA.getEndConnection());
-		assertEquals(endDateB, electricityB.getEndConnection());
 		assertEquals("Electricity", electricityA.getName());
+		assertEquals(priceB, electricityB.getPrice());
+		assertEquals(startDateB, electricityB.getStartConnection());
+		assertEquals(endDateB, electricityB.getEndConnection());
 		assertEquals("Electricity", electricityB.getName());
 	}
 	
 	@Test
 	void testPriceForConsumptionForAGivenLoad() {
-		orderA = mock(Order.class);
-		loadA = mock(Load.class);
+		loadA = mock(Reefer.class);
 		int energyConsumptionA = 2;
-		when(orderA.getLoad()).thenReturn(loadA);
-		when(loadA.getEnergyConsumption()).thenReturn(energyConsumptionA);
+		when(loadA.getConsumptionkWh()).thenReturn((double) energyConsumptionA);
 		Double expectedPrice = hoursA * energyConsumptionA * electricityA.getPrice();
-		assertEquals(expectedPrice, electricityA.getPriceFor(orderA));
+		assertEquals(expectedPrice, electricityA.getPriceFor(loadA));
 	}
 }

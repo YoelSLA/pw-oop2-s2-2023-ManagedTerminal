@@ -1,27 +1,28 @@
 package service;
 
-import order.Order;
+import load.Load;
 
 public class Washed extends Service {
 	
 	//en metros cubicos
 	private final int maxVolumePerMinimumFee = 70;
+	private Double costPerBigLoad;
 	
 
-	public Washed(Double price, Double optionalPrice) {
-		super(price, optionalPrice);
+	public Washed(Double price, Double costPerBigLoad) {
+		super(price);
 		this.name = "Washed";
+		this.costPerBigLoad = costPerBigLoad;
 	}
 	
 	@Override
-	public Double getPriceFor(Order order) {
-		if (order.getLoadVolume() <= maxVolumePerMinimumFee) {
-			return price;
-		} else return optionalPrice;
+	public Double getPriceFor(Load load) {
+		Boolean hasRegularSize = load.getVolume() <= maxVolumePerMinimumFee;
+		return hasRegularSize ? this.getPrice() : getCostPerBigLoad();
 	}
 
-	public Double getBigVolumePrice() {
-		return optionalPrice;
+	public Double getCostPerBigLoad() {
+		return costPerBigLoad;
 	}
 
 }

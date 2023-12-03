@@ -35,9 +35,7 @@ public abstract class Load {
 		return weight;
 	}
 	
-	public final Double getVolume() {
+	public Double getVolume() {
 		return width * height * length;
 	}
-	
-	public int getEnergyConsumption() {return 0;}
 }

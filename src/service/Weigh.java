@@ -9,14 +9,9 @@ public class Weigh extends Service {
 		super(price);
 		this.name = "Weigh";
 	}
-		
-	public Double weighOn(Load load) {
-		return load.getWeight();
-	}
-
 
 	@Override
-	public Double getPriceFor(Order order) {
+	public Double getPriceFor(Load load) {
 		return price;
 	}
 }
