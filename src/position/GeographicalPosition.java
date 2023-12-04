@@ -1,4 +1,4 @@
-package geographicalPosition;
+package position;
 
 public class GeographicalPosition {
 	private double latitude;

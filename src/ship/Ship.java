@@ -1,7 +1,7 @@
 package ship;
 
-import geographicalPosition.GeographicalPosition;
 import phase.Phase;
+import position.GeographicalPosition;
 import trip.Trip;
 
 /**

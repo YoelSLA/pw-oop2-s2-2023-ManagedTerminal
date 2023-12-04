@@ -1,19 +1,23 @@
 package client;
 
-public abstract class Client {
+import mailSender.MailSender;
 
-	private int dni;
+public abstract class Client implements MailSender {
+
+	private String dni;
 	private String name;
-	
-	public Client(int dni, String name) {
+
+	public Client(String dni, String name) {
 		this.dni = dni;
 		this.name = name;
 	}
-	
-	public int getDni() {
+
+	public String getDni() {
 		return dni;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 }

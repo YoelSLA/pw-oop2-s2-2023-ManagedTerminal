@@ -1,11 +1,32 @@
 package client;
 
+import java.time.LocalDateTime;
+
+import bill.Bill;
+import terminal.ManagedTerminal;
+
 public class Consignee extends Client {
-	
-	private int dni;
-	private String name;
-	
-	public Consignee(int dni, String name) {
+
+	public Consignee(String dni, String name) {
 		super(dni, name);
 	}
+
+	@Override
+	public void sendMail(ManagedTerminal managedTerminal, Client client, Bill bill) {
+		// TODO IMPLEMENTAR MAIL CONSIGNEE
+
+	}
+
+	@Override
+	public void sendMail(ManagedTerminal managedTerminal, Client client, String string) {
+		// TODO IMPLEMENTAR MAIL CONSIGNEE
+
+	}
+
+	@Override
+	public void sendMail(ManagedTerminal managedTerminal, Client client, LocalDateTime date) {
+		// TODO IMPLEMENTAR MAIL CONSIGNEE
+
+	}
+
 }

@@ -1,6 +1,6 @@
 package terminal;
 
-import geographicalPosition.GeographicalPosition;
+import position.GeographicalPosition;
 
 public interface Terminal {
 
