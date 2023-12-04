@@ -1,19 +1,22 @@
 package order;
 
-import java.util.List;
-
+import client.Client;
 import client.Consignee;
-import service.Service;
+import terminal.Terminal;
 import load.Load;
 import trip.Trip;
+import truck.Truck;
+import driver.Driver;
 
 
 public class ImportOrder extends Order {
+	
 	private Consignee consignee;
 
-	public ImportOrder(List<Service> servicesList, Load load, Consignee consignee, Trip trip) {
-		super(servicesList, load, trip);
-		this.consignee = consignee;
+	public ImportOrder(Load load, Trip trip, Terminal origin, Terminal destiny, 
+						Client consignee, Driver driver,	Truck truck) {
+		super(load, trip, origin, destiny, consignee, driver, truck);
+		this.consignee = (Consignee) consignee;
 	}
 	
 	public Consignee getConsignee() {
