@@ -5,6 +5,7 @@ import java.util.List;
 
 import maritimeCircuit.MaritimeCircuit;
 import ship.Ship;
+import terminal.Terminal;
 import trip.Trip;
 
 public class ShippingLine {
@@ -55,6 +56,18 @@ public class ShippingLine {
 		ships.add(ship);
 	}
 
+	public void registerToTerminal(Terminal terminal) {
+		System.out.println("CIRCUITOS DE BUENOS AIRES | " + maritimeCircuitsForTerminal(terminal));
+
+		// Obtén los circuitos marítimos relevantes para esta terminal
+		List<MaritimeCircuit> relevantCircuits = maritimeCircuitsForTerminal(terminal);
+
+		// Establece los circuitos marítimos relevantes en la compañía naviera
+		setMaritimeCircuits(relevantCircuits);
+
+		System.out.println("CIRCUITOS | " + maritimeCircuits);
+	}
+
 	public void registerTrip(Trip trip) throws Exception {
 		validateMaritimeCircuitRegistration(trip);
 		validateShipRegistration(trip);
@@ -75,6 +88,10 @@ public class ShippingLine {
 		if (!ships.contains(trip.getShip())) {
 			throw new RuntimeException("The ship is not registered in the shipping line.");
 		}
+	}
+
+	public List<MaritimeCircuit> maritimeCircuitsForTerminal(Terminal terminal) {
+		return maritimeCircuits.stream().filter(m -> m.hasATerminal(terminal)).toList();
 	}
 
 }

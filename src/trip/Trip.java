@@ -9,9 +9,9 @@ import terminal.Terminal;
 
 public class Trip {
 
-	private LocalDateTime startDate;
-	private Ship ship;
 	private MaritimeCircuit maritimeCircuit;
+	private Ship ship;
+	private LocalDateTime startDate;
 
 	public Trip(MaritimeCircuit maritimeCircuit, Ship ship, LocalDateTime startDate) {
 		this.maritimeCircuit = maritimeCircuit;
@@ -19,8 +19,50 @@ public class Trip {
 		this.startDate = startDate;
 	}
 
+	/**
+	 * Calcula la fecha estimada de llegada a una terminal específica en el circuito
+	 * marítimo.
+	 *
+	 * @param terminal Terminal de destino para la cual se calculará la fecha de
+	 *                 llegada.
+	 * @return Fecha estimada de llegada a la terminal especificada.
+	 * @throws Exception
+	 */
+	public LocalDateTime calculateEstimatedArrivalDateToTerminal(Terminal terminal) throws Exception {
+		// Se obtiene la terminal de origen del circuito marítimo.
+		final Terminal ORIGIN_TERMINAL = maritimeCircuit.originTerminal();
+
+		// Se calculan las horas totales hasta la llegada a la terminal de destino.
+		final Integer HOURS_TO_ARRIVAL = maritimeCircuit.calculateTotalHoursBetweenTerminals(ORIGIN_TERMINAL, terminal);
+
+		// Se suma las horas al startDate para obtener la fecha estimada de llegada a la
+		// terminal de destino.
+		return startDate.plus(HOURS_TO_ARRIVAL, ChronoUnit.HOURS);
+
+	}
+
 	public MaritimeCircuit getMaritimeCircuit() {
 		return maritimeCircuit;
+	}
+
+	/**
+	 * Obtiene la siguiente terminal en el circuito marítimo después de la terminal
+	 * proporcionada.
+	 *
+	 * @param terminal Terminal de referencia.
+	 * @return Siguiente terminal en el circuito marítimo.
+	 */
+	public Terminal getNextTerminal(Terminal terminal) {
+		return maritimeCircuit.getNextTerminalInCircuit(terminal);
+	}
+
+	/**
+	 * Obtiene la terminal de origen del circuito marítimo de la travesía.
+	 *
+	 * @return Terminal de origen del circuito marítimo.
+	 */
+	public Terminal getOriginTerminal() {
+		return maritimeCircuit.originTerminal();
 	}
 
 	public Ship getShip() {
@@ -29,20 +71,6 @@ public class Trip {
 
 	public LocalDateTime getStartDate() {
 		return startDate;
-	}
-
-	public boolean hasATerminal(Terminal terminal) {
-		return maritimeCircuit.hasATerminal(terminal);
-	}
-
-	public Terminal originTerminal() {
-		return maritimeCircuit.originTerminal();
-	}
-
-	public Terminal nextTerminalOf(Terminal terminal) {
-		Integer indexTerminal = maritimeCircuit.originTerminals().indexOf(terminal);
-		return maritimeCircuit.originTerminals().get(indexTerminal + 1);
-
 	}
 
 	/**
@@ -55,24 +83,4 @@ public class Trip {
 		return maritimeCircuit.hasATerminal(terminal);
 	}
 
-	/**
-	 * Calcula la fecha estimada de llegada a una terminal específica en el circuito
-	 * marítimo.
-	 *
-	 * @param terminal Terminal de destino para la cual se calculará la fecha de
-	 *                 llegada.
-	 * @return Fecha estimada de llegada a la terminal especificada.
-	 */
-	public LocalDateTime calculateEstimatedArrivalDateToTerminal(Terminal terminal) {
-		// Se obtiene la terminal de origen del circuito marítimo.
-		final Terminal ORIGIN_TERMINAL = maritimeCircuit.originTerminal();
-
-		// Se calculan las horas totales hasta la llegada a la terminal de destino.
-		final Integer HOURS_TO_ARRIVAL = maritimeCircuit.calculateTotalHoursBetweenTerminals(ORIGIN_TERMINAL, terminal);
-
-		// Se suma las horas al startDate para obtener la fecha estimada de llegada a la
-		// terminal de destino.
-		return startDate.plus(HOURS_TO_ARRIVAL, ChronoUnit.HOURS);
-
-	}
 }

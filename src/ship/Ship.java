@@ -103,4 +103,14 @@ public class Ship {
 		// TODO Auto-generated method stub
 
 	}
+
+	public void startWorking() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void depart() {
+		// TODO Auto-generated method stub
+
+	}
 }
