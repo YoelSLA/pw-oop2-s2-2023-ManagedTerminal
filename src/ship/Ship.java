@@ -1,7 +1,7 @@
 package ship;
 
 import phase.Phase;
-import position.GeographicalPosition;
+import position.Position;
 import trip.Trip;
 
 /**
@@ -16,7 +16,7 @@ public class Ship {
 
 	private String name;
 	private Phase phase;
-	private GeographicalPosition geographicalPosition;
+	private Position geographicalPosition;
 	/**
 	 * @author alejandrabesel Un codigo identificador de un buque generado por el
 	 *         String "IMO-" seguido de 7 letras (IMOXXXXXXX)
@@ -36,7 +36,7 @@ public class Ship {
 	 * @param phase La fase en la que se encuentra el buque.
 	 * 
 	 */
-	public Ship(String name, String imo, GeographicalPosition geographicalPosition) {
+	public Ship(String name, String imo, Position geographicalPosition) {
 		setName(name);
 		setImo(imo);
 		setPhase(phase);
@@ -74,7 +74,7 @@ public class Ship {
 	 * Devuelve la posicion geografica actual en la que se encuentra el buque
 	 * gracias a su sistema de gps.
 	 */
-	public GeographicalPosition getPosition() {
+	public Position getPosition() {
 		return geographicalPosition;
 	}
 
@@ -83,7 +83,7 @@ public class Ship {
 	 * Observacion: la dejo en private porque entiendo que el buque se setea su
 	 * propia posicion
 	 */
-	private void setPosition(GeographicalPosition newPosition) {
+	private void setPosition(Position newPosition) {
 		this.geographicalPosition = newPosition;
 	}
 

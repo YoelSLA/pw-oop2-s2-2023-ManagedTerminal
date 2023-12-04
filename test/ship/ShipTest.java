@@ -8,20 +8,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import phase.*;
-import position.GeographicalPosition;
+import position.Position;
 
 class ShipTest {
 	
 	private Ship ship; //SUT
 	private Phase phaseArrived; //DOC
 	private Phase phaseWorking;
-	private GeographicalPosition geographicalPosition; //SUT
+	private Position geographicalPosition; //SUT
 	
 	@BeforeEach
 	void setUp() {
 		phaseArrived = mock(Phase.class);
 		phaseWorking = mock(Phase.class);
-		geographicalPosition = mock(GeographicalPosition.class);
+		geographicalPosition = mock(Position.class);
 		ship = new Ship("La Perla Negra", "IMO1234567", phaseArrived, geographicalPosition);
 		
 	}

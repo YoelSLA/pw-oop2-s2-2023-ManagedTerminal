@@ -1,11 +1,11 @@
 package terminal;
 
-import position.GeographicalPosition;
+import position.Position;
 
 public interface Terminal {
 
 	String getName();
 
-	GeographicalPosition getPosition();
+	Position getPosition();
 
 }

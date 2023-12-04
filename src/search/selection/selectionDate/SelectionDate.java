@@ -41,8 +41,9 @@ public abstract class SelectionDate extends Selection {
 	 *
 	 * @param trip El viaje para el cual se calculará la fecha de llegada estimada.
 	 * @return La fecha de llegada estimada del viaje a la terminal.
+	 * @throws Exception
 	 */
-	protected LocalDate calculateArrivalDate(Trip trip) {
+	protected LocalDate calculateArrivalDate(Trip trip) throws Exception {
 		return trip.calculateEstimatedArrivalDateToTerminal(getTerminal()).toLocalDate();
 	}
 
@@ -66,7 +67,13 @@ public abstract class SelectionDate extends Selection {
 
 	@Override
 	public List<Trip> filterTrips(List<Trip> trips) {
-		return trips.stream().filter(trip -> searchByCriteriaTo(calculateArrivalDate(trip))).toList();
+		return trips.stream().filter(trip -> {
+			try {
+				return searchByCriteriaTo(calculateArrivalDate(trip));
+			} catch (Exception e) {
+			}
+			return false;
+		}).toList();
 	}
 
 }

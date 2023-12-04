@@ -22,7 +22,13 @@ public class DepartureDate extends SelectionDate {
 	 */
 	@Override
 	public List<Trip> filterTrips(List<Trip> trips) {
-		return trips.stream().filter(trip -> searchByCriteriaTo(calculateArrivalDate(trip))).toList();
+		return trips.stream().filter(trip -> {
+			try {
+				return searchByCriteriaTo(calculateArrivalDate(trip));
+			} catch (Exception e) {
+			}
+			return false;
+		}).toList();
 	}
 
 }

@@ -19,7 +19,7 @@ import client.Shipper;
 import driver.Driver;
 import maritimeCircuit.MaritimeCircuit;
 import order.ExportOrder;
-import position.GeographicalPosition;
+import position.Position;
 import routing.Routing;
 import shippingLine.ShippingLine;
 import stretch.Stretch;
@@ -35,7 +35,7 @@ class ManagedTerminalTest {
 //-------------------------------------------------------------
 	private ExportOrder exportOrderOfAlejandra;
 //-------------------------------------------------------------
-	private GeographicalPosition positionBuenosAires;
+	private Position positionBuenosAires;
 //-------------------------------------------------------------
 	private MaritimeCircuit maritimeCircuit;
 //-------------------------------------------------------------
@@ -81,7 +81,7 @@ class ManagedTerminalTest {
 		when(exportOrderOfAlejandra.getTrip()).thenReturn(trip);
 //-------------------------------------------------------------
 		// GEOGRAPHICAL POSITION
-		positionBuenosAires = mock(GeographicalPosition.class);
+		positionBuenosAires = mock(Position.class);
 
 		when(positionBuenosAires.getLatitude()).thenReturn(-34.5795823299825);
 		when(positionBuenosAires.getLongitude()).thenReturn(-58.373877081937);

@@ -17,14 +17,21 @@ public abstract class Routing {
 	 * @param destiny          Terminal de destino.
 	 * @param maritimeCircuits Lista de circuitos marítimos disponibles.
 	 * @return El mejor circuito marítimo.
+	 * @throws Exception
 	 */
 	public final MaritimeCircuit bestCircuitBetween(ManagedTerminal origin, Terminal destiny,
-			List<MaritimeCircuit> maritimeCircuits) {
+			List<MaritimeCircuit> maritimeCircuits) throws Exception {
 		validateMaritimeCircuits(maritimeCircuits);
 		validateTerminalDestinyIn(destiny, maritimeCircuits);
-		return maritimeCircuits.stream()
-				.min(Comparator.comparingDouble(circuit -> calculateSpecificRouting(origin, destiny, circuit)))
-				.orElse(maritimeCircuits.get(0));
+		return maritimeCircuits.stream().min(Comparator.comparingDouble(circuit -> {
+			try {
+				return calculateSpecificRouting(origin, destiny, circuit);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return 0;
+		})).orElseThrow(() -> new Exception("Circuit not found."));
 	}
 
 	/**
@@ -35,9 +42,10 @@ public abstract class Routing {
 	 * @param destiny         Terminal de destino.
 	 * @param maritimeCircuit Circuito marítimo para el cálculo.
 	 * @return El resultado del cálculo de enrutamiento.
+	 * @throws Exception
 	 */
 	private final Double calculateSpecificRouting(ManagedTerminal origin, Terminal destiny,
-			MaritimeCircuit maritimeCircuit) {
+			MaritimeCircuit maritimeCircuit) throws Exception {
 		int startPosition = maritimeCircuit.getPositionOf(origin);
 		int endPosition = maritimeCircuit.getPositionOf(destiny);
 		return calculateRouting(maritimeCircuit.getStretches().subList(startPosition, endPosition));

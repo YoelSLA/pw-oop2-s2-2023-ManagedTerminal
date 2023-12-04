@@ -5,17 +5,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import position.GeographicalPosition;
+import position.Position;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GeographicalPositionTest {
-	private GeographicalPosition geographicalPosition;
+	private Position geographicalPosition;
 	
 	@BeforeEach
 	void setUp() {
-		geographicalPosition = new GeographicalPosition(-34.61315, -58.37723);
+		geographicalPosition = new Position(-34.61315, -58.37723);
 	}
 	
 	@Test
