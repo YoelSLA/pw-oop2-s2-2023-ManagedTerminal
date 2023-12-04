@@ -18,7 +18,7 @@ public abstract class Service {
 		return price;
 	}
 
-	public final String getName() {
+	public String getName() {
 		return this.name;
 	}
 

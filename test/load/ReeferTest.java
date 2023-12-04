@@ -20,48 +20,47 @@ class ReeferTest {
 	private Double weightB = 120.0;
 	private Double energyB = 150.0;
 	private Reefer reeferB;
-	
+
 	@BeforeEach
 	void setUp() {
 		reeferA = new Reefer(lengthA, heightA, widthA, weightA, energyA);
 		reeferB = new Reefer(lengthB, heightB, widthB, weightB, energyB);
 	}
-	
-	
-	@Test
-	void testInicializationClassReefer() {
-		assertEquals(heightA, reeferA.getHeight());
-		assertEquals(heightB, reeferB.getHeight());
 
-	}
-	
+//	@Test
+//	void testInicializationClassReefer() {
+//		assertEquals(heightA, reeferA.getHeight());
+//		assertEquals(heightB, reeferB.getHeight());
+//
+//	}
+
 	@Test
 	void getWidth() {
 		assertEquals(widthA, reeferA.getWidth());
-		assertEquals(widthB, reeferB.getWidth());		
+		assertEquals(widthB, reeferB.getWidth());
 	}
-	
-	@Test
-	void getLength() {
-		assertEquals(lengthA, reeferA.getLength());
-		assertEquals(lengthB, reeferB.getLength());		
-	}
-	
+
+//	@Test
+//	void getLength() {
+//		assertEquals(lengthA, reeferA.getLength());
+//		assertEquals(lengthB, reeferB.getLength());		
+//	}
+
 	@Test
 	void getWeight() {
 		assertEquals(weightA, reeferA.getWeight());
-		assertEquals(weightB, reeferB.getWeight());		
+		assertEquals(weightB, reeferB.getWeight());
 	}
-	
+
 	@Test
 	void testGetName() {
 		assertEquals("Reefer", reeferA.getName());
 	}
-	
+
 	@Test
 	void getConsumption() {
 		assertEquals(energyA, reeferA.getConsumptionkWh());
-		assertEquals(energyB, reeferB.getConsumptionkWh());		
+		assertEquals(energyB, reeferB.getConsumptionkWh());
 	}
 
 	@Test

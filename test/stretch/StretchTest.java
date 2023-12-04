@@ -69,17 +69,17 @@ class StretchTest {
 
 	@Test
 	void hasATerminal_ShouldReturnTrue_ForOrigin_InStretchBuenosAiresMontevideo() {
-		assertTrue(buenosAiresMontevideo.hasATerminal(buenosAires));
+		assertTrue(buenosAiresMontevideo.hasTerminal(buenosAires));
 	}
 
 	@Test
 	void hasATerminal_ShouldReturnTrue_ForDestiny_InStretchBuenosAiresMontevideo() {
-		assertTrue(buenosAiresMontevideo.hasATerminal(montevideo));
+		assertTrue(buenosAiresMontevideo.hasTerminal(montevideo));
 	}
 
 	@Test
 	void hasATerminal_ShouldReturnFalse_ForMockedTerminal_InStretchBuenosAiresMontevideo() {
-		assertFalse(buenosAiresMontevideo.hasATerminal(mock(Terminal.class)));
+		assertFalse(buenosAiresMontevideo.hasTerminal(mock(Terminal.class)));
 	}
 
 	@Test

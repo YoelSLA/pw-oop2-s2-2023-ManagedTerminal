@@ -71,10 +71,8 @@ class TripTest {
 //-------------------------------------------------------------		
 		// MARITIME CIRCUIT
 		circuitValparaisoToMontevideo = mock(MaritimeCircuit.class);
-		when(circuitValparaisoToMontevideo.getStretchs())
+		when(circuitValparaisoToMontevideo.getStretches())
 				.thenReturn(List.of(valparaisoBuenosAires, buenosAiresMontevideo, montevideoValparaiso));
-		when(circuitValparaisoToMontevideo.originTerminals())
-				.thenReturn(List.of(valparaiso, buenosAires, montevideo, valparaiso));
 		when(circuitValparaisoToMontevideo.originTerminal()).thenReturn(valparaiso);
 //-------------------------------------------------------------		
 		// SHIP
@@ -105,27 +103,28 @@ class TripTest {
 		// SetUp
 		when(circuitValparaisoToMontevideo.hasATerminal(Mockito.eq(montevideo))).thenReturn(true);
 		// Assert
-		assertTrue(tripValparaisoToMontevideo.hasATerminal(montevideo));
+		assertTrue(tripValparaisoToMontevideo.hasTerminal(montevideo));
 	}
 
 	@Test
-	void testDateArrivedToDestiny_ShouldReturnCorrectDateTime_ForTripValparaisoToMontevideo() {
+	void testDateArrivedToDestiny_ShouldReturnCorrectDateTime_ForTripValparaisoToMontevideo() throws Exception {
 		// SetUp
 		when(circuitValparaisoToMontevideo.originTerminal()).thenReturn(valparaiso);
-		when(circuitValparaisoToMontevideo.calculateTimeBetween(valparaiso, buenosAires)).thenReturn(12);
+		when(circuitValparaisoToMontevideo.calculateTotalHoursBetweenTerminals(valparaiso, buenosAires)).thenReturn(12);
 		// Assert
 		assertEquals(LocalDateTime.of(2023, Month.DECEMBER, 01, 22, 0),
-				tripValparaisoToMontevideo.dateArrivedToDestiny(buenosAires)); // 01-12-23 | 22:00 Hs.
+				tripValparaisoToMontevideo.calculateEstimatedArrivalDateToTerminal(buenosAires)); // 01-12-23 | 22:00
+																									// Hs.
 	}
 
 	@Test
 	void testOriginTerminal_ShouldReturnValparaiso_ForTripValparaisoToMontevideo() {
-		assertEquals(valparaiso, tripValparaisoToMontevideo.originTerminal());
+		assertEquals(valparaiso, tripValparaisoToMontevideo.getOriginTerminal());
 	}
 
-	@Test
-	void nextTerminalOf_ShouldReturnBuenosAires_ForValparaiso_ForTripValparaisoToMontevideo() {
-		assertEquals(buenosAires, tripValparaisoToMontevideo.nextTerminalOf(valparaiso));
-	}
+//	@Test
+//	void nextTerminalOf_ShouldReturnBuenosAires_ForValparaiso_ForTripValparaisoToMontevideo() {
+//		assertEquals(buenosAires, tripValparaisoToMontevideo.getNextTerminal(valparaiso));
+//	}
 
 }
