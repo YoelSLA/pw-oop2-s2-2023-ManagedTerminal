@@ -51,7 +51,7 @@ public class BinaryOperatorTest {
 	protected DepartureDate departureDate;
 
 	@BeforeEach
-	void setUp() {
+	void setUp() throws Exception {
 		buenosAires = mock(ManagedTerminal.class);
 		// ------------------------------------------------------------------------------------------
 		guayaquil = mock(Terminal.class);

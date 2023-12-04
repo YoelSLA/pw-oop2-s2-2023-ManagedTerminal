@@ -13,7 +13,7 @@ class DestinationTerminalTest extends SelectionTest {
 	private DestinationTerminal destinationTerminal;
 
 	@BeforeEach
-	void setUp() {
+	void setUp() throws Exception {
 		super.setUp();
 		// -------------------------------------------------------------
 		destinationTerminal = new DestinationTerminal(lima);

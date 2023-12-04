@@ -20,7 +20,7 @@ class DepartureDateTest extends SelectionTest {
 	private DepartureDate departureDate;
 
 	@BeforeEach
-	void setUp() {
+	void setUp() throws Exception {
 		super.setUp();
 		// ------------------------------------------------------------------------------------------
 		when(buenosAiresValparaiso.getTime()).thenReturn(Duration.ofHours(13));

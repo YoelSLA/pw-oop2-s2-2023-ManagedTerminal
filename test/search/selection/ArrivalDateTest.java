@@ -20,7 +20,7 @@ class ArrivalDateTest extends SelectionTest {
 	private ArrivalDate arrivalDate; // SUT
 
 	@BeforeEach
-	void setUp() {
+	void setUp() throws Exception {
 		super.setUp();
 		// ------------------------------------------------------------------------------------------
 		when(buenosAiresValparaiso.getTime()).thenReturn(Duration.ofHours(13));
@@ -84,7 +84,7 @@ class ArrivalDateTest extends SelectionTest {
 	}
 
 	@Test
-	void noLimaTerminalAndEqualsCriteria_FilterByGuayaquilAndDate() {
+	void noLimaTerminalAndEqualsCriteria_FilterByGuayaquilAndDate() throws Exception {
 		// Set Up
 		when(tripOne.hasTerminal(lima)).thenReturn(false);
 

@@ -20,7 +20,7 @@ class OrTest extends BinaryOperatorTest {
 	private Or or;
 
 	@BeforeEach
-	void setUp() {
+	void setUp() throws Exception {
 		super.setUp();
 		// ------------------------------------------------------------------------------------------
 		arrivalDate = new ArrivalDate(Criteria.LESS_THAN, LocalDate.of(2023, Month.NOVEMBER, 15), valparaiso); // 15-11-23
@@ -49,7 +49,7 @@ class OrTest extends BinaryOperatorTest {
 	}
 
 	@Test
-	void testFilterTrips_OrConditionWithMultipleDestinationsAndArrivalDates_ReturnsMatchingTrips() {
+	void testFilterTrips_OrConditionWithMultipleDestinationsAndArrivalDates_ReturnsMatchingTrips() throws Exception {
 		// Set Up
 		when(tripOne.hasTerminal(valparaiso)).thenReturn(true);
 		when(tripOne.calculateEstimatedArrivalDateToTerminal(valparaiso))

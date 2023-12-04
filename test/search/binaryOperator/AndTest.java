@@ -20,7 +20,7 @@ class AndTest extends BinaryOperatorTest {
 	private And and;
 
 	@BeforeEach
-	void setUp() {
+	void setUp() throws Exception {
 		super.setUp();
 		// ------------------------------------------------------------------------------------------
 		arrivalDate = new ArrivalDate(Criteria.GREATHER_THAN, LocalDate.of(2023, Month.NOVEMBER, 10), lima); // 10-11-23
@@ -53,7 +53,7 @@ class AndTest extends BinaryOperatorTest {
 	}
 
 	@Test
-	void filterTrips_WhenValidArrivalDateAndTerminalConditions_ReturnsMatchingTrips() {
+	void filterTrips_WhenValidArrivalDateAndTerminalConditions_ReturnsMatchingTrips() throws Exception {
 		// Set Up
 		when(tripOne.hasTerminal(lima)).thenReturn(true);
 		when(tripOne.calculateEstimatedArrivalDateToTerminal(lima))
