@@ -19,6 +19,6 @@ public class DestinationTerminal extends Selection {
 	 */
 	@Override
 	public List<Trip> filterTrips(List<Trip> trips) {
-		return trips.stream().filter(t -> t.hasTerminal(getTerminal())).toList();
+		return trips.stream().filter(trip -> trip.hasTerminal(getTerminal())).toList();
 	}
 }
