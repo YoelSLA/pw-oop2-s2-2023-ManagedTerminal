@@ -2,42 +2,66 @@ package load;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TankTest {
 
-	Double widthA = 5.0;
-	Double heightA = 2.0;
-	Double lengthA = 8.0;
-	Double weightA = 50.0;
-	Tank tankA = new Tank(widthA,heightA,lengthA,weightA);
+	private Double widthA = 5.0;
+	private Double heightA = 2.0;
+	private Double lengthA = 8.0;
+	private Double weightA = 50.0;
+	private Tank tankA;
 	
 	
-	Double widthB = 4.0;
-	Double heightB = 3.0;
-	Double lengthB = 10.0;
-	Double weightB = 120.0;
-	Tank tankB = new Tank(widthB,heightB,lengthB,weightB);
+	private Double widthB = 4.0;
+	private Double heightB = 3.0;
+	private Double lengthB = 10.0;
+	private Double weightB = 120.0;
+	private Tank tankB;
+	
+	@BeforeEach
+	void setUp() {
+		tankA = new Tank(lengthA, heightA, widthA,weightA);
+		tankB = new Tank(lengthB, heightB, widthB,weightB);
+	}
 	
 	
 	@Test
 	void testInicializationClassTank() {
-		//TankA
-		assertEquals(widthA, tankA.getWidth());
 		assertEquals(heightA, tankA.getHeight());
-		assertEquals(lengthA, tankA.getLength());
-		assertEquals(weightA, tankA.getWeight());
-		//TankB
-		assertEquals(widthB, tankB.getWidth());
 		assertEquals(heightB, tankB.getHeight());
-		assertEquals(lengthB, tankB.getLength());
+	}
+	
+	@Test
+	void testGetWidth() {
+		assertEquals(widthA, tankA.getWidth());
+		assertEquals(widthB, tankB.getWidth());		
+	}
+	
+	@Test
+	void testGetLength() {
+		assertEquals(lengthA, tankA.getLength());
+		assertEquals(lengthB, tankB.getLength());		
+	}
+	
+	@Test
+	void testGetWeight() {
+		assertEquals(weightA, tankA.getWeight());		
 		assertEquals(weightB, tankB.getWeight());
 	}
 	
 	@Test
-	void testVolume() {
+	void testGetName() {
+		assertEquals("Tank", tankB.getName());
+	}
+	
+	@Test
+	void testGetVolume() {
+		//TankA
 		Double expectedValueA = tankA.getWidth()*tankA.getLength()*tankA.getHeight();
 		assertEquals(expectedValueA, tankA.getVolume());
+		//TankB
 		Double expectedValueB = tankB.getWidth()*tankB.getLength()*tankB.getHeight();
 		assertEquals(expectedValueB, tankB.getVolume());
 	}

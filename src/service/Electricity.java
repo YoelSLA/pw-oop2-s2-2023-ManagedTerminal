@@ -12,11 +12,9 @@ public class Electricity extends Service{
 	private LocalDateTime startConnection;
 	private LocalDateTime endConnection;	
 	
-	public Electricity(Double price, LocalDateTime startConnection, LocalDateTime endConnection) {
-		super(price);
+	public Electricity(Double price, LocalDateTime startConnection) {
+		super(price, "Electricity");
 		this.startConnection = startConnection;
-		this.endConnection = endConnection;
-		this.name = "Electricity";
 	}
 	
 	@Override
@@ -35,5 +33,9 @@ public class Electricity extends Service{
 
 	public LocalDateTime getEndConnection() {
 		return endConnection;
+	}
+	
+	public void setEndConnection(LocalDateTime endConnection) {
+		this.endConnection = endConnection;
 	}
 }

@@ -6,8 +6,7 @@ import order.Order;
 public class Weigh extends Service {
 	
 	public Weigh(Double price) {
-		super(price);
-		this.name = "Weigh";
+		super(price, "Weigh");
 	}
 
 	@Override

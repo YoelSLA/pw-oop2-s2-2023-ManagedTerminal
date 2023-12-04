@@ -2,43 +2,68 @@ package load;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class DryTest {
+	
+	private Dry dryA;
+	private Dry dryB;
 
-	Double widthA = 5.0;
-	Double heightA = 2.0;
-	Double lengthA = 8.0;
-	Double weightA = 50.0;
-	Dry dryA = new Dry(widthA,heightA,lengthA,weightA);
+	private Double widthA = 5.0;
+	private Double heightA = 2.0;
+	private Double lengthA = 8.0;
+	private Double weightA = 50.0;
 	
 	
-	Double widthB = 4.0;
-	Double heightB = 3.0;
-	Double lengthB = 10.0;
-	Double weightB = 120.0;
-	Dry dryB = new Dry(widthB,heightB,lengthB,weightB);
+	private Double widthB = 4.0;
+	private Double heightB = 3.0;
+	private Double lengthB = 10.0;
+	private Double weightB = 120.0;
+	
+	@BeforeEach
+	void setUp() {
+		dryA = new Dry(lengthA, heightA, widthA,weightA);
+		dryB = new Dry(lengthB,heightB,widthB,weightB);		
+	}
 	
 	
 	@Test
-	void testInicializationClassReefer() {
-		//reeferA
+	void testGetWidth() {
 		assertEquals(widthA, dryA.getWidth());
-		assertEquals(heightA, dryA.getHeight());
-		assertEquals(lengthA, dryA.getLength());
-		assertEquals(weightA, dryA.getWeight());
-		//reeferB
 		assertEquals(widthB, dryB.getWidth());
-		assertEquals(heightB, dryB.getHeight());
-		assertEquals(lengthB, dryB.getLength());
-		assertEquals(weightB, dryB.getWeight());
 	}
 	
 	@Test
-	void testVolume() {
+	void testGetHeight() {
+		assertEquals(heightA, dryA.getHeight());
+		assertEquals(heightB, dryB.getHeight());		
+	}
+	
+	@Test
+	void testGetLength() {
+		assertEquals(lengthA, dryA.getLength());
+		assertEquals(lengthB, dryB.getLength());		
+	}
+	
+	@Test
+	void testGetWeight() {
+		assertEquals(weightA, dryA.getWeight());
+		assertEquals(weightB, dryB.getWeight());		
+	}
+	
+	@Test
+	void testGetName() {
+		assertEquals("Dry", dryA.getName());
+	}
+	
+	@Test
+	void testGetVolume() {
+		//reeferA
 		Double expectedValueA = dryA.getWidth()*dryA.getLength()*dryA.getHeight();
 		assertEquals(expectedValueA, dryA.getVolume());
 		
+		//reeferB
 		Double expectedValueB = dryB.getWidth()*dryB.getLength()*dryB.getHeight();
 		assertEquals(expectedValueB, dryB.getVolume());
 	}

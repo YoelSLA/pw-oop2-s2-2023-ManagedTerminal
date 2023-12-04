@@ -4,25 +4,20 @@ import load.Load;
 
 public class Washed extends Service {
 	
-	//en metros cubicos
-	private final int maxVolumePerMinimumFee = 70;
-	private Double costPerBigLoad;
+	private Double otherPrice;
 	
 
-	public Washed(Double price, Double costPerBigLoad) {
-		super(price);
-		this.name = "Washed";
-		this.costPerBigLoad = costPerBigLoad;
+	public Washed(Double price, Double otherPrice) {
+		super(price, "Washed");
+		this.otherPrice = otherPrice;
 	}
 	
 	@Override
 	public Double getPriceFor(Load load) {
-		Boolean hasRegularSize = load.getVolume() <= maxVolumePerMinimumFee;
-		return hasRegularSize ? this.getPrice() : getCostPerBigLoad();
+		return load.getVolume() > 70 ? this.getPrice() : otherPrice;
 	}
 
-	public Double getCostPerBigLoad() {
-		return costPerBigLoad;
+	public Double getOtherPrice() {
+		return otherPrice;
 	}
-
 }

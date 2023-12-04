@@ -2,7 +2,7 @@ package load;
 
 public class Tank extends Load{
 
-	public Tank(Double width, Double height, Double length, Double weight) {
-		super(width, height, length, weight);
+	public Tank(Double length, Double height, Double width, Double weight) {
+		super(length, height, width, weight, "Tank");
 	}
 }

@@ -1,4 +1,4 @@
-package service1;
+package services;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -18,32 +18,38 @@ import service.Weigh;
  */
 class WeighTest {
 	
-	Weigh weighA;
-	Double priceA = 100.0;
+	private Weigh weighA;
+	private Double priceA = 100.0;
 	
-	Weigh weighB;
-	Double priceB = 300.0;
+	private Weigh weighB;
+	private Double priceB = 300.0;
 	
-	Load loadA;
+	private Load loadA;
+	
+	private Double priceExpectedLoadA = priceA;
 
 	@BeforeEach
 	void setUp() {
 		weighA= new Weigh(priceA);
 		weighB= new Weigh(priceB);
+		
+		loadA = mock(Tank.class);
 	}
 		
 	@Test
-	void testWeighClassInitialization() {
+	void testGetPrice() {
 		assertEquals(priceA, weighA.getPrice());
-		assertEquals("Weigh", weighA.getName());
 		assertEquals(priceB, weighB.getPrice());
-		assertEquals("Weigh", weighB.getName());
+	}
+	
+	@Test
+	void testGetName() {
+		assertEquals("Weigh", weighA.getName());		
 	}
 	
 	@Test
 	void testWeighServiceForAGivenLoad() {
-		loadA = mock(Tank.class);
-		Double priceExpectedLoadA = priceA;
+		
 		assertEquals(priceExpectedLoadA, weighA.getPriceFor(loadA));
 	}
 

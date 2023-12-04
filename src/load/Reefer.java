@@ -2,14 +2,14 @@ package load;
 
 public class Reefer extends Load {
 	
-	private int energyConsumption;
+	private Double energyConsumption;
 	
-	public Reefer(Double width, Double height, Double length, Double weight, int energyConsumption) {
-		super(width, height, length, weight);
+	public Reefer(Double length, Double height, Double width, Double weight, Double energyConsumption) {
+		super(length, height, width, weight, "Reefer");
 		this.energyConsumption = energyConsumption;
 	}
 	
 	public Double getConsumptionkWh() {
-		return (double) energyConsumption;
+		return energyConsumption;
 	}
 }

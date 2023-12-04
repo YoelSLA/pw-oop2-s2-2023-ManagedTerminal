@@ -7,8 +7,7 @@ public class ExcessStorage extends Service{
 	Integer hoursOfStay;
 
 	public ExcessStorage(Double price, Integer hoursOfStay) {
-		super(price);
-		this.name = "ExcessStorage";
+		super(price, "ExcessStorage");
 		this.hoursOfStay = hoursOfStay;
 	}
 	

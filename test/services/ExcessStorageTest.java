@@ -1,4 +1,4 @@
-package service1;
+package services;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -20,43 +20,52 @@ import service.ExcessStorage;
  */
 class ExcessStorageTest {
 	
-	ExcessStorage storageA;
-	Double priceA = 100.0;
-	Integer hoursA = 2;
+	private ExcessStorage storageA;
+	private Double priceA = 100.0;
+	private Integer hoursA = 2;
 	
-	ExcessStorage storageB;
-	Double priceB = 300.0;
-	Integer hoursB = 48;
+	private ExcessStorage storageB;
+	private Double priceB = 300.0;
+	private Integer hoursB = 48;
 	
-	Load loadA;
-	Load loadB;
+	private Load loadA;
+	private Load loadB;
 	
 	@BeforeEach
 	void setUp() {
 		storageA= new ExcessStorage(priceA, hoursA);
 		storageB= new ExcessStorage(priceB, hoursB);
+		loadA = mock(Tank.class);
+		loadB = mock(Tank.class);
 	}
 	
 	@Test
-	void testExcessStorageClassInitialization() {
+	void testGetPrice() {
 		assertEquals(priceA, storageA.getPrice());
-		assertEquals("ExcessStorage", storageA.getName());
-		assertEquals(hoursA, storageA.getHoursOfStay());
 		assertEquals(priceB, storageB.getPrice());
-		assertEquals("ExcessStorage", storageB.getName());
-		assertEquals(hoursB, storageB.getHoursOfStay());
+	}
+	
+	@Test
+	void testGetHoursOfStay() {
+		assertEquals(hoursA, storageA.getHoursOfStay());
+		assertEquals(hoursB, storageB.getHoursOfStay());		
+	}
+	
+	@Test
+	void testGetName() {
+		assertEquals("ExcessStorage", storageA.getName());		
 	}
 	
 	@Test
 	void testPriceForExcessStorageForAGivenLoadOnTime() {
-		loadA = mock(Tank.class);
+		
 		Double expectedPrice = priceA * hoursA;
 		assertEquals(expectedPrice, storageA.getPriceFor(loadA));
 	}
 	
 	@Test
 	void testPriceForExcessStorageForAGivenLoadDelayed() {
-		loadB = mock(Tank.class);
+		
 		Double expectedPrice = priceB * hoursB;
 		assertEquals(expectedPrice, storageB.getPriceFor(loadB));
 	}

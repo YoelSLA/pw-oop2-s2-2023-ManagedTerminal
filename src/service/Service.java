@@ -8,14 +8,19 @@ public abstract class Service {
 	protected Double price;
 	protected String name;
 	
-	public Service(Double price) {
+	public Service(Double price, String name) {
 		this.price = price;
+		this.name = name;
 	}
-
-	public Double getPrice() {return price;}
 	
 	public abstract Double getPriceFor(Load load);
+
+	public Double getPrice() {
+		return price;
+	}
 	
-	public final String getName() {return this.name;}
+	public final String getName() {
+		return this.name;
+	}
 
 }

@@ -10,8 +10,8 @@ public class Dry extends Load {
 	 * @param length La longitud de la carga en metros.
 	 * @param weight El peso de la carga en toneladas.
 	 */
-	public Dry(Double width, Double height, Double length, Double weight) {
-		super(width, height, length, weight);
+	public Dry(Double length, Double height, Double width, Double weight) {
+		super(length, height, width, weight, "Dry");
 	}
 
 }

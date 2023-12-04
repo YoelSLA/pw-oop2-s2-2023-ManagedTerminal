@@ -19,7 +19,7 @@ public class Bill {
 	public Double getTotalAmountPerServices() {
 		return order.getServices()
 					.stream()
-					.mapToDouble(serv -> serv.getPriceFor(order))
+					.mapToDouble(serv -> serv.getPriceFor(order.getLoad()))
 					.sum();
 	}
 	
@@ -42,7 +42,7 @@ public class Bill {
 			.stream()
 			.forEach( serv -> sb.append(
 								String.format("%s,%s,%s\r\n",
-											serv.getName(), broadcastDate, serv.getPriceFor(order)
+											serv.getName(), broadcastDate, serv.getPriceFor(order.getLoad())
 								)
 						)
 			);
