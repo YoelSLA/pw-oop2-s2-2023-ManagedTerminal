@@ -1,8 +1,9 @@
 package maritimeCircuit;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -19,89 +20,105 @@ import terminal.Terminal;
 class MaritimeCircuitTest {
 
 	private ManagedTerminal buenosAires;
+	// ------------------------------------------------------------
+	private Terminal valparaiso;
+	private Terminal lima;
+	private Terminal guayaquil;
 //-------------------------------------------------------------
-	private Terminal montevideo;
-	private Terminal rioDeJaneiro;
+	private Stretch buenosAiresValparaiso;
+	private Stretch valparaisoLima;
+	private Stretch limaGuayaquil;
+	private Stretch guayaquilBuenosAires;
 //-------------------------------------------------------------
-	private Stretch buenosAiresMontevideo;
-	private Stretch montevideoRioDeJaniero;
-	private Stretch rioDeJaneiroBuenosAires;
-//-------------------------------------------------------------
-	private MaritimeCircuit circuitBuenosAiresRioDeJaniero; // SUT
+	private MaritimeCircuit maritimeCircuitOne; // SUT
 
 	@BeforeEach
 	void setUp() {
-		// MANAGED TERMINAL
 		buenosAires = mock(ManagedTerminal.class);
-//-------------------------------------------------------------		
-		// TERMINAL
-		montevideo = mock(Terminal.class);
-		rioDeJaneiro = mock(Terminal.class);
-//-------------------------------------------------------------		
-		// STRETCH
-		buenosAiresMontevideo = mock(Stretch.class);
-		when(buenosAiresMontevideo.getOrigin()).thenReturn(buenosAires);
-		when(buenosAiresMontevideo.getDestiny()).thenReturn(montevideo);
-		when(buenosAiresMontevideo.getTime()).thenReturn(Duration.ofHours(3));
+		// ------------------------------------------------------------------------------------------
+		valparaiso = mock(Terminal.class);
+		lima = mock(Terminal.class);
+		guayaquil = mock(Terminal.class);
+		// ------------------------------------------------------------------------------------------
+		buenosAiresValparaiso = mock(Stretch.class);
+		when(buenosAiresValparaiso.getOrigin()).thenReturn(buenosAires);
+		when(buenosAiresValparaiso.getDestiny()).thenReturn(valparaiso);
+		when(buenosAiresValparaiso.getTime()).thenReturn(Duration.ofHours(13));
+		when(buenosAiresValparaiso.getPrice()).thenReturn(1040.00);
+		when(buenosAiresValparaiso.hasTerminal(buenosAires)).thenReturn(true);
 
-		montevideoRioDeJaniero = mock(Stretch.class);
-		when(montevideoRioDeJaniero.getOrigin()).thenReturn(montevideo);
-		when(montevideoRioDeJaniero.getDestiny()).thenReturn(rioDeJaneiro);
-		when(montevideoRioDeJaniero.getTime()).thenReturn(Duration.ofHours(8));
+		valparaisoLima = mock(Stretch.class);
+		when(valparaisoLima.getOrigin()).thenReturn(valparaiso);
+		when(valparaisoLima.getDestiny()).thenReturn(lima);
+		when(valparaisoLima.getTime()).thenReturn(Duration.ofHours(9));
+		when(valparaisoLima.getPrice()).thenReturn(2040.00);
 
-		rioDeJaneiroBuenosAires = mock(Stretch.class);
-		when(rioDeJaneiroBuenosAires.getOrigin()).thenReturn(rioDeJaneiro);
-		when(rioDeJaneiroBuenosAires.getDestiny()).thenReturn(buenosAires);
-		when(rioDeJaneiroBuenosAires.getTime()).thenReturn(Duration.ofHours(16));
-//-------------------------------------------------------------		
-		// MARITIME CIRCUIT
-		circuitBuenosAiresRioDeJaniero = new MaritimeCircuit(
-				List.of(buenosAiresMontevideo, montevideoRioDeJaniero, rioDeJaneiroBuenosAires));
+		limaGuayaquil = mock(Stretch.class);
+		when(limaGuayaquil.getOrigin()).thenReturn(lima);
+		when(limaGuayaquil.getDestiny()).thenReturn(guayaquil);
+		when(limaGuayaquil.getTime()).thenReturn(Duration.ofHours(6));
+		when(limaGuayaquil.getPrice()).thenReturn(1821.00);
+		when(limaGuayaquil.hasTerminal(lima)).thenReturn(true);
+
+		guayaquilBuenosAires = mock(Stretch.class);
+		when(guayaquilBuenosAires.getOrigin()).thenReturn(guayaquil);
+		when(guayaquilBuenosAires.getDestiny()).thenReturn(buenosAires);
+		when(guayaquilBuenosAires.getTime()).thenReturn(Duration.ofHours(36));
+		when(guayaquilBuenosAires.getPrice()).thenReturn(2192.00);
+		// ------------------------------------------------------------------------------------------
+		maritimeCircuitOne = new MaritimeCircuit(
+				List.of(buenosAiresValparaiso, valparaisoLima, limaGuayaquil, guayaquilBuenosAires));
 	}
 
 	@Test
-	void getStretches_ShouldReturnCorrectStretchs_ForCircuitBuenosAiresRioDeJaneiro() {
-		assertEquals(List.of(buenosAiresMontevideo, montevideoRioDeJaniero, rioDeJaneiroBuenosAires),
-				circuitBuenosAiresRioDeJaniero.getStretches());
+	void testStretchesInMaritimeCircuitOne() {
+		assertEquals(List.of(buenosAiresValparaiso, valparaisoLima, limaGuayaquil, guayaquilBuenosAires),
+				maritimeCircuitOne.getStretches());
 	}
 
 	@Test
-	void hasATerminal_ShouldReturnFalse_ForMockedTerminal_InCircuitBuenosAiresRioDeJaneiro() {
-		assertFalse(circuitBuenosAiresRioDeJaniero.hasATerminal(mock(Terminal.class)));
+	void testGetPositionOfTerminalBuenosAiresInMaritimeCircuitOne() throws Exception {
+		assertEquals(0, maritimeCircuitOne.getPositionOf(buenosAires));
 	}
 
 	@Test
-	void hasATerminal_ShouldReturnTrue_ForTerminalBuenosAires_InCircuitBuenosAiresRioDeJaneiro() {
-		assertTrue(circuitBuenosAiresRioDeJaniero.hasATerminal(buenosAires));
+	void testGetPositionOfUnknownTerminalInMaritimeCircuitOneThrowsException() throws Exception {
+		assertThrows(Exception.class, () -> maritimeCircuitOne.getPositionOf(mock(Terminal.class)),
+				"Terminal not found");
 	}
 
 	@Test
-	void calculateTotalHoursBetweenTerminals_ShouldReturnCorrectHours_ForCircuitBuenosAiresRioDeJaneiro() {
-		assertEquals(11, circuitBuenosAiresRioDeJaniero.calculateTotalHoursBetweenTerminals(buenosAires, rioDeJaneiro));
+	void testGetPriceOfMaritimeCircuitOne() {
+		assertEquals(7093.00, maritimeCircuitOne.getPrice());
 	}
 
 	@Test
-	void getTime_ShouldReturnCorrectTime_ForCircuitBuenosAiresRioDeJaneiro() {
-		assertEquals(27, circuitBuenosAiresRioDeJaniero.getTime());
+	void testGetTimeOfMaritimeCircuitOne() {
+		assertEquals(64, maritimeCircuitOne.getTime());
 	}
 
 	@Test
-	void getPositionOf_ShouldReturnCorrectPosition_ForMontevideo_InCircuitBuenosAiresRioDeJaneiro() {
-		assertEquals(1, circuitBuenosAiresRioDeJaniero.getPositionOf(montevideo));
+	void testCalculateTotalHoursBetweenTerminalsInMaritimeCircuitOne() throws Exception {
+		assertEquals(22, maritimeCircuitOne.calculateTotalHoursBetweenTerminals(buenosAires, lima));
 	}
 
 	@Test
-	void getPrice_ShouldReturnCorrectPrice_ForCircuitBuenosAiresRioDeJaneiro() {
-		// Exercise
-		when(buenosAiresMontevideo.getPrice()).thenReturn(500.0);
-		when(montevideoRioDeJaniero.getPrice()).thenReturn(800.0);
-		when(rioDeJaneiroBuenosAires.getPrice()).thenReturn(1500.0);
-		// Assert
-		assertEquals(2800.00, circuitBuenosAiresRioDeJaniero.getPrice());
+	void testHasTerminalBuenosAiresInMaritimeCircuitOne() {
+		assertTrue(maritimeCircuitOne.hasATerminal(buenosAires));
 	}
 
 	@Test
-	void originTerminal_ShouldReturnBuenosAires_ForCircuitBuenosAiresRioDeJaneiro() {
-		assertEquals(buenosAires, circuitBuenosAiresRioDeJaniero.originTerminal());
+	void TestHasUnknownTerminalInMaritimeCircuitOneReturnsFalse() {
+		assertFalse(maritimeCircuitOne.hasATerminal(mock(Terminal.class)));
+	}
+
+	@Test
+	void testOriginTerminalOfMaritimeCircuitOne() {
+		assertEquals(buenosAires, maritimeCircuitOne.originTerminal());
+	}
+
+	@Test
+	void testGetNextTerminalInCircuitFromBuenosAiresInMaritimeCircuitOne() {
+		assertEquals(valparaiso, maritimeCircuitOne.getNextTerminalInCircuit(buenosAires));
 	}
 }
