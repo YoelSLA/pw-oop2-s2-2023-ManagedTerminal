@@ -27,8 +27,7 @@ public abstract class Order {
 	private List<Service> services;
 	private Turn turn;
 
-	public Order(Load load, Trip trip, Terminal origin, Terminal destiny,
-				Client client, Driver driver, Truck truck) {
+	public Order(Load load, Trip trip, Terminal origin, Terminal destiny, Client client, Driver driver, Truck truck) {
 		this.load = load;
 		this.trip = trip;
 		this.origin = origin;
@@ -38,15 +37,14 @@ public abstract class Order {
 		this.truck = truck;
 		this.bill = new Bill(this);
 		this.services = new ArrayList<Service>();
-		this.turn = new Turn(driver, truck, null);
+		this.turn = new Turn(driver, truck, null); // TODO: REVISAR
 	}
-	
-	/*public Order(List<Service> servicesList, Load load, Trip trip) {
-		this.services = servicesList;
-		this.load = load;
-		this.trip = trip;
-	}*/
-	
+
+	/*
+	 * public Order(List<Service> servicesList, Load load, Trip trip) {
+	 * this.services = servicesList; this.load = load; this.trip = trip; }
+	 */
+
 	public Bill getBill() {
 		return bill;
 	}
@@ -58,11 +56,11 @@ public abstract class Order {
 	public Terminal getDestiny() {
 		return destiny;
 	}
-	
+
 	public Terminal getOrigin() {
 		return origin;
 	}
-	
+
 	public Load getLoad() {
 		return load;
 	}
@@ -74,11 +72,11 @@ public abstract class Order {
 	public Trip getTrip() {
 		return trip;
 	}
-	
+
 	public Truck getTruck() {
 		return truck;
 	}
-	
+
 	public Driver getDriver() {
 		return driver;
 	}
