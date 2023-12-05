@@ -16,4 +16,9 @@ public class Reefer extends Load {
 	public void setConsumption(Double consumptionkWh) {
 		this.energyConsumption = consumptionkWh;
 	}
+
+	@Override
+	public Boolean consumesElectricity() {
+		return false;
+	}
 }

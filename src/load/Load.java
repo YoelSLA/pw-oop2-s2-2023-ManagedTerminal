@@ -45,4 +45,8 @@ public abstract class Load {
 	public Double getVolume() {
 		return width * height * length;
 	}
+
+	public Boolean consumesElectricity() {
+		return false;
+	}
 }

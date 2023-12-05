@@ -7,7 +7,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
@@ -15,46 +14,17 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import client.Shipper;
 import driver.Driver;
 import load.Dry;
 import load.Reefer;
-import maritimeCircuit.MaritimeCircuit;
 import order.ExportOrder;
 import service.Electricity;
 import service.Weigh;
-import shippingLine.ShippingLine;
-import stretch.Stretch;
-import trip.Trip;
 import truck.Truck;
-import truckTransportCompany.TruckTransportCompany;
 import turn.Turn;
 
-class ProcessOfExportOrderTest extends ManagedTerminal2Test {
+class ProcessOfExportOrderTest extends ManagedTerminalTest {
 
-	private Terminal guayaquil;
-	private Terminal lima;
-	private Terminal valparaiso;
-	// ------------------------------------------------------------
-	private Stretch buenosAiresValparaiso;
-	private Stretch valparaisoLima;
-	private Stretch limaGuayaquil;
-	private Stretch guayaquilBuenosAires;
-	// ------------------------------------------------------------
-	private MaritimeCircuit maritimeCircuitOne;
-	// ------------------------------------------------------------
-	private Trip tripOne;
-	// ------------------------------------------------------------
-	private ShippingLine apmMaersk;
-	// ------------------------------------------------------------
-	private Shipper ivan;
-	// ------------------------------------------------------------
-	private Driver alberto;
-	// ------------------------------------------------------------
-	private Truck volvo;
-	// ------------------------------------------------------------
-	private TruckTransportCompany transportVesprini;
-	// ------------------------------------------------------------
 	private Turn turnExportOrder;
 	// ------------------------------------------------------------
 	private Reefer reefer;
@@ -68,95 +38,28 @@ class ProcessOfExportOrderTest extends ManagedTerminal2Test {
 	@BeforeEach
 	void setUp() throws Exception {
 		super.setUp();
-		// -------------------------------------------------------------------------------------------
-		// TERMINAL
-		guayaquil = mock(Terminal.class);
-		lima = mock(Terminal.class);
-		valparaiso = mock(Terminal.class);
 		// ------------------------------------------------------------------------------------------
-		// STRETCH
-		buenosAiresValparaiso = mock(Stretch.class);
-		when(buenosAiresValparaiso.getOrigin()).thenReturn(buenosAires);
-		when(buenosAiresValparaiso.getDestiny()).thenReturn(valparaiso);
-		when(buenosAiresValparaiso.getPrice()).thenReturn(1.040);
-		when(buenosAiresValparaiso.getTime()).thenReturn(Duration.ofHours(13));
-
-		valparaisoLima = mock(Stretch.class);
-		when(valparaisoLima.getOrigin()).thenReturn(valparaiso);
-		when(valparaisoLima.getDestiny()).thenReturn(lima);
-		when(valparaisoLima.getPrice()).thenReturn(2.024);
-		when(valparaisoLima.getTime()).thenReturn(Duration.ofHours(9));
-
-		limaGuayaquil = mock(Stretch.class);
-		when(limaGuayaquil.getOrigin()).thenReturn(lima);
-		when(limaGuayaquil.getDestiny()).thenReturn(guayaquil);
-		when(limaGuayaquil.getPrice()).thenReturn(1.821);
-		when(limaGuayaquil.getTime()).thenReturn(Duration.ofHours(6));
-
-		guayaquilBuenosAires = mock(Stretch.class);
-		when(guayaquilBuenosAires.getOrigin()).thenReturn(guayaquil);
-		when(guayaquilBuenosAires.getDestiny()).thenReturn(buenosAires);
-		when(guayaquilBuenosAires.getPrice()).thenReturn(2.192);
-		when(guayaquilBuenosAires.getTime()).thenReturn(Duration.ofHours(36));
-		// ------------------------------------------------------------------------------------------
-		// MARITIME CIRCUIT
-		maritimeCircuitOne = mock(MaritimeCircuit.class);
-		when(maritimeCircuitOne.getStretches())
-				.thenReturn(List.of(buenosAiresValparaiso, valparaisoLima, limaGuayaquil, guayaquilBuenosAires));
-		when(maritimeCircuitOne.originTerminal()).thenReturn(buenosAires);
-		// ------------------------------------------------------------------------------------------
-		// TRIP
-		tripOne = mock(Trip.class);
-		when(tripOne.getStartDate()).thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 12, 12, 0));
-		// 12-11-23 | 12:00 Hs.
-		when(tripOne.getMaritimeCircuit()).thenReturn(maritimeCircuitOne);
-		when(tripOne.calculateEstimatedArrivalDateToTerminal(buenosAires))
-				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 12, 12, 0)); // 12-11-23 | 12:00 Hs.
-		// ------------------------------------------------------------------------------------------
-		// SHIPPING LINE
-		apmMaersk = mock(ShippingLine.class);
-		when(apmMaersk.getMaritimeCircuits()).thenReturn(List.of(maritimeCircuitOne));
-		when(apmMaersk.getTrips()).thenReturn(List.of(tripOne));
-		// ------------------------------------------------------------------------------------------
-		// SHIPPER
-		ivan = mock(Shipper.class);
-		// ------------------------------------------------------------------------------------------
-		// DRIVER
-		alberto = mock(Driver.class);
-		// ------------------------------------------------------------------------------------------
-		// TRUCK
-		volvo = mock(Truck.class);
-		// ------------------------------------------------------------------------------------------
-		// TRUCK TRANSPORT COMPANY
-		transportVesprini = mock(TruckTransportCompany.class);
-		when(transportVesprini.getDrivers()).thenReturn(List.of(alberto));
-		when(transportVesprini.getTrucks()).thenReturn(List.of(volvo));
-		// ------------------------------------------------------------------------------------------
-		// LOAD
 		dry = mock(Dry.class);
-		when(dry.getName()).thenReturn("Dry");
 
 		reefer = mock(Reefer.class);
-		when(reefer.getName()).thenReturn("Reefer");
+		when(reefer.consumesElectricity()).thenReturn(true);
 		// ------------------------------------------------------------------------------------------
 		electricity = mock(Electricity.class);
 		when(electricity.getPrice()).thenReturn(2000.0);
+		when(electricity.getName()).thenReturn("Electricity");
 		when(electricity.getStartConnection()).thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 12, 12, 00));
 		// 12-11-23 | 12:00 Hs.
-		when(electricity.getName()).thenReturn("Electricity");
 
 		weigh = mock(Weigh.class);
 		when(weigh.getPrice()).thenReturn(1000.0);
 		when(weigh.getName()).thenReturn("Weigh");
 		// ------------------------------------------------------------------------------------------
-		// TURN
 		turnExportOrder = mock(Turn.class);
 		when(turnExportOrder.getDriver()).thenReturn(alberto);
 		when(turnExportOrder.getTruck()).thenReturn(volvo);
 		when(turnExportOrder.getDate()).thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 12, 06, 00));
 		// 12-11-23 | 06:00 Hs.
 		// ------------------------------------------------------------------------------------------
-		// EXPORT ORDER
 		exportOrder = spy(new ExportOrder(dry, tripOne, buenosAires, lima, ivan, alberto, volvo));
 		when(exportOrder.getClient()).thenReturn(ivan);
 		when(exportOrder.getTurn()).thenReturn(turnExportOrder);

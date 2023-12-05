@@ -30,7 +30,7 @@ import truck.Truck;
 import truckTransportCompany.TruckTransportCompany;
 import turn.Turn;
 
-class ShippingCommunication extends ManagedTerminal2Test {
+class ShippingCommunication extends ManagedTerminalTest {
 
 	private Terminal montevideo;
 	private Terminal lima;
@@ -163,15 +163,16 @@ class ShippingCommunication extends ManagedTerminal2Test {
 		// IMPORT ORDER
 		importOrder = spy(new ImportOrder(dry, tripOne, montevideo, buenosAires, yoel, alberto, volvo));
 		// ------------------------------------------------------------------------------------------
-		buenosAires.registerShippingCompany(apmMaersk);
-		buenosAires.registerTruckTransportCompany(transportVesprini);
-		buenosAires.hireExportService(exportOrder);
-		buenosAires.hireImportService(importOrder);
+
 	}
 
 	@Test
 	void testNotifyShipInminentArrival_ShipAndOrdersNotified() throws Exception {
 		// Exercise
+		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerTruckTransportCompany(transportVesprini);
+		buenosAires.hireExportService(exportOrder);
+		buenosAires.hireImportService(importOrder);
 		buenosAires.notifyShipInminentArrival(bismarck);
 		// Verify
 		// SHIP
@@ -187,24 +188,36 @@ class ShippingCommunication extends ManagedTerminal2Test {
 	}
 
 	@Test
-	void testNotifyShipArrival_StartWorkingCalledOnce() {
+	void testNotifyShipArrival_StartWorkingCalledOnce() throws Exception {
 		// Exercise
+		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerTruckTransportCompany(transportVesprini);
+		buenosAires.hireExportService(exportOrder);
+		buenosAires.hireImportService(importOrder);
 		buenosAires.notifyShipArrival(bismarck);
 		// Verify
 		verify(bismarck, times(1)).startWorking();
 	}
 
 	@Test
-	void testNotifyShipArrival_DepartCalledOnce() {
+	void testNotifyShipArrival_DepartCalledOnce() throws Exception {
 		// Exercise
+		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerTruckTransportCompany(transportVesprini);
+		buenosAires.hireExportService(exportOrder);
+		buenosAires.hireImportService(importOrder);
 		buenosAires.notifyShipArrival(bismarck);
 		// Verify
 		verify(bismarck, times(1)).depart();
 	}
 
 	@Test
-	void testNotifyShipDeparture_ShouldNotifyClientsAndSendBillToShipper() {
+	void testNotifyShipDeparture_ShouldNotifyClientsAndSendBillToShipper() throws Exception {
 		// Exercise
+		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerTruckTransportCompany(transportVesprini);
+		buenosAires.hireExportService(exportOrder);
+		buenosAires.hireImportService(importOrder);
 		buenosAires.notifyShipDeparture(bismarck);
 		// Verify
 		verify(exportOrder, times(4)).getClient();
