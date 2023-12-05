@@ -13,6 +13,7 @@ import order.ExportOrder;
 import order.ImportOrder;
 import orderValidation.ExportValidation;
 import routing.Routing;
+import ship.Ship;
 import shippingLine.ShippingLine;
 import truck.Truck;
 import truckTransportCompany.TruckTransportCompany;
@@ -136,6 +137,14 @@ public class ManagedTerminal implements Terminal {
 	@Override
 	public GeographicalPosition getPosition() {
 		return new GeographicalPosition(-34.5795823299825, -58.373877081937);
+	}
+	
+	public void updateShipInminentArrival(Ship ship) {
+		//TODO
+	}
+	
+	public void updateShipArrival(Ship ship) {
+		//TODO
 	}
 
 }

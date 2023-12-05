@@ -1,7 +1,9 @@
 package ship;
 
 import geographicalPosition.GeographicalPosition;
+import phase.Arrived;
 import phase.Phase;
+import terminal.Terminal;
 import trip.Trip;
 
 /**
@@ -10,6 +12,13 @@ import trip.Trip;
  *         Esta clase gestiona la información del buque a realizar el viaje,
  *         incluyendo su nombre y codigo IMO (indetificacion univoca de cada
  *         buque).
+ *         
+ *         La clase Ship implementa el patron de diseno State, y su comportamiento varia segun las distintas fases en las que puede encontrarse:
+ *         Outbound: es la fase inicial, e indica que el buque se encuentra aún muy lejos de la terminal.
+ *         Inbound: el buque se encuentra a menos de 50 kms de distancia de la terminal. Al entrar en dicha fase, el buque dara un preaviso a la terminal sobre su arribo.
+ *         Arrived:
+ *         Working:
+ *         Departing:
  */
 
 public class Ship {
@@ -23,6 +32,7 @@ public class Ship {
 	 */
 	private String imo;
 	private Trip trip;
+	private Terminal terminal;
 	private boolean isOnTrip;
 
 	/**
@@ -36,7 +46,7 @@ public class Ship {
 	 * @param phase La fase en la que se encuentra el buque.
 	 * 
 	 */
-	public Ship(String name, String imo, GeographicalPosition geographicalPosition) {
+	public Ship(String name, String imo, Phase phase, GeographicalPosition geographicalPosition) {
 		setName(name);
 		setImo(imo);
 		setPhase(phase);
@@ -60,7 +70,7 @@ public class Ship {
 	}
 
 	private void setPhase(Phase phase) {
-		this.phase = phase;
+		phase.updatePhaseFor(this);
 	}
 
 	/**
@@ -87,9 +97,9 @@ public class Ship {
 		this.geographicalPosition = newPosition;
 	}
 
-	public void otorgarViaje(Trip trip) {
-		this.trip = trip;
-	}
+//	public void otorgarViaje(Trip trip) {
+//		this.trip = trip;
+//	}
 
 	public Trip getTrip() {
 		return trip;
@@ -100,7 +110,33 @@ public class Ship {
 	}
 
 	public void startTrip() {
-		// TODO Auto-generated method stub
+		isOnTrip = true;
+	}
 
+	//solo funciona en Phase Working
+	public void depart() {
+		terminal = this.getTrip().nextTerminalOf(terminal);
+		this.setPhase(phase.nextPhase());
+	}
+	
+	public void notifyInminentArrival() {
+		terminal.updateShipInminentArrival(this);
+	}
+	
+	public void notifyArrival() {
+		terminal.updateShipArrival(this);
+		isOnTrip = false;
+	}
+	
+	//solo funciona en Phase Arrived para que pase a Working
+	public void startWork() {
+		// validar que la fase actual sea Arrived
+		//setear la fase a Working o arrojar un error
+		if (!this.isOnTrip) this.setPhase(phase.nextPhase());
+		else throw new RuntimeException("The ship hasn't arrived to the terminal yet");
+	}
+	
+	public void templateMethod() {
+		
 	}
 }

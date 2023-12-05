@@ -1,5 +1,8 @@
 package phase;
 
+import ship.Ship;
+import terminal.ManagedTerminal;
+
 /** 
  * @author alejandrabesel
  * Clase abstracta que representa una fase del buque. 
@@ -10,5 +13,9 @@ package phase;
 
 public interface Phase {
 
-	public abstract Phase nextPhase();
+	Phase updatePhase(Ship ship, ManagedTerminal managedTerminal);
+	Phase updatePhaseFor(Ship ship);
+	Phase nextPhase();
+
+
 }

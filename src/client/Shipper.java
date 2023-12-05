@@ -8,5 +8,4 @@ public class Shipper extends Client {
 	public Shipper(int dni, String name) {
 		super(dni, name);
 	}
-	
 }

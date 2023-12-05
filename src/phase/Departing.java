@@ -6,5 +6,6 @@ public final class Departing implements Phase {
 	public Outbound nextPhase() {
 		return new Outbound();
 	}
+
 }
 
