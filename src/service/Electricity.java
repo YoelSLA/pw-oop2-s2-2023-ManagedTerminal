@@ -37,4 +37,8 @@ public class Electricity extends Service {
 	public void setEndConnection(LocalDateTime endConnection) {
 		this.endConnection = endConnection;
 	}
+
+	public Boolean isElectricyService() {
+		return true;
+	}
 }

@@ -43,7 +43,7 @@ public abstract class SelectionDate extends Selection {
 	 * @return La fecha de llegada estimada del viaje a la terminal.
 	 * @throws Exception
 	 */
-	protected LocalDate calculateArrivalDate(Trip trip) throws Exception {
+	protected LocalDate calculateArrivalDate(Trip trip) {
 		return trip.calculateEstimatedArrivalDateToTerminal(getTerminal()).toLocalDate();
 	}
 

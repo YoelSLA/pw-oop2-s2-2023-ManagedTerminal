@@ -34,9 +34,11 @@ public class MaritimeCircuit {
 	 *         encuentra.
 	 * @throws Exception Si no se encuentra la terminal, se lanza una excepción.
 	 */
-	public Integer getPositionOf(Terminal terminal) throws Exception {
-		return stretches.indexOf(stretches.stream().filter(s -> s.hasTerminal(terminal)).findFirst()
-				.orElseThrow(() -> new Exception("Terminal not found")));
+	public Integer getPositionOf(Terminal terminal) throws RuntimeException {
+		if (stretches.stream().noneMatch(s -> s.hasTerminal(terminal))) {
+			throw new RuntimeException("Terminal not found");
+		}
+		return stretches.indexOf(stretches.stream().filter(s -> s.hasTerminal(terminal)).findFirst().orElse(null));
 	}
 
 	/**
@@ -70,7 +72,7 @@ public class MaritimeCircuit {
 	 * @return Duración total en horas entre las terminales dadas.
 	 * @throws Exception
 	 */
-	public Integer calculateTotalHoursBetweenTerminals(Terminal origin, Terminal destiny) throws Exception {
+	public Integer calculateTotalHoursBetweenTerminals(Terminal origin, Terminal destiny) {
 		long totalNanos = stretches.stream().skip(getPositionOf(origin))
 				.limit(getPositionOf(destiny) - getPositionOf(origin)).mapToLong(s -> s.getTime().toNanos()).sum();
 		return calculateHoursRounded(Duration.ofNanos(totalNanos));

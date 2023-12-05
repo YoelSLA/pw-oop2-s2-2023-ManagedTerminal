@@ -64,7 +64,6 @@ public class ManagedTerminal implements Terminal {
 	// ----------------------------------------------------------------------------------------------------
 	// GETTERS
 	// ----------------------------------------------------------------------------------------------------
-
 	public List<Consignee> getConsignees() {
 		return consignees;
 	}
@@ -195,8 +194,11 @@ public class ManagedTerminal implements Terminal {
 	 * @param terminal Terminal de destino.
 	 * @return Fecha de próxima salida hacia la terminal especificada.
 	 */
-	public LocalDateTime nextDepartureDateTo(Terminal terminal) {
-		return null;
+	public LocalDateTime nextDepartureDateTo(Terminal destiny) {
+		return shippingLines.stream().flatMap(s -> s.getTrips().stream())
+				.filter(t -> t.hasTerminal(this) && t.hasTerminal(destiny))
+				.map(t -> t.calculateEstimatedArrivalDateToTerminal(this)).min(LocalDateTime::compareTo)
+				.orElseThrow(() -> new RuntimeException("There is no estimated date for this destiny."));
 	}
 
 	/**
@@ -367,19 +369,16 @@ public class ManagedTerminal implements Terminal {
 	public void notifyShipArrival(Ship ship) {
 		// Se le da la orden al buque de empezar el trabajo.
 		ship.startWorking();
-		try {
-			// Se registra la fecha de finalización del servicio eléctrico para órdenes
-			// de
-			// exportación que contengan cargas Reefer.
-			registerEndOfElectricityService(exportOrders,
-					calculateEstimatedArrivalDateToManagedTerminal(ship.getTrip()));
-			// Se registra la fecha de inicio servicio eléctrico para órdenes de
-			// importación
-			// que contengan cargas Reefer.
-			registerStartElectricityService(importOrders,
-					calculateEstimatedArrivalDateToManagedTerminal(ship.getTrip()));
-		} catch (Exception e) {
-		}
+
+		// Se registra la fecha de finalización del servicio eléctrico para órdenes
+		// de
+		// exportación que contengan cargas Reefer.
+		registerEndOfElectricityService(exportOrders, calculateEstimatedArrivalDateToManagedTerminal(ship.getTrip()));
+		// Se registra la fecha de inicio servicio eléctrico para órdenes de
+		// importación
+		// que contengan cargas Reefer.
+		registerStartElectricityService(importOrders, calculateEstimatedArrivalDateToManagedTerminal(ship.getTrip()));
+
 		// Se envia la notifacación a todos los clientes que su buque ha llegado.
 		sendArrivalNotificationsToClients(ship, importOrders);
 		// Se le da la orden de partida al buque.
@@ -434,13 +433,8 @@ public class ManagedTerminal implements Terminal {
 	 * @param ship Buque que ha partido de la terminal gestionada.
 	 */
 	private void notifyConsigneesAboutCargoDeparture(Ship ship) {
-		exportOrders.stream().filter(e -> e.getTrip().equals(ship.getTrip())).forEach(e -> {
-			try {
-				e.getClient().sendMail(this, e.getClient(),
-						ship.getTrip().calculateEstimatedArrivalDateToTerminal(this));
-			} catch (Exception e1) {
-			}
-		});
+		exportOrders.stream().filter(e -> e.getTrip().equals(ship.getTrip())).forEach(e -> e.getClient().sendMail(this,
+				e.getClient(), ship.getTrip().calculateEstimatedArrivalDateToTerminal(this)));
 	}
 
 	/**
@@ -452,12 +446,8 @@ public class ManagedTerminal implements Terminal {
 	 *               notificaciones de llegada.
 	 */
 	private void sendArrivalNotificationsToClients(Ship ship, List<? extends Order> orders) {
-		orders.stream().filter(order -> order.getTrip().equals(ship.getTrip())).forEach(t -> {
-			try {
-				sendArrivalNotificationToClient(t);
-			} catch (Exception e) {
-			}
-		});
+		orders.stream().filter(order -> order.getTrip().equals(ship.getTrip()))
+				.forEach(t -> sendArrivalNotificationToClient(t));
 	}
 
 	/**
@@ -467,7 +457,7 @@ public class ManagedTerminal implements Terminal {
 	 * @param order Orden para la cual se enviará la notificación de llegada.
 	 * @throws Exception
 	 */
-	private void sendArrivalNotificationToClient(Order order) throws Exception {
+	private void sendArrivalNotificationToClient(Order order) {
 		Client client = order.getClient();
 		LocalDateTime arrivalDate = order.getTrip().calculateEstimatedArrivalDateToTerminal(this);
 		client.sendMail(this, client, arrivalDate.toString());
@@ -545,7 +535,7 @@ public class ManagedTerminal implements Terminal {
 	 */
 	private void registerEndOfElectricityService(List<? extends Order> orders, LocalDateTime dateToEndService) {
 		List<Electricity> electricitys = orders.stream().flatMap(o -> o.getServices().stream())
-				.filter(s -> s.getName().equals("Electricity")).map(s -> (Electricity) s).toList();
+				.filter(s -> s.isElectricyService()).map(s -> (Electricity) s).toList();
 
 		electricitys.forEach(e -> e.setEndConnection(dateToEndService));
 	}
@@ -624,7 +614,7 @@ public class ManagedTerminal implements Terminal {
 	 * @return La fecha estimada de llegada del viaje a la terminal gestionada.
 	 * @throws Exception
 	 */
-	private LocalDateTime calculateEstimatedArrivalDateToManagedTerminal(Trip trip) throws Exception {
+	private LocalDateTime calculateEstimatedArrivalDateToManagedTerminal(Trip trip) {
 		return trip.calculateEstimatedArrivalDateToTerminal(this);
 	}
 

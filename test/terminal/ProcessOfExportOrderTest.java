@@ -30,9 +30,6 @@ class ProcessOfExportOrderTest extends ManagedTerminalTest {
 	private Reefer reefer;
 	private Dry dry;
 	// ------------------------------------------------------------
-	private Electricity electricity;
-	private Weigh weigh;
-	// ------------------------------------------------------------
 	private ExportOrder exportOrder;
 
 	@BeforeEach
@@ -43,16 +40,6 @@ class ProcessOfExportOrderTest extends ManagedTerminalTest {
 
 		reefer = mock(Reefer.class);
 		when(reefer.consumesElectricity()).thenReturn(true);
-		// ------------------------------------------------------------------------------------------
-		electricity = mock(Electricity.class);
-		when(electricity.getPrice()).thenReturn(2000.0);
-		when(electricity.getName()).thenReturn("Electricity");
-		when(electricity.getStartConnection()).thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 12, 12, 00));
-		// 12-11-23 | 12:00 Hs.
-
-		weigh = mock(Weigh.class);
-		when(weigh.getPrice()).thenReturn(1000.0);
-		when(weigh.getName()).thenReturn("Weigh");
 		// ------------------------------------------------------------------------------------------
 		turnExportOrder = mock(Turn.class);
 		when(turnExportOrder.getDriver()).thenReturn(alberto);

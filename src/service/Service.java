@@ -22,4 +22,8 @@ public abstract class Service {
 		return this.name;
 	}
 
+	public Boolean isElectricyService() {
+		return false;
+	}
+
 }

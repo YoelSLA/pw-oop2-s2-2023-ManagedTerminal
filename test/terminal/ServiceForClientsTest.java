@@ -25,6 +25,7 @@ import search.selection.DestinationTerminal;
 import search.selection.selectionDate.ArrivalDate;
 import search.selection.selectionDate.DepartureDate;
 import service.Washed;
+import trip.Trip;
 import turn.Turn;
 
 class ServiceForClientsTest extends ManagedTerminalTest {
@@ -156,6 +157,54 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 		assertThrows(RuntimeException.class, () -> {
 			buenosAires.hireWashedServiceFor(dry, mock(Client.class));
 		}, "Order corresponding to the load and client not found.");
+
+	}
+
+	@Test
+	void x() {
+		// Set Up
+		buenosAires.registerShippingCompany(apmMaersk);
+
+		when(tripOne.hasTerminal(buenosAires)).thenReturn(true);
+		when(tripOne.hasTerminal(lima)).thenReturn(true);
+		when(tripOne.getOriginTerminal()).thenReturn(buenosAires);
+
+		when(tripTwo.hasTerminal(buenosAires)).thenReturn(true);
+		when(tripTwo.hasTerminal(lima)).thenReturn(true);
+		when(tripTwo.getOriginTerminal()).thenReturn(montevideo);
+
+		when(apmMaersk.getTrips()).thenReturn(List.of(tripOne, mock(Trip.class), tripTwo, mock(Trip.class)));
+		// Assert
+		assertEquals(LocalDateTime.of(2023, Month.NOVEMBER, 01, 14, 00), buenosAires.nextDepartureDateTo(lima));
+
+	}
+
+	@Test
+	void x2() {
+		// Set Up
+		buenosAires.registerShippingCompany(apmMaersk);
+
+		when(tripOne.hasTerminal(buenosAires)).thenReturn(true);
+		when(tripOne.hasTerminal(lima)).thenReturn(true);
+		when(tripOne.getOriginTerminal()).thenReturn(buenosAires);
+
+		when(apmMaersk.getTrips()).thenReturn(List.of(tripOne));
+		// Assert
+		assertThrows(RuntimeException.class, () -> {
+			buenosAires.nextDepartureDateTo(mock(Terminal.class));
+		}, "There is no estimated date for this destiny.");
+
+	}
+
+	@Test
+	void x1() {
+		// Set Up
+		buenosAires.registerShippingCompany(apmMaersk);
+		when(apmMaersk.getTrips()).thenReturn(List.of(mock(Trip.class)));
+		// Assert
+		assertThrows(RuntimeException.class, () -> {
+			buenosAires.nextDepartureDateTo(mock(Terminal.class));
+		}, "There is no estimated date for this destiny.");
 
 	}
 

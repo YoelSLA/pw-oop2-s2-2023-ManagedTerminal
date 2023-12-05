@@ -31,8 +31,6 @@ class ProcessOfImportOrderTest extends ManagedTerminalTest {
 	private Reefer reefer;
 	private Dry dry;
 	// ------------------------------------------------------------
-	private Electricity electricity;
-	// ------------------------------------------------------------
 	private ImportOrder importOrder;
 
 	@BeforeEach
@@ -44,9 +42,6 @@ class ProcessOfImportOrderTest extends ManagedTerminalTest {
 		reefer = mock(Reefer.class);
 		when(reefer.getConsumptionkWh()).thenReturn(50.00);
 		when(reefer.consumesElectricity()).thenReturn(true);
-		// ------------------------------------------------------------------------------------------
-		electricity = mock(Electricity.class);
-		when(electricity.getName()).thenReturn("Electricity");
 		// ------------------------------------------------------------------------------------------
 		turnImportOrder = mock(Turn.class);
 		when(turnImportOrder.getDriver()).thenReturn(alberto);

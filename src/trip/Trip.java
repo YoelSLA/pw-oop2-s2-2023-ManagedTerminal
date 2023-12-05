@@ -28,7 +28,7 @@ public class Trip {
 	 * @return Fecha estimada de llegada a la terminal especificada.
 	 * @throws Exception
 	 */
-	public LocalDateTime calculateEstimatedArrivalDateToTerminal(Terminal terminal) throws Exception {
+	public LocalDateTime calculateEstimatedArrivalDateToTerminal(Terminal terminal) {
 		// Se obtiene la terminal de origen del circuito marítimo.
 		final Terminal ORIGIN_TERMINAL = maritimeCircuit.originTerminal();
 
