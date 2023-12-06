@@ -169,7 +169,7 @@ class ShippingCommunication extends ManagedTerminalTest {
 	@Test
 	void testNotifyShipInminentArrival_ShipAndOrdersNotified() throws Exception {
 		// Exercise
-		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerShippingLine(apmMaersk);
 		buenosAires.registerTruckTransportCompany(transportVesprini);
 		buenosAires.hireExportService(exportOrder);
 		buenosAires.hireImportService(importOrder);
@@ -190,7 +190,7 @@ class ShippingCommunication extends ManagedTerminalTest {
 	@Test
 	void testNotifyShipArrival_StartWorkingCalledOnce() throws Exception {
 		// Exercise
-		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerShippingLine(apmMaersk);
 		buenosAires.registerTruckTransportCompany(transportVesprini);
 		buenosAires.hireExportService(exportOrder);
 		buenosAires.hireImportService(importOrder);
@@ -202,7 +202,7 @@ class ShippingCommunication extends ManagedTerminalTest {
 	@Test
 	void testNotifyShipArrival_DepartCalledOnce() throws Exception {
 		// Exercise
-		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerShippingLine(apmMaersk);
 		buenosAires.registerTruckTransportCompany(transportVesprini);
 		buenosAires.hireExportService(exportOrder);
 		buenosAires.hireImportService(importOrder);
@@ -214,7 +214,7 @@ class ShippingCommunication extends ManagedTerminalTest {
 	@Test
 	void testNotifyShipDeparture_ShouldNotifyClientsAndSendBillToShipper() throws Exception {
 		// Exercise
-		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerShippingLine(apmMaersk);
 		buenosAires.registerTruckTransportCompany(transportVesprini);
 		buenosAires.hireExportService(exportOrder);
 		buenosAires.hireImportService(importOrder);

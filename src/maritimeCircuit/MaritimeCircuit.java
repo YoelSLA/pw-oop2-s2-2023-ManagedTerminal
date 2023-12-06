@@ -113,4 +113,5 @@ public class MaritimeCircuit {
 		origins.add(stretches.get(0).getOrigin());
 		return origins;
 	}
+
 }

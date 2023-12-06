@@ -5,20 +5,21 @@ import java.util.List;
 
 import maritimeCircuit.MaritimeCircuit;
 import ship.Ship;
+import terminal.Terminal;
 import trip.Trip;
 
 public class ShippingLine {
 
 	private String cuit;
-	private List<MaritimeCircuit> maritimeCircuits;
 	private String name;
+	private List<MaritimeCircuit> maritimeCircuits;
 	private List<Ship> ships;
 	private List<Trip> trips;
 
 	public ShippingLine(String cuit, String name) {
 		this.cuit = cuit;
-		this.maritimeCircuits = new ArrayList<MaritimeCircuit>();
 		this.name = name;
+		this.maritimeCircuits = new ArrayList<MaritimeCircuit>();
 		this.ships = new ArrayList<Ship>();
 		this.trips = new ArrayList<Trip>();
 	}
@@ -27,20 +28,16 @@ public class ShippingLine {
 		return cuit;
 	}
 
-	public List<MaritimeCircuit> getMaritimeCircuits() {
-		return maritimeCircuits;
-	}
-
 	public String getName() {
 		return name;
 	}
 
-	public List<Ship> getShips() {
-		return ships;
+	public List<MaritimeCircuit> getMaritimeCircuits() {
+		return maritimeCircuits;
 	}
 
-	public List<Ship> getShipsInTrip() {
-		return ships.stream().filter(s -> !s.getIsOnTrip()).toList();
+	public List<Ship> getShips() {
+		return ships;
 	}
 
 	public List<Trip> getTrips() {
@@ -56,25 +53,29 @@ public class ShippingLine {
 	}
 
 	public void registerTrip(Trip trip) throws Exception {
-		validateMaritimeCircuitRegistration(trip);
-		validateShipRegistration(trip);
-		trips.add(trip);
-	}
-
-	public void setMaritimeCircuits(List<MaritimeCircuit> maritimeCircuits) {
-		this.maritimeCircuits = maritimeCircuits;
-	}
-
-	private void validateMaritimeCircuitRegistration(Trip trip) throws Exception {
 		if (!maritimeCircuits.contains(trip.getMaritimeCircuit())) {
 			throw new RuntimeException("The maritime circuit is not registered in the shipping line.");
 		}
-	}
-
-	private void validateShipRegistration(Trip trip) throws Exception {
 		if (!ships.contains(trip.getShip())) {
 			throw new RuntimeException("The ship is not registered in the shipping line.");
 		}
+		trips.add(trip);
 	}
 
+	public List<Ship> shipsInTrip() {
+		return ships.stream().filter(s -> !s.getIsOnTrip()).toList();
+	}
+
+	public Integer timeItTakesToGetTo(Terminal origin, Terminal destiny) {
+		System.out.println(maritimeCircuits.stream().noneMatch(m -> m.hasATerminal(origin)));
+		if (maritimeCircuits.stream().noneMatch(m -> m.hasATerminal(origin))) {
+			throw new RuntimeException("Terminal origin not found.");
+		}
+		System.out.println(destiny);
+		if (maritimeCircuits.stream().noneMatch(m -> m.hasATerminal(destiny))) {
+			throw new RuntimeException("There destiny not found.");
+		}
+		return maritimeCircuits.stream().mapToInt(m -> m.calculateTotalHoursBetweenTerminals(origin, destiny)).min()
+				.orElse(0);
+	}
 }

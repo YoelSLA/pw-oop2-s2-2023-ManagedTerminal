@@ -104,7 +104,7 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 	}
 
 	private void configureSimulatedTrips() throws Exception {
-		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerShippingLine(apmMaersk);
 		// Se configura el primer viaje.
 		when(tripOne.hasTerminal(buenosAires)).thenReturn(true);
 		when(tripOne.hasTerminal(lima)).thenReturn(true);
@@ -161,9 +161,9 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 	}
 
 	@Test
-	void x() {
+	void testNextDepartureDateTo_ReturnsNextDate_WhenTripsAvailable() {
 		// Set Up
-		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerShippingLine(apmMaersk);
 
 		when(tripOne.hasTerminal(buenosAires)).thenReturn(true);
 		when(tripOne.hasTerminal(lima)).thenReturn(true);
@@ -180,9 +180,9 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 	}
 
 	@Test
-	void x2() {
+	void testNextDepartureDateTo_ThrowsException_WhenTripsNotAvailable() {
 		// Set Up
-		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerShippingLine(apmMaersk);
 
 		when(tripOne.hasTerminal(buenosAires)).thenReturn(true);
 		when(tripOne.hasTerminal(lima)).thenReturn(true);
@@ -197,15 +197,32 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 	}
 
 	@Test
-	void x1() {
+	void testNextDepartureDateTo_ThrowsException_WhenNoTripsAvailable() {
 		// Set Up
-		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerShippingLine(apmMaersk);
 		when(apmMaersk.getTrips()).thenReturn(List.of(mock(Trip.class)));
 		// Assert
 		assertThrows(RuntimeException.class, () -> {
 			buenosAires.nextDepartureDateTo(mock(Terminal.class));
 		}, "There is no estimated date for this destiny.");
 
+	}
+
+	@Test
+	void testTimeItTakesToGetTo_ReturnsTime_WhenShippingLineAvailable() {
+		// Set Up
+		buenosAires.registerShippingLine(apmMaersk);
+		when(apmMaersk.timeItTakesToGetTo(buenosAires, lima)).thenReturn(20);
+		// Assert
+		assertEquals(20, buenosAires.timeItTakesToGetTo(apmMaersk, lima));
+
+	}
+
+	@Test
+	void testTimeItTakesToGetTo_ThrowsException_WhenDestinationIsOrigin() {
+		assertThrows(RuntimeException.class, () -> {
+			buenosAires.timeItTakesToGetTo(apmMaersk, buenosAires);
+		}, "Shipping Line not found.");
 	}
 
 }

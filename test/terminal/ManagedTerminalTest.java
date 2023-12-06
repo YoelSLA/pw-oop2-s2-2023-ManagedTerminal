@@ -65,7 +65,7 @@ class ManagedTerminalTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		shorterTime = new ShorterTime();
-		// ------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------
 		buenosAires = new ManagedTerminal(shorterTime);
 		// -------------------------------------------------------------------------------------------
 		guayaquil = mock(Terminal.class);
@@ -252,7 +252,7 @@ class ManagedTerminalTest {
 	@Test
 	void testRegisteringShippingCompanyShouldAddToShippingLinesList() {
 		// Exercise
-		buenosAires.registerShippingCompany(apmMaersk);
+		buenosAires.registerShippingLine(apmMaersk);
 		// Assert
 		assertEquals(List.of(apmMaersk), buenosAires.getShippingLines());
 	}

@@ -156,7 +156,7 @@ public class ManagedTerminal implements Terminal {
 		shippers.add(shipper);
 	}
 
-	public void registerShippingCompany(ShippingLine shippingLine) {
+	public void registerShippingLine(ShippingLine shippingLine) {
 		shippingLines.add(shippingLine);
 	}
 
@@ -226,7 +226,10 @@ public class ManagedTerminal implements Terminal {
 	 *         el inicio de la línea naviera.
 	 */
 	public Integer timeItTakesToGetTo(ShippingLine shippingLine, Terminal destiny) {
-		return null;
+		if (!shippingLines.contains(shippingLine)) {
+			throw new RuntimeException("Shipping Line not found.");
+		}
+		return shippingLine.timeItTakesToGetTo(this, destiny);
 	}
 
 	/**
