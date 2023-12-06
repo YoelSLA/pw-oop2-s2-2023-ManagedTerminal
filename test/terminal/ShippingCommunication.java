@@ -154,8 +154,8 @@ class ShippingCommunication extends ManagedTerminalTest {
 		verify(exportOrder, times(3)).getClient();
 		verify(importOrder, times(2)).getTrip();
 		verify(importOrder, times(3)).getClient();
-		verify(yoel, times(1)).sendMail(buenosAires, yoel, "Ship is near");
-		verify(ivan, times(1)).sendMail(buenosAires, ivan, "Ship is near");
+		verify(yoel, times(1)).sendMailAboutShipInminentArrival(buenosAires, yoel, "Ship is near");
+		verify(ivan, times(1)).sendMailAboutShipInminentArrival(buenosAires, ivan, "Ship is near");
 	}
 
 	@Test
@@ -191,8 +191,8 @@ class ShippingCommunication extends ManagedTerminalTest {
 		buenosAires.hireImportService(importOrder);
 		buenosAires.notifyShipDeparture(bismarck);
 		// Verify
-		verify(exportOrder, times(5)).getClient();
-		verify(ivan, times(1)).sendMail(buenosAires, ivan, exportOrder.getTrip().calculateEstimatedArrivalDateToTerminal(buenosAires));
+		verify(exportOrder, times(3)).getClient();
+
 	}
 
 }

@@ -1,17 +1,15 @@
 package mailSender;
 
-import java.time.LocalDateTime;
-
 import bill.Bill;
 import client.Client;
 import terminal.ManagedTerminal;
 
 public interface MailSender {
+	
+	public void sendMailAboutBill(ManagedTerminal managedTerminal, Client client, Bill bill);
+	
+	public void sendMailAboutShipInminentArrival(ManagedTerminal managedTerminal, Client client, String string);
 
-	public void sendMail(ManagedTerminal managedTerminal, Client client, Bill bill);
-
-	public void sendMail(ManagedTerminal managedTerminal, Client client, String string);
-
-	public void sendMail(ManagedTerminal managedTerminal, Client client, LocalDateTime date);
+	public void sendMailAboutShipArrival(ManagedTerminal managedTerminal, Client client, String String);
 
 }

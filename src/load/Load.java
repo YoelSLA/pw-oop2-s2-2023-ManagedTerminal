@@ -21,17 +21,17 @@ public abstract class Load {
 		this.weight = weight;
 		this.name = name;
 	}
-
-	public Double getWidth() {
-		return width;
-	}
-
+	
 	public Double getHeight() {
 		return height;
 	}
-
+	
 	public Double getLength() {
 		return length;
+	}
+
+	public Double getWidth() {
+		return width;
 	}
 
 	public Double getWeight() {

@@ -11,51 +11,45 @@ import terminal.Terminal;
 public abstract class Routing {
 
 	/**
-	 * Encuentra el mejor circuito marítimo entre dos terminales.
+	 * Encuentra el mejor circuito marï¿½timo entre dos terminales.
 	 *
 	 * @param origin           Terminal de origen.
 	 * @param destiny          Terminal de destino.
-	 * @param maritimeCircuits Lista de circuitos marítimos disponibles.
-	 * @return El mejor circuito marítimo.
+	 * @param maritimeCircuits Lista de circuitos marï¿½timos disponibles.
+	 * @return El mejor circuito marï¿½timo.
 	 * @throws Exception
 	 */
 	public final MaritimeCircuit bestCircuitBetween(ManagedTerminal origin, Terminal destiny,
 			List<MaritimeCircuit> maritimeCircuits) throws Exception {
 		validateMaritimeCircuits(maritimeCircuits);
 		validateTerminalDestinyIn(destiny, maritimeCircuits);
-		return maritimeCircuits.stream().min(Comparator.comparingDouble(circuit -> {
-			try {
-				return calculateSpecificRouting(origin, destiny, circuit);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return 0;
-		})).orElseThrow(() -> new Exception("Circuit not found."));
+		return maritimeCircuits.stream()
+				.min(Comparator.comparingDouble(circuit -> calculateSpecificRouting(origin, destiny, circuit)))
+				.orElse(null);
 	}
 
 	/**
-	 * Calcula el enrutamiento especifico para un circuito marítimo entre dos
+	 * Calcula el enrutamiento especifico para un circuito marï¿½timo entre dos
 	 * terminales.
 	 *
 	 * @param origin          Terminal de origen.
 	 * @param destiny         Terminal de destino.
-	 * @param maritimeCircuit Circuito marítimo para el cálculo.
-	 * @return El resultado del cálculo de enrutamiento.
+	 * @param maritimeCircuit Circuito marï¿½timo para el cï¿½lculo.
+	 * @return El resultado del cï¿½lculo de enrutamiento.
 	 * @throws Exception
 	 */
 	private final Double calculateSpecificRouting(ManagedTerminal origin, Terminal destiny,
-			MaritimeCircuit maritimeCircuit) throws Exception {
+			MaritimeCircuit maritimeCircuit) {
 		int startPosition = maritimeCircuit.getPositionOf(origin);
 		int endPosition = maritimeCircuit.getPositionOf(destiny);
 		return calculateRouting(maritimeCircuit.getStretches().subList(startPosition, endPosition));
 	}
 
 	/**
-	 * Valida que la lista de circuitos marítimos no esté vacía.
+	 * Valida que la lista de circuitos marï¿½timos no estï¿½ vacï¿½a.
 	 *
-	 * @param maritimeCircuits Lista de circuitos marítimos.
-	 * @throws RuntimeException si la lista está vacía.
+	 * @param maritimeCircuits Lista de circuitos marï¿½timos.
+	 * @throws RuntimeException si la lista estï¿½ vacï¿½a.
 	 */
 	private void validateMaritimeCircuits(List<MaritimeCircuit> maritimeCircuits) {
 		if (maritimeCircuits.isEmpty()) {
@@ -64,13 +58,13 @@ public abstract class Routing {
 	}
 
 	/**
-	 * Valida que el destino esté presente en al menos uno de los circuitos
-	 * marítimos.
+	 * Valida que el destino estï¿½ presente en al menos uno de los circuitos
+	 * marï¿½timos.
 	 *
 	 * @param destiny          Terminal de destino.
-	 * @param maritimeCircuits Lista de circuitos marítimos.
-	 * @throws RuntimeException si el destino no está en la lista de circuitos
-	 *                          marítimos.
+	 * @param maritimeCircuits Lista de circuitos marï¿½timos.
+	 * @throws RuntimeException si el destino no estï¿½ en la lista de circuitos
+	 *                          marï¿½timos.
 	 */
 	private void validateTerminalDestinyIn(Terminal destiny, List<MaritimeCircuit> maritimeCircuits) {
 		if (maritimeCircuits.stream().noneMatch(circuit -> circuit.hasATerminal(destiny))) {
@@ -82,7 +76,7 @@ public abstract class Routing {
 	 * Calcula el enrutamiento para un conjunto de tramos.
 	 *
 	 * @param stretches Lista de tramos.
-	 * @return El resultado del cálculo de enrutamiento específico.
+	 * @return El resultado del cï¿½lculo de enrutamiento especï¿½fico.
 	 */
 	protected abstract Double calculateRouting(List<Stretch> stretches);
 

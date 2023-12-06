@@ -20,12 +20,12 @@ public class MaritimeCircuit {
 	}
 
 	/**
-	 * Calcula la duración total en horas entre dos terminales específicas en el
+	 * Calcula la duraciï¿½n total en horas entre dos terminales especï¿½ficas en el
 	 * circuito.
 	 *
 	 * @param origin  Terminal de origen.
 	 * @param destiny Terminal de destino.
-	 * @return Duración total en horas entre las terminales dadas.
+	 * @return Duraciï¿½n total en horas entre las terminales dadas.
 	 * @throws Exception
 	 */
 	public Integer calculateTotalHoursBetweenTerminals(Terminal origin, Terminal destiny) {
@@ -35,7 +35,7 @@ public class MaritimeCircuit {
 	}
 
 	/**
-	 * Obtiene la siguiente terminal en el circuito después de una terminal dada.
+	 * Obtiene la siguiente terminal en el circuito despuï¿½s de una terminal dada.
 	 *
 	 * @param terminal Terminal de referencia.
 	 * @return Siguiente terminal en el circuito.
@@ -46,12 +46,12 @@ public class MaritimeCircuit {
 	}
 
 	/**
-	 * Devuelve la posición de la terminal en la lista de tramos.
+	 * Devuelve la posiciï¿½n de la terminal en la lista de tramos.
 	 *
-	 * @param terminal La terminal cuya posición se busca.
-	 * @return La posición de la terminal en la lista de tramos, o -1 si no se
+	 * @param terminal La terminal cuya posiciï¿½n se busca.
+	 * @return La posiciï¿½n de la terminal en la lista de tramos, o -1 si no se
 	 *         encuentra.
-	 * @throws Exception Si no se encuentra la terminal, se lanza una excepción.
+	 * @throws Exception Si no se encuentra la terminal, se lanza una excepciï¿½n.
 	 */
 	public Integer getPositionOf(Terminal terminal) throws RuntimeException {
 		if (stretches.stream().noneMatch(s -> s.hasTerminal(terminal))) {
@@ -72,23 +72,22 @@ public class MaritimeCircuit {
 	public Double getPriceBetween(Terminal origin, Terminal destiny) {
 		return stretches.stream().skip(getPositionOf(origin)).limit(getPositionOf(destiny) - getPositionOf(origin))
 				.mapToDouble(s -> s.getPrice()).sum();
-
 	}
 
 	/**
-	 * Obtiene la duración total del circuito sumando las duraciones de cada tramo.
+	 * Obtiene la duraciï¿½n total del circuito sumando las duraciones de cada tramo.
 	 *
-	 * @return Duración total del circuito en horas.
+	 * @return Duraciï¿½n total del circuito en horas.
 	 */
 	public Integer getTime() {
 		return stretches.stream().mapToInt(s -> calculateHoursRounded(s.getTime())).sum();
 	}
 
 	/**
-	 * Verifica si el circuito tiene una terminal específica.
+	 * Verifica si el circuito tiene una terminal especï¿½fica.
 	 *
-	 * @param destiny Terminal que se desea verificar si está en el circuito.
-	 * @return true si la terminal está en el circuito, false de lo contrario.
+	 * @param destiny Terminal que se desea verificar si estï¿½ en el circuito.
+	 * @return true si la terminal estï¿½ en el circuito, false de lo contrario.
 	 */
 	public Boolean hasATerminal(Terminal destiny) {
 		return originTerminals().stream().anyMatch(terminal -> terminal.equals(destiny));
@@ -99,9 +98,9 @@ public class MaritimeCircuit {
 	}
 
 	/**
-	 * Calcula las horas redondeadas a partir de una duración dada.
+	 * Calcula las horas redondeadas a partir de una duraciï¿½n dada.
 	 *
-	 * @param time Duración a convertir a horas.
+	 * @param time Duraciï¿½n a convertir a horas.
 	 * @return Horas redondeadas.
 	 */
 	private Integer calculateHoursRounded(Duration time) {
