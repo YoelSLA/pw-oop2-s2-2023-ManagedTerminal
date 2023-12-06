@@ -10,7 +10,7 @@ public class Position {
 		this.longitude = longitude;
 	}
 
-	public Integer distanceInKilometersBetween(Position positionOne, Position positionTwo) {
+	public static Integer distanceInKilometersBetween(Position positionOne, Position positionTwo) {
 
 		// Radio de la Tierra en kilómetros.
 		final Integer RADIO = 6371;
@@ -55,14 +55,14 @@ public class Position {
 		setLongitude(longitude);
 	}
 
-	private Double calculateSinSquaredHalfDelta(Double differenceLatitude, Double differenceLongitude,
+	private static Double calculateSinSquaredHalfDelta(Double differenceLatitude, Double differenceLongitude,
 			Double latitudeOne, Double latitudeTwo) {
 		return Math.sin(differenceLatitude / 2) * Math.sin(differenceLatitude / 2)
 				+ Math.cos(Math.toRadians(latitudeOne)) * Math.cos(Math.toRadians(latitudeTwo))
 						* Math.sin(differenceLongitude / 2) * Math.sin(differenceLongitude / 2);
 	}
 
-	private Double calculateAngularDistance(Double sinSquaredHalfDelta) {
+	private static Double calculateAngularDistance(Double sinSquaredHalfDelta) {
 		return 2 * Math.atan2(Math.sqrt(sinSquaredHalfDelta), Math.sqrt(1 - sinSquaredHalfDelta));
 	}
 
