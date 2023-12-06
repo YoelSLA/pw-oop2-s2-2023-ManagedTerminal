@@ -9,11 +9,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import maritimeCircuit.MaritimeCircuit;
 import ship.Ship;
 import stretch.Stretch;
@@ -23,108 +20,119 @@ import terminal.Terminal;
 class TripTest {
 
 	private ManagedTerminal buenosAires;
-//-------------------------------------------------------------
+	// -------------------------------------------------------------
 	private Terminal valparaiso;
-	private Terminal montevideo;
-//-------------------------------------------------------------
-	private Stretch valparaisoBuenosAires;
-	private Stretch buenosAiresMontevideo;
-	private Stretch montevideoValparaiso;
-//-------------------------------------------------------------
-	private MaritimeCircuit circuitValparaisoToMontevideo;
-//-------------------------------------------------------------
+	private Terminal lima;
+	private Terminal guayaquil;
+	// -------------------------------------------------------------
+	private Stretch buenosAiresValparaiso;
+	private Stretch valparaisoLima;
+	private Stretch limaGuayaquil;
+	private Stretch guayaquilBuenosAires;
+	// -------------------------------------------------------------
+	private MaritimeCircuit maritimeCircuitOne;
+	// -------------------------------------------------------------
 	private Ship bismarck;
-//-------------------------------------------------------------
+	// -------------------------------------------------------------
 	private LocalDateTime startDate;
-//-------------------------------------------------------------
-	private Trip tripValparaisoToMontevideo; // SUT
-//-------------------------------------------------------------
+	// -------------------------------------------------------------
+	private Trip tripOne; // SUT
 
 	@BeforeEach
 	void setUp() {
-		// MANAGED TERMINAL
+
 		buenosAires = mock(ManagedTerminal.class);
-		when(buenosAires.getName()).thenReturn("Puerto de Buenos Aires");
-//-------------------------------------------------------------		
-		// TERMINAL
+		// -------------------------------------------------------------------------------------------
 		valparaiso = mock(Terminal.class);
-		when(valparaiso.getName()).thenReturn("Puerto de Valparaiso");
+		lima = mock(Terminal.class);
+		guayaquil = mock(Terminal.class);
+		// -------------------------------------------------------------------------------------------
+		buenosAiresValparaiso = mock(Stretch.class);
+		when(buenosAiresValparaiso.getOrigin()).thenReturn(buenosAires);
+		when(buenosAiresValparaiso.getDestiny()).thenReturn(valparaiso);
+		when(buenosAiresValparaiso.getPrice()).thenReturn(1.040);
+		when(buenosAiresValparaiso.getTime()).thenReturn(Duration.ofHours(13));
 
-		montevideo = mock(Terminal.class);
-		when(montevideo.getName()).thenReturn("Puerto de Montevideo");
-//-------------------------------------------------------------		
-		// STRETCH
-		valparaisoBuenosAires = mock(Stretch.class);
-		when(valparaisoBuenosAires.getOrigin()).thenReturn(valparaiso);
-		when(valparaisoBuenosAires.getDestiny()).thenReturn(buenosAires);
-		when(valparaisoBuenosAires.getTime()).thenReturn(Duration.ofHours(12));
+		valparaisoLima = mock(Stretch.class);
+		when(valparaisoLima.getOrigin()).thenReturn(valparaiso);
+		when(valparaisoLima.getDestiny()).thenReturn(lima);
+		when(valparaisoLima.getPrice()).thenReturn(2.024);
+		when(valparaisoLima.getTime()).thenReturn(Duration.ofHours(9));
 
-		buenosAiresMontevideo = mock(Stretch.class);
-		when(buenosAiresMontevideo.getOrigin()).thenReturn(buenosAires);
-		when(buenosAiresMontevideo.getDestiny()).thenReturn(montevideo);
-		when(buenosAiresMontevideo.getTime()).thenReturn(Duration.ofHours(3));
+		limaGuayaquil = mock(Stretch.class);
+		when(limaGuayaquil.getOrigin()).thenReturn(lima);
+		when(limaGuayaquil.getDestiny()).thenReturn(guayaquil);
+		when(limaGuayaquil.getPrice()).thenReturn(1.821);
+		when(limaGuayaquil.getTime()).thenReturn(Duration.ofHours(6));
 
-		montevideoValparaiso = mock(Stretch.class);
-		when(montevideoValparaiso.getOrigin()).thenReturn(montevideo);
-		when(montevideoValparaiso.getDestiny()).thenReturn(valparaiso);
-		when(montevideoValparaiso.getTime()).thenReturn(Duration.ofHours(22));
-//-------------------------------------------------------------		
-		// MARITIME CIRCUIT
-		circuitValparaisoToMontevideo = mock(MaritimeCircuit.class);
-		when(circuitValparaisoToMontevideo.getStretches())
-				.thenReturn(List.of(valparaisoBuenosAires, buenosAiresMontevideo, montevideoValparaiso));
-		when(circuitValparaisoToMontevideo.originTerminal()).thenReturn(valparaiso);
-//-------------------------------------------------------------		
-		// SHIP
+		guayaquilBuenosAires = mock(Stretch.class);
+		when(guayaquilBuenosAires.getOrigin()).thenReturn(guayaquil);
+		when(guayaquilBuenosAires.getDestiny()).thenReturn(buenosAires);
+		when(guayaquilBuenosAires.getPrice()).thenReturn(2.192);
+		when(guayaquilBuenosAires.getTime()).thenReturn(Duration.ofHours(36));
+		// -------------------------------------------------------------------------------------------
+		maritimeCircuitOne = mock(MaritimeCircuit.class);
+		when(maritimeCircuitOne.getStretches())
+				.thenReturn(List.of(buenosAiresValparaiso, valparaisoLima, limaGuayaquil, guayaquilBuenosAires));
+		when(maritimeCircuitOne.originTerminal()).thenReturn(buenosAires);
+		// -------------------------------------------------------------------------------------------
 		bismarck = mock(Ship.class);
-//-------------------------------------------------------------		
-		// TRIP
-		startDate = LocalDateTime.of(2023, Month.DECEMBER, 01, 10, 0); // 01-12-23 | 10:00 Hs.
-		tripValparaisoToMontevideo = new Trip(circuitValparaisoToMontevideo, bismarck, startDate);
+		// -------------------------------------------------------------------------------------------
+		startDate = LocalDateTime.of(2023, Month.NOVEMBER, 12, 12, 00); // 12-11-23 | 12:00 Hs.
+		// -------------------------------------------------------------------------------------------
+		tripOne = new Trip(maritimeCircuitOne, bismarck, startDate);
 	}
 
 	@Test
-	void getMaritimeCircuit_ShouldReturnCorrectCircuit_ForNewlyCreatedTripValparaisoToMontevideo() {
-		assertEquals(circuitValparaisoToMontevideo, tripValparaisoToMontevideo.getMaritimeCircuit());
+	void testGetMaritimeCircuit_ReturnsCorrectMaritimeCircuit() {
+		assertEquals(maritimeCircuitOne, tripOne.getMaritimeCircuit());
 	}
 
 	@Test
-	void getShip_ShouldReturnCorrectShip_ForNewlyCreatedTripValparaisoToMontevideo() {
-		assertEquals(bismarck, tripValparaisoToMontevideo.getShip());
+	void testGetShip_ReturnsCorrectShip() {
+		assertEquals(bismarck, tripOne.getShip());
 	}
 
 	@Test
-	void getStartDate_ShouldReturnCorrectStartDate_ForNewlyCreatedTripValparaisoToMontevideo() {
-		assertEquals(startDate, tripValparaisoToMontevideo.getStartDate());
+	void testGetStartDate_ReturnsCorrectStartDate() {
+		assertEquals(startDate, tripOne.getStartDate());
 	}
 
 	@Test
-	void testHasATerminal_ShouldReturnTrue_ForTripValparaisoToMontevideoWhenLookingForMontevideo() {
+	void testCalculateEstimatedArrivalDateToTerminal_ReturnsCorrectEstimatedArrivalDate() {
 		// SetUp
-		when(circuitValparaisoToMontevideo.hasATerminal(Mockito.eq(montevideo))).thenReturn(true);
+		when(maritimeCircuitOne.calculateTotalHoursBetweenTerminals(buenosAires, valparaiso)).thenReturn(13);
+		when(maritimeCircuitOne.getPositionOf(buenosAires)).thenReturn(0);
+		when(maritimeCircuitOne.getPositionOf(valparaiso)).thenReturn(1);
+		
 		// Assert
-		assertTrue(tripValparaisoToMontevideo.hasTerminal(montevideo));
+		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 13, 01, 00);
+		assertEquals(arrivalDate, tripOne.calculateEstimatedArrivalDateToTerminal(valparaiso)); 
+		// 13-11-23 | 01:00 Hs.
 	}
-
+	
 	@Test
-	void testDateArrivedToDestiny_ShouldReturnCorrectDateTime_ForTripValparaisoToMontevideo() throws Exception {
-		// SetUp
-		when(circuitValparaisoToMontevideo.originTerminal()).thenReturn(valparaiso);
-		when(circuitValparaisoToMontevideo.calculateTotalHoursBetweenTerminals(valparaiso, buenosAires)).thenReturn(12);
+	void getOriginTerminal_ReturnsCorrectOriginTerminal() {
+		assertEquals(buenosAires, tripOne.getOriginTerminal());
+	}
+	
+	@Test
+	void getNextTerminal_ReturnsCorrectNextTerminal() {
+		// Set Up
+		when(maritimeCircuitOne.getNextTerminalInCircuit(buenosAires)).thenReturn(valparaiso);
+		
 		// Assert
-		assertEquals(LocalDateTime.of(2023, Month.DECEMBER, 01, 22, 0),
-				tripValparaisoToMontevideo.calculateEstimatedArrivalDateToTerminal(buenosAires)); // 01-12-23 | 22:00
-																									// Hs.
+		assertEquals(valparaiso, tripOne.getNextTerminal(buenosAires));
 	}
-
+	
 	@Test
-	void testOriginTerminal_ShouldReturnValparaiso_ForTripValparaisoToMontevideo() {
-		assertEquals(valparaiso, tripValparaisoToMontevideo.getOriginTerminal());
+	void hasTerminal_ReturnsTrueForExistingTerminal() {
+		// Set Up
+		when(maritimeCircuitOne.hasATerminal(buenosAires)).thenReturn(true);
+		
+		// Assert
+		assertTrue(tripOne.hasTerminal(buenosAires));
 	}
-
-//	@Test
-//	void nextTerminalOf_ShouldReturnBuenosAires_ForValparaiso_ForTripValparaisoToMontevideo() {
-//		assertEquals(buenosAires, tripValparaisoToMontevideo.getNextTerminal(valparaiso));
-//	}
-
+	
+	
 }

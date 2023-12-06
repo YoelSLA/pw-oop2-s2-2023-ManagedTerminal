@@ -37,9 +37,9 @@ public abstract class SelectionDate extends Selection {
 
 	/**
 	 * Calcula y devuelve la fecha de llegada estimada de un viaje a una terminal
-	 * específica.
+	 * especï¿½fica.
 	 *
-	 * @param trip El viaje para el cual se calculará la fecha de llegada estimada.
+	 * @param trip El viaje para el cual se calcularï¿½ la fecha de llegada estimada.
 	 * @return La fecha de llegada estimada del viaje a la terminal.
 	 * @throws Exception
 	 */
@@ -48,10 +48,10 @@ public abstract class SelectionDate extends Selection {
 	}
 
 	/**
-	 * Realiza una comparación de fechas basada en un criterio específico.
+	 * Realiza una comparaciï¿½n de fechas basada en un criterio especï¿½fico.
 	 * 
 	 * @param date Fecha a comparar.
-	 * @return true si la comparación según el criterio es verdadera, false de lo
+	 * @return true si la comparaciï¿½n segï¿½n el criterio es verdadera, false de lo
 	 *         contrario.
 	 */
 	protected Boolean searchByCriteriaTo(LocalDate searchDate) {
@@ -63,17 +63,6 @@ public abstract class SelectionDate extends Selection {
 		default:
 			return this.searchDate.isAfter(searchDate);
 		}
-	}
-
-	@Override
-	public List<Trip> filterTrips(List<Trip> trips) {
-		return trips.stream().filter(trip -> {
-			try {
-				return searchByCriteriaTo(calculateArrivalDate(trip));
-			} catch (Exception e) {
-			}
-			return false;
-		}).toList();
 	}
 
 }
