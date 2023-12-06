@@ -11,10 +11,9 @@ public class Turn {
 	private Truck truck;
 	private LocalDateTime date;
 
-	public Turn(Driver driver, Truck truck, LocalDateTime date) {
+	public Turn(Driver driver, Truck truck) {
 		this.driver = driver;
 		this.truck = truck;
-		this.date = date;
 	}
 
 	public Driver getDriver() {

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class DriverTest {
-	
+
 	private Driver yoel;
 
 	@BeforeEach
@@ -15,9 +15,12 @@ class DriverTest {
 	}
 
 	@Test
-	void testADriverIsCreated() {
-		// Assert
+	void testGetDniSuccessful() {
 		assertEquals("42341174", yoel.getDni());
+	}
+
+	@Test
+	void testNameShouldBeYoel() {
 		assertEquals("Yoel", yoel.getName());
 	}
 

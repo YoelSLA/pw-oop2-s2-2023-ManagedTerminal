@@ -14,4 +14,9 @@ public class ImportOrder extends Order {
 		super(load, trip, origin, destiny, consignee, driver, truck);
 	}
 
+	@Override
+	public Double getPriceOfTrip() {
+		return getTrip().getMaritimeCircuit().getPriceBetween(getOrigin(), getDestiny());
+	}
+
 }

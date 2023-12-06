@@ -158,7 +158,7 @@ class ShippingCommunication extends ManagedTerminalTest {
 		when(reefer.getName()).thenReturn("Reefer");
 		// ------------------------------------------------------------------------------------------
 		// EXPORT ORDER
-		exportOrder = spy(new ExportOrder(dry, tripOne, buenosAires, lima, ivan, alberto, volvo));
+		exportOrder = spy(new ExportOrder(dry, tripOne, lima, ivan, alberto, volvo));
 		// ------------------------------------------------------------------------------------------
 		// IMPORT ORDER
 		importOrder = spy(new ImportOrder(dry, tripOne, montevideo, buenosAires, yoel, alberto, volvo));

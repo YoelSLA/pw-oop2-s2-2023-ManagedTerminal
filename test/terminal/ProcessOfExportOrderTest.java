@@ -47,11 +47,8 @@ class ProcessOfExportOrderTest extends ManagedTerminalTest {
 		when(turnExportOrder.getDate()).thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 12, 06, 00));
 		// 12-11-23 | 06:00 Hs.
 		// ------------------------------------------------------------------------------------------
-		exportOrder = spy(new ExportOrder(dry, tripOne, buenosAires, lima, ivan, alberto, volvo));
-		when(exportOrder.getClient()).thenReturn(ivan);
+		exportOrder = spy(new ExportOrder(dry, tripOne, lima, ivan, alberto, volvo));
 		when(exportOrder.getTurn()).thenReturn(turnExportOrder);
-		when(exportOrder.getLoad()).thenReturn(dry);
-		when(exportOrder.getTrip()).thenReturn(tripOne);
 		// ------------------------------------------------------------------------------------------
 		buenosAires.registerTruckTransportCompany(transportVesprini);
 	}

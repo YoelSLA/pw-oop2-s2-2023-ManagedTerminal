@@ -1,6 +1,8 @@
 package shippingLine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -75,109 +77,132 @@ class ShippingLineTest {
 		// -------------------------------------------------------------------------------------------
 		bismarck = mock(Ship.class);
 		// -------------------------------------------------------------------------------------------
-//		// TRIP
-//		tripBuenosAiresRioDeJaneiro = mock(Trip.class);
-//		when(tripBuenosAiresRioDeJaneiro.getMaritimeCircuit()).thenReturn(circuitBuenosAiresRioDeJaneiro);
-//		when(tripBuenosAiresRioDeJaneiro.getShip()).thenReturn(nautilus);
-
+		// TRIP
+		tripOne = mock(Trip.class);
+		when(tripOne.getMaritimeCircuit()).thenReturn(maritimeCircuitOne);
+		when(tripOne.getShip()).thenReturn(bismarck);
 		// -------------------------------------------------------------
 		apmMaersk = new ShippingLine("30234051497", "APM Maersk");
 	}
 
 	@Test
-	void getCuit_ShouldReturnCorrectCuit_ForApmMaersk() {
+	void x() {
 		assertEquals("30234051497", apmMaersk.getCuit());
 	}
 
 	@Test
-	void getMaritimeCircuits_ShouldReturnEmptyList_ForNewShippingLine() {
+	void x1() {
 		assertEquals(0, apmMaersk.getMaritimeCircuits().size());
 	}
 
 	@Test
-	void getName_ShouldReturnApmMaersk_ForNewShippingLine() {
+	void x2() {
 		assertEquals("APM Maersk", apmMaersk.getName());
 	}
 
 	@Test
-	void getShips_ShouldReturnEmptyList_ForNewShippingLine() {
+	void x3() {
 		assertEquals(0, apmMaersk.getShips().size());
 	}
 
 	@Test
-	void getTrips_ShouldReturnEmptyList_ForNewShippingLine() {
+	void x4() {
 		assertEquals(0, apmMaersk.getTrips().size());
 	}
 
-//	@Test
-//	void setMaritimeCircuits_ShouldUpdateMaritimeCircuitsList_ForApmMaersk() {
-//		// Exercise
-//		apmMaersk.setMaritimeCircuits(List.of(mock(MaritimeCircuit.class)));
-//		// Assert
-//		assertEquals(1, apmMaersk.getMaritimeCircuits().size());
-//	}
-//
-//	@Test
-//	void registerMaritimeCircuit_ShouldIncreaseMaritimeCircuitsCount_ForApmMaersk() {
-//		// Exercise
-//		apmMaersk.registerMaritimeCircuit(circuitBuenosAiresRioDeJaneiro);
-//		// Assert
-//		assertEquals(1, apmMaersk.getMaritimeCircuits().size());
-//	}
-//
-//	@Test
-//	void registerShip_ShouldIncreaseShipsCount_ForApmMaersk() {
-//		// Exercise
-//		apmMaersk.registerShip(nautilus);
-//		// Assert
-//		assertEquals(1, apmMaersk.getShips().size());
-//	}
-//
-//	@Test
-//	void registerTrip_ShouldIncreaseTripsCount_ForApmMaersk() throws Exception {
-//		// Exercise
-//		apmMaersk.registerMaritimeCircuit(circuitBuenosAiresRioDeJaneiro);
-//		apmMaersk.registerShip(nautilus);
-//		apmMaersk.registerTrip(tripBuenosAiresRioDeJaneiro);
-//		// Assert
-//		assertEquals(1, apmMaersk.getTrips().size());
-//	}
-//
-//	@Test
-//	void registerTrip_WithoutRegisteredMaritimeCircuit_ShouldThrowRuntimeException() {
-//		// Exercise
-//		apmMaersk.registerShip(nautilus);
-//		// Assert
-//		assertThrows("The maritime circuit is not registered in the shipping line.", RuntimeException.class,
-//				() -> apmMaersk.registerTrip(tripBuenosAiresRioDeJaneiro));
-//	}
-//
-//	@Test
-//	void registerTrip_WithoutRegisteredShip_ShouldThrowRuntimeException() {
-//		// Exercise
-//		apmMaersk.registerMaritimeCircuit(circuitBuenosAiresRioDeJaneiro);
-//		// Assert
-//		assertThrows("The ship is not registered in the shipping line.", RuntimeException.class,
-//				() -> apmMaersk.registerTrip(tripBuenosAiresRioDeJaneiro));
-//	}
-//
-//	@Test
-//	void registerShip_StartTrip_ShouldNotBeInShipsInTripList() {
-//		// Exercise
-//		apmMaersk.registerShip(nautilus);
-//		nautilus.startTrip();
-//		// Assert
-//		assertEquals(List.of(), apmMaersk.getShipsInTrip());
-//	}
-//
-//	@Test
-//	void registerShip_StartTripWithAnotherShip_ShouldBeInShipsInTripList() {
-//		// Exercise
-//		Ship bismarck = mock(Ship.class);
-//		apmMaersk.registerShip(nautilus);
-//		apmMaersk.registerShip(bismarck);
-//		nautilus.startTrip();
-//		// Assert
-//		assertEquals(List.of(bismarck), apmMaersk.getShipsInTrip());
-//	}
+	@Test
+	void x5() {
+		// Exercise
+		apmMaersk.registerMaritimeCircuit(maritimeCircuitOne);
+		// Assert
+		assertTrue(apmMaersk.getMaritimeCircuits().contains(maritimeCircuitOne));
+	}
+
+	@Test
+	void x6() {
+		// Exercise
+		apmMaersk.registerShip(bismarck);
+		// Assert
+		assertTrue(apmMaersk.getShips().contains(bismarck));
+	}
+
+	@Test
+	void x7() throws Exception {
+		// Exercise
+		apmMaersk.registerMaritimeCircuit(maritimeCircuitOne);
+		apmMaersk.registerShip(bismarck);
+		apmMaersk.registerTrip(tripOne);
+		// Assert
+		assertTrue(apmMaersk.getTrips().contains(tripOne));
+	}
+
+	@Test
+	void x8() {
+		// Exercise
+		apmMaersk.registerShip(bismarck);
+		// Assert
+		assertThrows(RuntimeException.class, () -> apmMaersk.registerTrip(tripOne),
+				"The maritime circuit is not registered in the shipping line.");
+	}
+
+	@Test
+	void x9() {
+		// Exercise
+		apmMaersk.registerMaritimeCircuit(maritimeCircuitOne);
+		// Assert
+		assertThrows(RuntimeException.class, () -> apmMaersk.registerTrip(tripOne),
+				"The ship is not registered in the shipping line.");
+	}
+
+	@Test
+	void x10() {
+		// Exercise
+		when(maritimeCircuitOne.hasATerminal(buenosAires)).thenReturn(true);
+		when(maritimeCircuitOne.hasATerminal(lima)).thenReturn(true);
+		when(maritimeCircuitOne.calculateTotalHoursBetweenTerminals(buenosAires, lima)).thenReturn(22);
+		apmMaersk.registerMaritimeCircuit(maritimeCircuitOne);
+		// Assert
+		assertEquals(22, apmMaersk.timeItTakesToGetTo(buenosAires, lima));
+	}
+
+	@Test
+	void x11() {
+		// Exercise
+		when(maritimeCircuitOne.hasATerminal(buenosAires)).thenReturn(false);
+		when(maritimeCircuitOne.hasATerminal(lima)).thenReturn(true);
+		apmMaersk.registerMaritimeCircuit(maritimeCircuitOne);
+		// Assert
+		assertThrows(RuntimeException.class, () -> apmMaersk.timeItTakesToGetTo(buenosAires, lima),
+				"Terminal origin not found.");
+	}
+
+	@Test
+	void x12() {
+		// Exercise
+		when(maritimeCircuitOne.hasATerminal(buenosAires)).thenReturn(true);
+		when(maritimeCircuitOne.hasATerminal(lima)).thenReturn(false);
+		apmMaersk.registerMaritimeCircuit(maritimeCircuitOne);
+		// Assert
+		assertThrows(RuntimeException.class, () -> apmMaersk.timeItTakesToGetTo(buenosAires, lima),
+				"There destiny not found.");
+	}
+
+	@Test
+	void x13() {
+		// Exercise
+		when(maritimeCircuitOne.hasATerminal(buenosAires)).thenReturn(true);
+		apmMaersk.registerMaritimeCircuit(maritimeCircuitOne);
+		// Assert
+		assertTrue(apmMaersk.hasTerminal(buenosAires));
+	}
+
+	@Test
+	void x14() {
+		// Exercise
+		when(bismarck.getIsOnTrip()).thenReturn(true);
+		apmMaersk.registerShip(bismarck);
+		// Assert
+		assertTrue(apmMaersk.shipsInTrip().contains(bismarck));
+	}
+
 }

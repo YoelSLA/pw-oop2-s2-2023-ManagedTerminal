@@ -44,6 +44,10 @@ public class ShippingLine {
 		return trips;
 	}
 
+	public Boolean hasTerminal(Terminal terminal) {
+		return maritimeCircuits.stream().anyMatch(m -> m.hasATerminal(terminal));
+	}
+
 	public void registerMaritimeCircuit(MaritimeCircuit maritimeCircuit) {
 		maritimeCircuits.add(maritimeCircuit);
 	}
@@ -63,19 +67,18 @@ public class ShippingLine {
 	}
 
 	public List<Ship> shipsInTrip() {
-		return ships.stream().filter(s -> !s.getIsOnTrip()).toList();
+		return ships.stream().filter(s -> s.getIsOnTrip()).toList();
 	}
 
 	public Integer timeItTakesToGetTo(Terminal origin, Terminal destiny) {
-		System.out.println(maritimeCircuits.stream().noneMatch(m -> m.hasATerminal(origin)));
 		if (maritimeCircuits.stream().noneMatch(m -> m.hasATerminal(origin))) {
 			throw new RuntimeException("Terminal origin not found.");
 		}
-		System.out.println(destiny);
 		if (maritimeCircuits.stream().noneMatch(m -> m.hasATerminal(destiny))) {
 			throw new RuntimeException("There destiny not found.");
 		}
 		return maritimeCircuits.stream().mapToInt(m -> m.calculateTotalHoursBetweenTerminals(origin, destiny)).min()
 				.orElse(0);
 	}
+
 }

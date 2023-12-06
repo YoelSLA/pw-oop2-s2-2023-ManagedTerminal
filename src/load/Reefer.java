@@ -19,6 +19,6 @@ public class Reefer extends Load {
 
 	@Override
 	public Boolean consumesElectricity() {
-		return false;
+		return true;
 	}
 }

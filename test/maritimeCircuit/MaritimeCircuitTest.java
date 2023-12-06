@@ -24,12 +24,12 @@ class MaritimeCircuitTest {
 	private Terminal valparaiso;
 	private Terminal lima;
 	private Terminal guayaquil;
-//-------------------------------------------------------------
+	// -------------------------------------------------------------
 	private Stretch buenosAiresValparaiso;
 	private Stretch valparaisoLima;
 	private Stretch limaGuayaquil;
 	private Stretch guayaquilBuenosAires;
-//-------------------------------------------------------------
+	// -------------------------------------------------------------
 	private MaritimeCircuit maritimeCircuitOne; // SUT
 
 	@BeforeEach
@@ -120,5 +120,10 @@ class MaritimeCircuitTest {
 	@Test
 	void testGetNextTerminalInCircuitFromBuenosAiresInMaritimeCircuitOne() {
 		assertEquals(valparaiso, maritimeCircuitOne.getNextTerminalInCircuit(buenosAires));
+	}
+
+	@Test
+	void x() {
+		assertEquals(3080.00, maritimeCircuitOne.getPriceBetween(buenosAires, lima));
 	}
 }

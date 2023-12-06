@@ -50,7 +50,7 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 		turnImportOrder = mock(Turn.class);
 		when(turnImportOrder.getDriver()).thenReturn(null);
 		// ------------------------------------------------------------------------------------------
-		exportOrder = spy(new ExportOrder(dry, tripOne, buenosAires, lima, ivan, alberto, volvo));
+		exportOrder = spy(new ExportOrder(dry, tripOne, lima, ivan, alberto, volvo));
 		// ------------------------------------------------------------------------------------------
 		arrivalDate = new ArrivalDate(Criteria.GREATHER_THAN, LocalDate.of(2023, Month.NOVEMBER, 10), lima); // 10-11-23
 		departureDate = new DepartureDate(Criteria.EQUALS, LocalDate.of(2023, Month.NOVEMBER, 12), buenosAires); // 12-11-23

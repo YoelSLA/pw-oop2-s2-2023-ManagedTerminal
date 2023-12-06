@@ -15,6 +15,25 @@ public class MaritimeCircuit {
 		this.stretches = stretches;
 	}
 
+	public List<Stretch> getStretches() {
+		return stretches;
+	}
+
+	/**
+	 * Calcula la duración total en horas entre dos terminales específicas en el
+	 * circuito.
+	 *
+	 * @param origin  Terminal de origen.
+	 * @param destiny Terminal de destino.
+	 * @return Duración total en horas entre las terminales dadas.
+	 * @throws Exception
+	 */
+	public Integer calculateTotalHoursBetweenTerminals(Terminal origin, Terminal destiny) {
+		long totalNanos = stretches.stream().skip(getPositionOf(origin))
+				.limit(getPositionOf(destiny) - getPositionOf(origin)).mapToLong(s -> s.getTime().toNanos()).sum();
+		return calculateHoursRounded(Duration.ofNanos(totalNanos));
+	}
+
 	/**
 	 * Obtiene la siguiente terminal en el circuito después de una terminal dada.
 	 *
@@ -50,8 +69,10 @@ public class MaritimeCircuit {
 		return stretches.stream().mapToDouble(Stretch::getPrice).sum();
 	}
 
-	public List<Stretch> getStretches() {
-		return stretches;
+	public Double getPriceBetween(Terminal origin, Terminal destiny) {
+		return stretches.stream().skip(getPositionOf(origin)).limit(getPositionOf(destiny) - getPositionOf(origin))
+				.mapToDouble(s -> s.getPrice()).sum();
+
 	}
 
 	/**
@@ -61,21 +82,6 @@ public class MaritimeCircuit {
 	 */
 	public Integer getTime() {
 		return stretches.stream().mapToInt(s -> calculateHoursRounded(s.getTime())).sum();
-	}
-
-	/**
-	 * Calcula la duración total en horas entre dos terminales específicas en el
-	 * circuito.
-	 *
-	 * @param origin  Terminal de origen.
-	 * @param destiny Terminal de destino.
-	 * @return Duración total en horas entre las terminales dadas.
-	 * @throws Exception
-	 */
-	public Integer calculateTotalHoursBetweenTerminals(Terminal origin, Terminal destiny) {
-		long totalNanos = stretches.stream().skip(getPositionOf(origin))
-				.limit(getPositionOf(destiny) - getPositionOf(origin)).mapToLong(s -> s.getTime().toNanos()).sum();
-		return calculateHoursRounded(Duration.ofNanos(totalNanos));
 	}
 
 	/**
