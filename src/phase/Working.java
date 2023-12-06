@@ -1,10 +1,12 @@
 package phase;
 
-public final class Working implements Phase {
+public class Working extends Phase {
 
 	@Override
-	public Departing nextPhase() {
+	public Phase nextPhase() {
 		return new Departing();
 	}
+	
+	
 }
 
