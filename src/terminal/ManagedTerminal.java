@@ -395,7 +395,9 @@ public class ManagedTerminal implements Terminal {
 	}
 
 	public void registerShippingLine(ShippingLine shippingLine) {
-		shippingLines.add(shippingLine);
+		if(shippingLine.hasTerminal(this)) {
+			shippingLines.add(shippingLine);
+		}
 	}
 
 	public void registerTruckTransportCompany(TruckTransportCompany truckTransportCompany) {

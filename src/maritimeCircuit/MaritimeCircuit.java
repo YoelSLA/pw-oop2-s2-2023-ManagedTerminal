@@ -29,6 +29,8 @@ public class MaritimeCircuit {
 	 * @throws Exception
 	 */
 	public Integer calculateTotalHoursBetweenTerminals(Terminal origin, Terminal destiny) {
+		System.out.println(getPositionOf(origin));
+		System.out.println(getPositionOf(destiny));
 		long totalNanos = stretches.stream().skip(getPositionOf(origin))
 				.limit(getPositionOf(destiny) - getPositionOf(origin)).mapToLong(s -> s.getTime().toNanos()).sum();
 		return calculateHoursRounded(Duration.ofNanos(totalNanos));

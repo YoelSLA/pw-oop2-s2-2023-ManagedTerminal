@@ -126,6 +126,7 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 	@Test
 	void testNextDepartureDateTo_ReturnsNextDate_WhenTripsAvailable() {
 		// Set Up
+		when(apmMaersk.hasTerminal(buenosAires)).thenReturn(true);
 		buenosAires.registerShippingLine(apmMaersk);
 
 		when(tripOne.hasTerminal(buenosAires)).thenReturn(true);
@@ -145,13 +146,14 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 	@Test
 	void testNextDepartureDateTo_ThrowsException_WhenTripsNotAvailable() {
 		// Set Up
-		buenosAires.registerShippingLine(apmMaersk);
-
 		when(tripOne.hasTerminal(buenosAires)).thenReturn(true);
 		when(tripOne.hasTerminal(lima)).thenReturn(true);
 		when(tripOne.getOriginTerminal()).thenReturn(buenosAires);
-
+		
 		when(apmMaersk.getTrips()).thenReturn(List.of(tripOne));
+		
+		buenosAires.registerShippingLine(apmMaersk);
+
 		// Assert
 		assertThrows(RuntimeException.class, () -> {
 			buenosAires.nextDepartureDateTo(mock(Terminal.class));
@@ -162,8 +164,9 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 	@Test
 	void testNextDepartureDateTo_ThrowsException_WhenNoTripsAvailable() {
 		// Set Up
-		buenosAires.registerShippingLine(apmMaersk);
 		when(apmMaersk.getTrips()).thenReturn(List.of(mock(Trip.class)));
+		buenosAires.registerShippingLine(apmMaersk);
+		
 		// Assert
 		assertThrows(RuntimeException.class, () -> {
 			buenosAires.nextDepartureDateTo(mock(Terminal.class));
@@ -174,8 +177,11 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 	@Test
 	void testTimeItTakesToGetTo_ReturnsTime_WhenShippingLineAvailable() {
 		// Set Up
-		buenosAires.registerShippingLine(apmMaersk);
+		when(apmMaersk.hasTerminal(buenosAires)).thenReturn(true);
 		when(apmMaersk.timeItTakesToGetTo(buenosAires, lima)).thenReturn(20);
+		buenosAires.registerShippingLine(apmMaersk);
+		
+		
 		// Assert
 		assertEquals(20, buenosAires.timeItTakesToGetTo(apmMaersk, lima));
 
@@ -190,6 +196,7 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 	
 	private void configureSimulatedTrips() throws Exception {
 		
+		when(apmMaersk.hasTerminal(buenosAires)).thenReturn(true);
 		buenosAires.registerShippingLine(apmMaersk);
 		
 		when(tripOne.hasTerminal(buenosAires)).thenReturn(true);

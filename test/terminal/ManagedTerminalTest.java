@@ -252,6 +252,7 @@ class ManagedTerminalTest {
 	@Test
 	void testRegisteringShippingCompanyShouldAddToShippingLinesList() {
 		// Exercise
+		when(apmMaersk.hasTerminal(buenosAires)).thenReturn(true);
 		buenosAires.registerShippingLine(apmMaersk);
 		// Assert
 		assertEquals(List.of(apmMaersk), buenosAires.getShippingLines());
