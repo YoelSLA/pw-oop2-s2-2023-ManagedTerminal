@@ -5,10 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +15,9 @@ import client.Shipper;
 import driver.Driver;
 import load.Dry;
 import maritimeCircuit.MaritimeCircuit;
-import ship.Ship;
-import stretch.Stretch;
+import service.ExcessStorage;
+import service.Washed;
+import service.Weigh;
 import terminal.ManagedTerminal;
 import terminal.Terminal;
 import trip.Trip;
@@ -28,20 +27,11 @@ class ExportOrderTest {
 
 	private ManagedTerminal buenosAires;
 	// ------------------------------------------------------------
-	private Terminal valparaiso;
 	private Terminal lima;
-	private Terminal guayaquil;
-	// ------------------------------------------------------------
-	private Stretch buenosAiresValparaiso;
-	private Stretch valparaisoLima;
-	private Stretch limaGuayaquil;
-	private Stretch guayaquilBuenosAires;
 	// ------------------------------------------------------------
 	private MaritimeCircuit maritimeCircuitOne;
 	// ------------------------------------------------------------
 	private Trip tripOne;
-	// ------------------------------------------------------------
-	private Ship bismarck;
 	// ------------------------------------------------------------
 	private Shipper ivan;
 	// ------------------------------------------------------------
@@ -51,6 +41,10 @@ class ExportOrderTest {
 	// ------------------------------------------------------------
 	private Dry dry;
 	// ------------------------------------------------------------
+	private ExcessStorage excessStorage;
+	private Washed washed;
+	private Weigh weigh;
+	// ------------------------------------------------------------
 	private ExportOrder exportOrder;
 	// ------------------------------------------------------------
 
@@ -58,37 +52,9 @@ class ExportOrderTest {
 	void setUp() {
 		buenosAires = mock(ManagedTerminal.class);
 		// -------------------------------------------------------------------------------------------
-		valparaiso = mock(Terminal.class);
 		lima = mock(Terminal.class);
-		guayaquil = mock(Terminal.class);
-		// ------------------------------------------------------------------------------------------
-		buenosAiresValparaiso = mock(Stretch.class);
-		when(buenosAiresValparaiso.getOrigin()).thenReturn(buenosAires);
-		when(buenosAiresValparaiso.getDestiny()).thenReturn(valparaiso);
-		when(buenosAiresValparaiso.getPrice()).thenReturn(1.040);
-		when(buenosAiresValparaiso.getTime()).thenReturn(Duration.ofHours(13));
-
-		valparaisoLima = mock(Stretch.class);
-		when(valparaisoLima.getOrigin()).thenReturn(valparaiso);
-		when(valparaisoLima.getDestiny()).thenReturn(lima);
-		when(valparaisoLima.getPrice()).thenReturn(2.024);
-		when(valparaisoLima.getTime()).thenReturn(Duration.ofHours(9));
-
-		limaGuayaquil = mock(Stretch.class);
-		when(limaGuayaquil.getOrigin()).thenReturn(lima);
-		when(limaGuayaquil.getDestiny()).thenReturn(guayaquil);
-		when(limaGuayaquil.getPrice()).thenReturn(1.821);
-		when(limaGuayaquil.getTime()).thenReturn(Duration.ofHours(6));
-
-		guayaquilBuenosAires = mock(Stretch.class);
-		when(guayaquilBuenosAires.getOrigin()).thenReturn(guayaquil);
-		when(guayaquilBuenosAires.getDestiny()).thenReturn(buenosAires);
-		when(guayaquilBuenosAires.getPrice()).thenReturn(2.192);
-		when(guayaquilBuenosAires.getTime()).thenReturn(Duration.ofHours(36));
 		// ------------------------------------------------------------------------------------------
 		maritimeCircuitOne = mock(MaritimeCircuit.class);
-		when(maritimeCircuitOne.getStretches())
-				.thenReturn(List.of(buenosAiresValparaiso, valparaisoLima, limaGuayaquil, guayaquilBuenosAires));
 		when(maritimeCircuitOne.originTerminal()).thenReturn(buenosAires);
 		// -------------------------------------------------------------------------------------------
 		tripOne = mock(Trip.class);
@@ -97,9 +63,6 @@ class ExportOrderTest {
 		when(tripOne.getMaritimeCircuit()).thenReturn(maritimeCircuitOne);
 		when(tripOne.getOriginTerminal()).thenReturn(buenosAires);
 		// -------------------------------------------------------------------------------------------
-		bismarck = mock(Ship.class);
-		when(tripOne.getShip()).thenReturn(bismarck);
-		// -------------------------------------------------------------------------------------------
 		ivan = mock(Shipper.class);
 		// -------------------------------------------------------------------------------------------
 		alberto = mock(Driver.class);
@@ -107,6 +70,15 @@ class ExportOrderTest {
 		volvo = mock(Truck.class);
 		// -------------------------------------------------------------------------------------------
 		dry = mock(Dry.class);
+		// -------------------------------------------------------------------------------------------	
+		excessStorage = mock(ExcessStorage.class);
+		when(excessStorage.getPrice()).thenReturn(2000.0);
+
+		washed = mock(Washed.class);
+		when(washed.getPrice()).thenReturn(3000.0);
+		
+		weigh = mock(Weigh.class);
+		when(weigh.getPrice()).thenReturn(4000.0);
 		// -------------------------------------------------------------------------------------------
 		exportOrder = new ExportOrder(ivan, tripOne, dry, lima, alberto, volvo);
 	}
@@ -150,4 +122,41 @@ class ExportOrderTest {
 	void testGetServices_ReturnsEmptyServicesListInitially() {
 	    assertTrue(exportOrder.getServices().isEmpty());
 	}
+
+	@Test
+	void testArrivalDate_ReturnsCorrectArrivalDate() {
+	    // Set Up
+	    LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 12, 12, 00);
+	    when(tripOne.calculateEstimatedArrivalDateToTerminal(buenosAires)).thenReturn(arrivalDate);
+	    
+	    // Assert
+	    assertEquals(arrivalDate, exportOrder.arrivalDate());
+	}
+
+	@Test
+	void testDepartureDate_ReturnsCorrectDepartureDate() {
+	    // Set Up
+	    LocalDateTime departureDate = LocalDateTime.of(2023, Month.NOVEMBER, 13, 18, 00);
+	    when(tripOne.calculateEstimatedArrivalDateToTerminal(lima)).thenReturn(departureDate);
+	    
+	    // Assert
+	    assertEquals(departureDate, exportOrder.departureDate());
+	}
+
+	@Test
+	void testPriceOfServices_ReturnsCorrectTotalPrice() {
+	    // Set Up
+	    exportOrder.registerService(excessStorage);
+	    exportOrder.registerService(weigh);
+	    exportOrder.registerService(washed);
+	    
+	    // Assert
+	    assertEquals(9000.00, exportOrder.priceOfServices());
+	}
+
+	@Test
+	void tesTravelCost_ReturnsZeroForNoServices() {
+	    assertEquals(0.0, exportOrder.travelCost());
+	}
+
 }
