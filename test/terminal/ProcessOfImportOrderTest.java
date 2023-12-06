@@ -1,7 +1,6 @@
 package terminal;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
@@ -22,12 +21,9 @@ import order.ImportOrder;
 import service.Electricity;
 import service.ExcessStorage;
 import truck.Truck;
-import turn.Turn;
 
 class ProcessOfImportOrderTest extends ManagedTerminalTest {
 
-	private Turn turnImportOrder;
-	// ------------------------------------------------------------
 	private Reefer reefer;
 	private Dry dry;
 	// ------------------------------------------------------------
@@ -43,14 +39,7 @@ class ProcessOfImportOrderTest extends ManagedTerminalTest {
 		when(reefer.getConsumptionkWh()).thenReturn(50.00);
 		when(reefer.consumesElectricity()).thenReturn(true);
 		// ------------------------------------------------------------------------------------------
-		turnImportOrder = mock(Turn.class);
-		when(turnImportOrder.getDriver()).thenReturn(alberto);
-		when(turnImportOrder.getTruck()).thenReturn(volvo);
-		when(turnImportOrder.getDate()).thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 01, 20, 00));
-		// 12-11-23 | 06:00 Hs.
-		// ------------------------------------------------------------------------------------------
-		importOrder = spy(new ImportOrder(dry, tripTwo, montevideo, buenosAires, yoel, alberto, volvo));
-		when(importOrder.getTurn()).thenReturn(turnImportOrder);
+		importOrder = spy(new ImportOrder(yoel, tripTwo, dry, montevideo, buenosAires, alberto, volvo));
 		// ------------------------------------------------------------------------------------------
 		buenosAires.registerTruckTransportCompany(transportVesprini);
 	}
@@ -98,7 +87,8 @@ class ProcessOfImportOrderTest extends ManagedTerminalTest {
 		// Exercise
 		buenosAires.hireImportService(importOrder);
 		// Assert
-		assertEquals(LocalDateTime.of(2023, Month.NOVEMBER, 01, 20, 00), importOrder.getTurn().getDate());
+		assertEquals(1, buenosAires.getTurns().size());
+		assertEquals(LocalDateTime.of(2023, Month.NOVEMBER, 01, 20, 00), buenosAires.getTurns().get(0).getDate());
 		// 01-11-23 | 20:00 Hs.
 	}
 
@@ -111,71 +101,74 @@ class ProcessOfImportOrderTest extends ManagedTerminalTest {
 	}
 
 	@Test
-	void truckLeaveWithLoad_ShouldNotIncludeExcessStorage_WhenConsigneeRetrievesOnTime() throws Exception {
-		// Set Up
-		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 01, 18, 00);
-		// 01-11-23 | 18:00 Hs.
-		// Exercise
-		buenosAires.truckLeaveWithLoad(importOrder, alberto, volvo, arrivalDate);
-		// Assert
-		assertFalse(
-				"La orden de exportación no contiene el alcemamiento de pesado ya que el consignee lo retiro a tiempo.",
-				importOrder.getServices().stream().anyMatch(ExcessStorage.class::isInstance));
-		assertFalse("La orden de exportación no contiene el servicio electrico ya que la orden posee una carga Dry.",
-				importOrder.getServices().stream().anyMatch(Electricity.class::isInstance));
-	}
+	void testTruckLeaveWithLoad_NoExcessStorageServiceAfterTimelyCargoRemoval() throws Exception {
 
-	@Test
-	void truckLeaveWithLoad_ShouldIncludeExcessStorageWithCorrectPrice_WhenConsigneeDoesNotRetrieveOnTime()
-			throws Exception {
 		// Set Up
-		buenosAires.setExcessStorageCost(2000.00);
-		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 3, 06, 00);
-		// 03-11-23 | 06:00 Hs.
-		// Exercise
-		buenosAires.truckLeaveWithLoad(importOrder, alberto, volvo, arrivalDate);
-		// Assert
-		assertTrue(
-				"La orden de exportación contiene el alcemamiento de pesado ya que el consignee no lo retiro a tiempo.",
-				importOrder.getServices().stream().anyMatch(ExcessStorage.class::isInstance));
-		assertEquals(2000.00, getExcessStorageServiceFromImportOrder().getPrice(), 0);
-		assertEquals(20000.00, getExcessStorageServiceFromImportOrder().getPriceFor(dry), 0);
-		assertFalse("La orden de exportación no contiene el servicio electrico ya que la orden posee una carga Dry.",
-				importOrder.getServices().stream().anyMatch(Electricity.class::isInstance));
-
-	}
-
-	@Test
-	void testTruckLeaveWithLoad_ElectricityServiceAndExcessStorage_RemovedOnTime() throws Exception {
-		// Set Up
-		buenosAires.setCostPerKw(1000.00);
-		when(importOrder.getLoad()).thenReturn(reefer);
 		buenosAires.hireImportService(importOrder);
-		buenosAires.notifyShipArrival(bismarck);
-		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 01, 17, 00);
-		// 01-11-23 | 17:00 Hs.
+		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 01, 18, 00); // 01-11-23 | 18:00 Hs.
 
 		// Exercise
 		buenosAires.truckLeaveWithLoad(importOrder, alberto, volvo, arrivalDate);
 
 		// Assert
-		assertFalse(
-				"La orden de importación no contiene el servicio de almacenamiento excesivo ya que el consignee lo retiró a tiempo.",
+		assertTrue("The import order does not contain excess storage service as the cargo was removed on time.",
+				importOrder.getServices().stream().noneMatch(ExcessStorage.class::isInstance));
+	}
+
+	@Test
+	void truckLeaveWithLoad_ExcessStorageServiceDueToDelayedCargoRemoval() throws Exception {
+
+		// Set Up
+		buenosAires.setExcessStorageCost(1000.00);
+		buenosAires.hireImportService(importOrder);
+		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 3, 06, 00); // 03-11-23 | 06:00 Hs.
+
+		// Exercise
+		buenosAires.truckLeaveWithLoad(importOrder, alberto, volvo, arrivalDate);
+
+		// Assert
+		assertTrue("The import order contains excess storage service due to delayed cargo removal.",
 				importOrder.getServices().stream().anyMatch(ExcessStorage.class::isInstance));
 
-		assertTrue("La orden de importación contiene el servicio eléctrico ya que la orden posee una carga Reefer.",
+		ExcessStorage excessStorageService = getExcessStorageServiceFromImportOrder();
+
+		assertEquals("The price of the excess storage service is the same as set by the managed terminal.", 1000.00,
+				excessStorageService.getPrice(), 0);
+
+		assertEquals("The total price of the excess storage service.", 10000.00, excessStorageService.getPriceFor(dry),
+				0);
+	}
+
+	@Test
+	void truckLeaveWithLoad_ElectricityServiceForReeferCargoOnTimeRemoval() throws Exception {
+		// Set Up
+		buenosAires.setExcessStorageCost(1000.00);
+		buenosAires.setCostPerKw(300.00);
+		buenosAires.hireImportService(importOrder);
+		when(importOrder.getLoad()).thenReturn(reefer);
+		buenosAires.notifyShipArrival(bismarck);
+		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 01, 17, 00); // 01-11-23 | 17:00 Hs.
+
+		// Exercise
+		buenosAires.truckLeaveWithLoad(importOrder, alberto, volvo, arrivalDate);
+
+		// Assert
+		assertTrue("The import order does not contain excess storage service as the cargo was removed on time.",
+				importOrder.getServices().stream().noneMatch(ExcessStorage.class::isInstance));
+
+		assertTrue("The import order contains electricity service as it has a Reefer cargo.",
 				importOrder.getServices().stream().anyMatch(Electricity.class::isInstance));
 
-		assertEquals("La fecha de inicio del servicio eléctrico es igual a la de llegada del buque",
-				LocalDateTime.of(2023, Month.NOVEMBER, 01, 14, 00),
-				getElectricityServiceFromImportOrder().getStartConnection());
+		Electricity electricityService = getElectricityServiceFromImportOrder();
 
-		assertEquals("La fecha de fin del servicio eléctrico es igual a la de llegada para retirar la carga",
-				LocalDateTime.of(2023, Month.NOVEMBER, 01, 17, 00),
-				getElectricityServiceFromImportOrder().getEndConnection());
+		assertEquals("The start date of the electricity service is equal to the ship's arrival date.",
+				LocalDateTime.of(2023, Month.NOVEMBER, 01, 14, 00), electricityService.getStartConnection());
 
-		assertEquals("El precio total del servicio eléctrico por la estadía en la terminal gestionada", 150000.00,
-				getElectricityServiceFromImportOrder().getPriceFor(reefer), 0);
+		assertEquals("The end date of the electricity service is equal to the truck's arrival date for cargo removal.",
+				LocalDateTime.of(2023, Month.NOVEMBER, 01, 17, 00), electricityService.getEndConnection());
+
+		assertEquals("The total price of the electricity service for the stay at the managed terminal.", 45000.00,
+				electricityService.getPriceFor(reefer), 0);
 	}
 
 	private Electricity getElectricityServiceFromImportOrder() {

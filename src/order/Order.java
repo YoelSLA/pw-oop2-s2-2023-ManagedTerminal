@@ -3,8 +3,6 @@ package order;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import bill.Bill;
 import client.Client;
 import driver.Driver;
 import load.Load;
@@ -12,37 +10,44 @@ import service.Service;
 import terminal.Terminal;
 import trip.Trip;
 import truck.Truck;
-import turn.Turn;
 
 public abstract class Order {
-
-	private Bill bill;
+	
 	private Client client;
-	private Terminal destiny;
+	private Trip trip;
 	private Load load;
 	private Terminal origin;
-	private Trip trip;
-	private Turn turn;
-
+	private Terminal destiny;
+	private Driver driver;
+	private Truck truck;
 	private List<Service> services;
-
-	public Order(Load load, Trip trip, Terminal origin, Terminal destiny, Client client, Driver driver, Truck truck) {
+	
+	
+	public Order(Client client, Trip trip, Load load, Terminal origin, Terminal destiny, Driver driver, Truck truck) {
+		this.client = client;
 		this.trip = trip;
 		this.load = load;
 		this.origin = origin;
 		this.destiny = destiny;
-		this.client = client;
-		this.bill = new Bill(this);
+		this.driver = driver;
+		this.truck = truck;
 		this.services = new ArrayList<Service>();
-		this.turn = new Turn(driver, truck);
-	}
-
-	public Bill getBill() {
-		return bill;
 	}
 
 	public Client getClient() {
 		return client;
+	}
+	
+	public Trip getTrip() {
+		return trip;
+	}
+	
+	public Load getLoad() {
+		return load;
+	}
+	
+	public Terminal getOrigin() {
+		return origin;
 	}
 
 	public Terminal getDestiny() {
@@ -50,51 +55,33 @@ public abstract class Order {
 	}
 
 	public Driver getDriver() {
-		return turn.getDriver();
-	}
-
-	public Load getLoad() {
-		return load;
-	}
-
-	public Terminal getOrigin() {
-		return origin;
-	}
-
-	public Trip getTrip() {
-		return trip;
+		return driver;
 	}
 
 	public Truck getTruck() {
-		return turn.getTruck();
-	}
-
-	public Turn getTurn() {
-		return turn;
+		return truck;
 	}
 
 	public List<Service> getServices() {
 		return services;
 	}
 
-	public void setTurn(Turn turn) {
-		this.turn = turn;
-	}
-
 	public LocalDateTime arrivalDate() {
-		return trip.calculateEstimatedArrivalDateToTerminal(destiny);
+		return getTrip().calculateEstimatedArrivalDateToTerminal(getOrigin());
 	}
-
-	public Double getPriceOfServices() {
+	
+	public LocalDateTime departureDate() {
+		return getTrip().calculateEstimatedArrivalDateToTerminal(getDestiny());
+	}
+	
+	public Double priceOfServices() {
 		return services.stream().mapToDouble(s -> s.getPrice()).sum();
 	}
-
-	public Double getPriceOfTrip() {
-		return 0.0;
-	}
-
+	
 	public void registerService(Service service) {
 		services.add(service);
 	}
+	
+	public abstract Double travelCost();
 
 }

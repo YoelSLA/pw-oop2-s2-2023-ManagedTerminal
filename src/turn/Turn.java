@@ -1,36 +1,24 @@
 package turn;
 
 import java.time.LocalDateTime;
-
-import driver.Driver;
-import truck.Truck;
+import order.Order;
 
 public class Turn {
 
-	private Driver driver;
-	private Truck truck;
 	private LocalDateTime date;
+	private Order order;
 
-	public Turn(Driver driver, Truck truck) {
-		this.driver = driver;
-		this.truck = truck;
-	}
-
-	public Driver getDriver() {
-		return driver;
-	}
-
-	public Truck getTruck() {
-		return truck;
+	public Turn(LocalDateTime date, Order order) {
+		this.date = date;
+		this.order = order;
 	}
 
 	public LocalDateTime getDate() {
 		return date;
 	}
-
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-
+	
+	public Order getOrder() {
+		return order;
 	}
 
 }

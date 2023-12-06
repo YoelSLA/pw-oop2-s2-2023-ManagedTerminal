@@ -28,7 +28,6 @@ import stretch.Stretch;
 import trip.Trip;
 import truck.Truck;
 import truckTransportCompany.TruckTransportCompany;
-import turn.Turn;
 
 class ShippingCommunication extends ManagedTerminalTest {
 
@@ -53,9 +52,6 @@ class ShippingCommunication extends ManagedTerminalTest {
 	// ------------------------------------------------------------
 	private Shipper ivan;
 	// ------------------------------------------------------------
-	private Turn turnExportOrder;
-	private Turn turnImportOrder;
-	// ------------------------------------------------------------
 	private Driver alberto;
 	// ------------------------------------------------------------
 	private Truck volvo;
@@ -73,12 +69,10 @@ class ShippingCommunication extends ManagedTerminalTest {
 	void setUp() throws Exception {
 		super.setUp();
 		// -------------------------------------------------------------------------------------------
-		// TERMINAL
 		montevideo = mock(Terminal.class);
 		valparaiso = mock(Terminal.class);
 		lima = mock(Terminal.class);
 		// ------------------------------------------------------------------------------------------
-		// STRETCH
 		montevideoBuenosAires = mock(Stretch.class);
 		when(montevideoBuenosAires.getOrigin()).thenReturn(montevideo);
 		when(montevideoBuenosAires.getDestiny()).thenReturn(buenosAires);
@@ -103,34 +97,30 @@ class ShippingCommunication extends ManagedTerminalTest {
 		when(limaMontevideo.getPrice()).thenReturn(1.497);
 		when(limaMontevideo.getTime()).thenReturn(Duration.ofHours(26));
 		// ------------------------------------------------------------------------------------------
-		// MARITIME CIRCUIT
 		maritimeCircuitOne = mock(MaritimeCircuit.class);
 		when(maritimeCircuitOne.getStretches())
 				.thenReturn(List.of(montevideoBuenosAires, buenosAiresValparaiso, valparaisoLima, limaMontevideo));
 		when(maritimeCircuitOne.originTerminal()).thenReturn(montevideo);
 		// ------------------------------------------------------------------------------------------
-		// TRIP
 		tripOne = mock(Trip.class);
-		when(tripOne.getStartDate()).thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 12, 12, 0));
+		when(tripOne.getStartDate()).thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 01, 10, 00));
+		// 01-11-23 | 10:00 Hs.
 		when(tripOne.getMaritimeCircuit()).thenReturn(maritimeCircuitOne);
 		when(tripOne.getShip()).thenReturn(bismarck);
 		when(tripOne.calculateEstimatedArrivalDateToTerminal(buenosAires))
 				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 01, 14, 00));
+		// 01-11-23 | 14:00 Hs.
 		// ------------------------------------------------------------------------------------------
-		// SHIP
 		bismarck = mock(Ship.class);
 		when(bismarck.getTrip()).thenReturn(tripOne);
 		// ------------------------------------------------------------------------------------------
-		// SHIPPING LINE
 		apmMaersk = mock(ShippingLine.class);
 		when(apmMaersk.getShips()).thenReturn(List.of(bismarck));
 		when(apmMaersk.getMaritimeCircuits()).thenReturn(List.of(maritimeCircuitOne));
 		when(apmMaersk.getTrips()).thenReturn(List.of(tripOne));
 		// ------------------------------------------------------------------------------------------
-		// CONSIGNEE
 		yoel = mock(Consignee.class);
 		// ------------------------------------------------------------------------------------------
-		// SHIPPER
 		ivan = mock(Shipper.class);
 		// ------------------------------------------------------------------------------------------
 		alberto = mock(Driver.class);
@@ -141,28 +131,12 @@ class ShippingCommunication extends ManagedTerminalTest {
 		when(transportVesprini.getDrivers()).thenReturn(List.of(alberto));
 		when(transportVesprini.getTrucks()).thenReturn(List.of(volvo));
 		// ------------------------------------------------------------------------------------------
-		// TURN
-		turnExportOrder = mock(Turn.class);
-		when(turnExportOrder.getDriver()).thenReturn(alberto);
-		when(turnExportOrder.getTruck()).thenReturn(volvo);
-
-		turnImportOrder = mock(Turn.class);
-		when(turnImportOrder.getDriver()).thenReturn(alberto);
-		when(turnImportOrder.getTruck()).thenReturn(volvo);
-		// ------------------------------------------------------------------------------------------
-		// LOAD
 		dry = mock(Dry.class);
-		when(dry.getName()).thenReturn("Dry");
-
 		reefer = mock(Reefer.class);
-		when(reefer.getName()).thenReturn("Reefer");
 		// ------------------------------------------------------------------------------------------
-		// EXPORT ORDER
-		exportOrder = spy(new ExportOrder(dry, tripOne, lima, ivan, alberto, volvo));
+		exportOrder = spy(new ExportOrder(ivan, tripOne, dry, lima, alberto, volvo));
 		// ------------------------------------------------------------------------------------------
-		// IMPORT ORDER
-		importOrder = spy(new ImportOrder(dry, tripOne, montevideo, buenosAires, yoel, alberto, volvo));
-		// ------------------------------------------------------------------------------------------
+		importOrder = spy(new ImportOrder(yoel, tripOne, dry, montevideo, buenosAires, alberto, volvo));
 
 	}
 
@@ -175,14 +149,11 @@ class ShippingCommunication extends ManagedTerminalTest {
 		buenosAires.hireImportService(importOrder);
 		buenosAires.notifyShipInminentArrival(bismarck);
 		// Verify
-		// SHIP
 		verify(bismarck, times(2)).getTrip();
-		// ORDER
 		verify(exportOrder, times(2)).getTrip();
 		verify(exportOrder, times(3)).getClient();
 		verify(importOrder, times(2)).getTrip();
 		verify(importOrder, times(3)).getClient();
-		// CLIENT
 		verify(yoel, times(1)).sendMail(buenosAires, yoel, "Ship is near");
 		verify(ivan, times(1)).sendMail(buenosAires, ivan, "Ship is near");
 	}
@@ -220,12 +191,8 @@ class ShippingCommunication extends ManagedTerminalTest {
 		buenosAires.hireImportService(importOrder);
 		buenosAires.notifyShipDeparture(bismarck);
 		// Verify
-		verify(exportOrder, times(4)).getClient();
-		verify(exportOrder, times(1)).getBill();
-
-		// SHIPPER
-		verify(ivan, times(1)).sendMail(buenosAires, ivan, exportOrder.getBill());
-
+		verify(exportOrder, times(5)).getClient();
+		verify(ivan, times(1)).sendMail(buenosAires, ivan, exportOrder.getTrip().calculateEstimatedArrivalDateToTerminal(buenosAires));
 	}
 
 }

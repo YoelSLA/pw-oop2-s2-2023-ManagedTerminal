@@ -26,19 +26,19 @@ import search.selection.selectionDate.ArrivalDate;
 import search.selection.selectionDate.DepartureDate;
 import service.Washed;
 import trip.Trip;
-import turn.Turn;
 
 class ServiceForClientsTest extends ManagedTerminalTest {
 
 	private Dry dry;
 	// ------------------------------------------------------------
-	private Turn turnImportOrder;
-	// ------------------------------------------------------------
 	private ExportOrder exportOrder;
 	// ------------------------------------------------------------
 	private ArrivalDate arrivalDate;
+	// ------------------------------------------------------------
 	private DestinationTerminal destinationTerminal;
+	// ------------------------------------------------------------
 	private DepartureDate departureDate;
+	// ------------------------------------------------------------
 	private And and;
 
 	@BeforeEach
@@ -47,13 +47,12 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 		// ------------------------------------------------------------------------------------------
 		dry = mock(Dry.class);
 		// ------------------------------------------------------------------------------------------
-		turnImportOrder = mock(Turn.class);
-		when(turnImportOrder.getDriver()).thenReturn(null);
-		// ------------------------------------------------------------------------------------------
-		exportOrder = spy(new ExportOrder(dry, tripOne, lima, ivan, alberto, volvo));
+		exportOrder = spy(new ExportOrder(ivan, tripOne, dry, lima, alberto, volvo));
 		// ------------------------------------------------------------------------------------------
 		arrivalDate = new ArrivalDate(Criteria.GREATHER_THAN, LocalDate.of(2023, Month.NOVEMBER, 10), lima); // 10-11-23
+		// ------------------------------------------------------------------------------------------
 		departureDate = new DepartureDate(Criteria.EQUALS, LocalDate.of(2023, Month.NOVEMBER, 12), buenosAires); // 12-11-23
+		// ------------------------------------------------------------------------------------------
 		destinationTerminal = new DestinationTerminal(guayaquil);
 		// ------------------------------------------------------------------------------------------
 		and = new And(destinationTerminal, departureDate);
@@ -61,79 +60,43 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 		buenosAires.registerTruckTransportCompany(transportVesprini);
 	}
 
-	/**
-	 * Prueba la funcionalidad de búsqueda de viajes desde Buenos Aires utilizando
-	 * un criterio específico.
-	 *
-	 * En este caso, se registran compañías navieras, se configuran viajes simulados
-	 * y se realiza una búsqueda utilizando un criterio compuesto. El objetivo es
-	 * verificar que la búsqueda devuelva los viajes esperados según el criterio.
-	 *
-	 * @throws Exception Si hay problemas durante la ejecución de la prueba.
-	 */
 	@Test
 	void searchTrips_FromBuenosAiresWithSpecificCriteria_ReturnsExpectedTrips() throws Exception {
+		
 		// Set Up
 		configureSimulatedTrips();
-		// Criterio de búsqueda compuesto (AND)
+		
+		// Criterio de busqueda compuesto (AND)
 		And andTwo = new And(destinationTerminal, departureDate);
 		and.setLeftClause(arrivalDate);
 		and.setRightClause(andTwo);
+		
 		// Assert
 		assertEquals(List.of(tripOne), buenosAires.searchTrips(andTwo));
 	}
 
-	/**
-	 * Prueba que el método bestCircuitFor devuelve el circuito marítimo óptimo
-	 * desde Buenos Aires hasta Lima.
-	 *
-	 * En esta prueba, se registran compañías navieras, se configuran viajes
-	 * simulados y se verifica que el método bestCircuitFor devuelva el circuito
-	 * marítimo esperado entre Buenos Aires y Lima.
-	 *
-	 * @throws Exception Si hay problemas durante la ejecución de la prueba.
-	 */
 	@Test
 	void bestCircuitFor_FromBuenosAiresToLima_ReturnsOptimalMaritimeCircuit() throws Exception {
+		
 		// Set Up
 		configureSimulatedTrips();
-		// Assert
 		when(maritimeCircuitOne.hasATerminal(lima)).thenReturn(true);
-
+		
+		// Assert
 		assertEquals(maritimeCircuitOne, buenosAires.bestCircuitFor(lima));
-	}
-
-	private void configureSimulatedTrips() throws Exception {
-		buenosAires.registerShippingLine(apmMaersk);
-		// Se configura el primer viaje.
-		when(tripOne.hasTerminal(buenosAires)).thenReturn(true);
-		when(tripOne.hasTerminal(lima)).thenReturn(true);
-		when(tripOne.hasTerminal(guayaquil)).thenReturn(true);
-		when(tripOne.calculateEstimatedArrivalDateToTerminal(buenosAires))
-				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 12, 12, 00)); // 12-11-23 | 12:00 Hs.
-		when(tripOne.calculateEstimatedArrivalDateToTerminal(lima))
-				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 13, 10, 00)); // 13-11-23 | 10:00 Hs.
-		when(tripOne.calculateEstimatedArrivalDateToTerminal(guayaquil))
-				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 13, 18, 00)); // 13-11-23 | 18:00 Hs.
-
-		// Se configura el segundo viaje.
-		when(tripTwo.hasTerminal(buenosAires)).thenReturn(true);
-		when(tripTwo.hasTerminal(lima)).thenReturn(true);
-		when(tripTwo.hasTerminal(guayaquil)).thenReturn(false);
-		when(tripTwo.calculateEstimatedArrivalDateToTerminal(buenosAires))
-				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 01, 14, 00)); // 01-11-23 | 14:00 Hs.
-		when(tripTwo.calculateEstimatedArrivalDateToTerminal(lima))
-				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 02, 10, 00)); // 02-11-23 | 10:00 Hs.
 	}
 
 	@Test
 	void testHireWashedService_AddsServiceToExportOrder() throws Exception {
+		
 		// Set Up
 		buenosAires.hireExportService(exportOrder);
+		
 		// Excercise
 		buenosAires.hireWashedServiceFor(dry, ivan);
+		
 		// Assert
-		assertTrue("La orden de exportación contiene el servicio de lavado.",
+		assertTrue("La orden de exportaciï¿½n contiene el servicio de lavado.",
 				exportOrder.getServices().stream().anyMatch(Washed.class::isInstance));
 
 	}
@@ -223,6 +186,29 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 		assertThrows(RuntimeException.class, () -> {
 			buenosAires.timeItTakesToGetTo(apmMaersk, buenosAires);
 		}, "Shipping Line not found.");
+	}
+	
+	private void configureSimulatedTrips() throws Exception {
+		
+		buenosAires.registerShippingLine(apmMaersk);
+		
+		when(tripOne.hasTerminal(buenosAires)).thenReturn(true);
+		when(tripOne.hasTerminal(lima)).thenReturn(true);
+		when(tripOne.hasTerminal(guayaquil)).thenReturn(true);
+		when(tripOne.calculateEstimatedArrivalDateToTerminal(buenosAires))
+				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 12, 12, 00)); // 12-11-23 | 12:00 Hs.
+		when(tripOne.calculateEstimatedArrivalDateToTerminal(lima))
+				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 13, 10, 00)); // 13-11-23 | 10:00 Hs.
+		when(tripOne.calculateEstimatedArrivalDateToTerminal(guayaquil))
+				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 13, 18, 00)); // 13-11-23 | 18:00 Hs.
+
+		when(tripTwo.hasTerminal(buenosAires)).thenReturn(true);
+		when(tripTwo.hasTerminal(lima)).thenReturn(true);
+		when(tripTwo.hasTerminal(guayaquil)).thenReturn(false);
+		when(tripTwo.calculateEstimatedArrivalDateToTerminal(buenosAires))
+				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 01, 14, 00)); // 01-11-23 | 14:00 Hs.
+		when(tripTwo.calculateEstimatedArrivalDateToTerminal(lima))
+				.thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 02, 10, 00)); // 02-11-23 | 10:00 Hs.
 	}
 
 }

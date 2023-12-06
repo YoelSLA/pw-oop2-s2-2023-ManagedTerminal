@@ -15,8 +15,8 @@ public abstract class OrderValidation {
 	}
 
 	public static void validateOrderInTerminal(ManagedTerminal managedTerminal, Order order) {
-		validateDriverInTerminal(managedTerminal, order.getTurn().getDriver());
-		validateTruckInTerminal(managedTerminal, order.getTurn().getTruck());
+		validateDriverInTerminal(managedTerminal, order.getDriver());
+		validateTruckInTerminal(managedTerminal, order.getTruck());
 
 	}
 
@@ -38,13 +38,13 @@ public abstract class OrderValidation {
 	}
 
 	private static void validateDriverInOrder(Order order, Driver driver) {
-		if (!order.getTurn().getDriver().equals(driver)) {
+		if (!order.getDriver().equals(driver)) {
 			throw new RuntimeException("Driver does not match the order");
 		}
 	}
 
 	private static void validateTruckInOrder(Order order, Truck truck) {
-		if (!order.getTurn().getTruck().equals(truck)) {
+		if (!order.getTruck().equals(truck)) {
 			throw new RuntimeException("Truck does not match the order");
 		}
 	}

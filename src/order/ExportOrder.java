@@ -9,8 +9,13 @@ import truck.Truck;
 
 public class ExportOrder extends Order {
 
-	public ExportOrder(Load load, Trip trip, Terminal destiny, Shipper shipper, Driver driver, Truck truck) {
-		super(load, trip, trip.getOriginTerminal(), destiny, shipper, driver, truck);
+	public ExportOrder(Shipper shipper, Trip trip, Load load, Terminal destiny, Driver driver, Truck truck) {
+		super(shipper, trip, load, trip.getOriginTerminal(), destiny, driver, truck);
+	}
+	
+	@Override
+	public Double travelCost() {
+		return 0.0;
 	}
 
 }

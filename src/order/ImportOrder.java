@@ -9,13 +9,13 @@ import truck.Truck;
 
 public class ImportOrder extends Order {
 
-	public ImportOrder(Load load, Trip trip, Terminal origin, Terminal destiny, Consignee consignee, Driver driver,
+	public ImportOrder(Consignee consignee, Trip trip, Load load, Terminal origin, Terminal destiny, Driver driver,
 			Truck truck) {
-		super(load, trip, origin, destiny, consignee, driver, truck);
+		super(consignee, trip, load, origin, destiny, driver, truck);
 	}
 
 	@Override
-	public Double getPriceOfTrip() {
+	public Double travelCost() {
 		return getTrip().getMaritimeCircuit().getPriceBetween(getOrigin(), getDestiny());
 	}
 

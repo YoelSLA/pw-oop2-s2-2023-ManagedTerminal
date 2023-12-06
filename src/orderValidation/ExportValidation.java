@@ -13,11 +13,11 @@ public final class ExportValidation extends OrderValidation {
 	public static void runFullOrderValidations(ManagedTerminal managedTerminal, ExportOrder exportOrder, Driver driver,
 			Truck truck, LocalDateTime dateToArrival) {
 		runFullOrderValidations(managedTerminal, exportOrder, driver, truck);
-		validateShiftTiming(exportOrder, dateToArrival);
+		validateShiftTiming(managedTerminal, exportOrder, dateToArrival);
 	}
 
-	private static void validateShiftTiming(ExportOrder exportOrder, LocalDateTime arrivalDate) {
-		Long hours = Duration.between(arrivalDate, exportOrder.getTurn().getDate()).toHours();
+	private static void validateShiftTiming(ManagedTerminal managedTerminal, ExportOrder exportOrder, LocalDateTime arrivalDate) {		
+		Long hours = Duration.between(arrivalDate, managedTerminal.findTurnByOrder(exportOrder).getDate()).toHours();
 
 		if (hours.intValue() > 3) {
 			throw new RuntimeException("Shift differs by more than 3 hours.");

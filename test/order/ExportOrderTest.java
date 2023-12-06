@@ -13,7 +13,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import bill.Bill;
 import client.Shipper;
 import driver.Driver;
 import load.Dry;
@@ -24,7 +23,6 @@ import terminal.ManagedTerminal;
 import terminal.Terminal;
 import trip.Trip;
 import truck.Truck;
-import turn.Turn;
 
 class ExportOrderTest {
 
@@ -94,7 +92,7 @@ class ExportOrderTest {
 		when(maritimeCircuitOne.originTerminal()).thenReturn(buenosAires);
 		// -------------------------------------------------------------------------------------------
 		tripOne = mock(Trip.class);
-		when(tripOne.getStartDate()).thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 12, 12, 0));
+		when(tripOne.getStartDate()).thenReturn(LocalDateTime.of(2023, Month.NOVEMBER, 12, 12, 00)); 
 		// 12-11-23 | 12:00 Hs.
 		when(tripOne.getMaritimeCircuit()).thenReturn(maritimeCircuitOne);
 		when(tripOne.getOriginTerminal()).thenReturn(buenosAires);
@@ -110,57 +108,46 @@ class ExportOrderTest {
 		// -------------------------------------------------------------------------------------------
 		dry = mock(Dry.class);
 		// -------------------------------------------------------------------------------------------
-		exportOrder = new ExportOrder(dry, tripOne, lima, ivan, alberto, volvo);
+		exportOrder = new ExportOrder(ivan, tripOne, dry, lima, alberto, volvo);
+	}
+	
+	@Test
+	void testGetClient_ReturnsCorrectClient() {
+	    assertEquals(ivan, exportOrder.getClient());
 	}
 
 	@Test
-	void x() {
-		assertEquals(Bill.class, exportOrder.getBill().getClass());
+	void testGetTrip_ReturnsCorrectTrip() {
+	    assertEquals(tripOne, exportOrder.getTrip());
 	}
 
 	@Test
-	void x1() {
-		assertEquals(ivan, exportOrder.getClient());
+	void testGetLoad_ReturnsCorrectLoad() {
+	    assertEquals(dry, exportOrder.getLoad());
 	}
 
 	@Test
-	void x2() {
-		assertEquals(lima, exportOrder.getDestiny());
+	void testGetOrigin_ReturnsCorrectOrigin() {
+	    assertEquals(buenosAires, exportOrder.getOrigin());
 	}
 
 	@Test
-	void x3() {
-		assertEquals(alberto, exportOrder.getDriver());
+	void testGetDestiny_ReturnsCorrectDestiny() {
+	    assertEquals(lima, exportOrder.getDestiny());
 	}
 
 	@Test
-	void x4() {
-		assertEquals(dry, exportOrder.getLoad());
+	void testGetDriver_ReturnsCorrectDriver() {
+	    assertEquals(alberto, exportOrder.getDriver());
 	}
 
 	@Test
-	void x5() {
-		assertEquals(buenosAires, exportOrder.getOrigin());
+	void testGetTruck_ReturnsCorrectTruck() {
+	    assertEquals(volvo, exportOrder.getTruck());
 	}
 
 	@Test
-	void x6() {
-		assertEquals(tripOne, exportOrder.getTrip());
+	void testGetServices_ReturnsEmptyServicesListInitially() {
+	    assertTrue(exportOrder.getServices().isEmpty());
 	}
-
-	@Test
-	void x7() {
-		assertEquals(volvo, exportOrder.getTruck());
-	}
-
-	@Test
-	void x8() {
-		assertEquals(Turn.class, exportOrder.getTurn().getClass());
-	}
-
-	@Test
-	void x9() {
-		assertTrue(exportOrder.getServices().isEmpty());
-	}
-
 }
