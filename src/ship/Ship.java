@@ -140,8 +140,8 @@ public class Ship {
 	 * Setea el status para poder pasar a la fase Working
 	 */
 	public void startWorking() {
-		// TODO Auto-generated method stub
-		phase.setStatus(true);
+		if (!isOnTrip) phase.changePhase(this);
+
 	}
 
 	/**
@@ -164,6 +164,7 @@ public class Ship {
 	}
 
 	public void notifyArrival() {
+		isOnTrip = false;
 		terminal.notifyShipArrival(this);
 	}
 

@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import maritimeCircuit.MaritimeCircuit;
 import phase.Arrived;
+import phase.Departing;
 import phase.Inbound;
 import phase.Outbound;
 import phase.Working;
@@ -101,63 +102,187 @@ class ShipTest {
 		
 		@Test
 		void getIsOnTrip() {
+			// Exercise
 			bismarck.startTrip();	
+			
+			// Assert
 			assertTrue(bismarck.getIsOnTrip());
 		}
 		
 		@Test
 		void testPhaseChange() {
-			bismarck.startTrip();	
+			// Exercise
+			bismarck.startTrip();
+			
+			// Assert
 			assertEquals(Outbound.class, bismarck.getPhase().getClass());
 		}
 		
 		@Test
 		void testNextTerminal() {
+			// Set Up
 			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
+			
+			// Exercise
 			bismarck.startTrip();	
+			
+			// Assert
 			assertEquals(buenosAires, bismarck.getTerminal());
 		}
 		
 		@Test
 		void testSetPositionSame() {
+			// Set Up
 			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
+			
+			// Exercise
 			bismarck.startTrip();	
 			bismarck.setPosition(new Position(-34.90367464769443, -50.21226754075775));	
+			
+			// Assert
 			assertEquals(Outbound.class, bismarck.getPhase().getClass());
 		}
 		
 		@Test
 		void testSetPositionNextPhase() {
+			// Set Up
 			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
+			
+			// Exercise
 			bismarck.startTrip();	
-			bismarck.setPosition(new Position(-34.90367464769443, -58.21226754075775));	
+			bismarck.setPosition(new Position(-34.90367464769443, -58.21226754075775));	// cambio a Inbound
+			
+			// Assert
 			assertEquals(Inbound.class, bismarck.getPhase().getClass());
+			
+			// Verify
+			verify(buenosAires, times(1)).notifyShipInminentArrival(bismarck);
 		}
 		
 		@Test
-		void testEqualPosition() {
+		void testShipArrivedToTerminal() {
+			// Set Up
+			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
+			bismarck.startTrip();	
+			bismarck.setPosition(new Position(-34.90367464769443, -58.21226754075775));	// cambio a Inbound
+			
+			// Exercise
+			bismarck.setPosition(new Position(-34.5795823299825, -58.373877081937));	//cambio a Arrived
+			
+			// Assert
+			assertEquals(Arrived.class, bismarck.getPhase().getClass());
+			
+			// Verify
+			verify(buenosAires, times(1)).notifyShipArrival(bismarck);
+
+		}
+		
+		@Test
+		void testShipArrivedToTerminalFail() {
+			// Set Up
+			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
+			bismarck.startTrip();	
+			bismarck.setPosition(new Position(-34.90367464769443, -58.21226754075775));	// cambio a Inbound
+			
+			// Exercise
+			bismarck.setPosition(new Position(-34.90367464769443, -58.373877081937));	// intento cambiar a Arrived, pero todavia no llego el buque a la terminal
+			
+			// Assert
+			assertEquals(Inbound.class, bismarck.getPhase().getClass());
+			
+			// Verify
+			verify(buenosAires, times(0)).notifyShipArrival(bismarck);
+
+		}
+		
+		
+		@Test
+		void testStartWorking() {	
+			// Set Up
 			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
 			bismarck.startTrip();	
 			bismarck.setPosition(new Position(-34.90367464769443, -58.21226754075775));	// cambio a Inbound
 			bismarck.setPosition(new Position(-34.5795823299825, -58.373877081937));	//cambio a Arrived
-			assertEquals(Arrived.class, bismarck.getPhase().getClass());
-			verify(buenosAires, times(1)).notifyShipInminentArrival(bismarck);
+			
+			// Exercise
+			bismarck.startWorking();			
+			
+			// Assert
+			assertEquals(Working.class, bismarck.getPhase().getClass());
 		}
 		
-//		 comento este porque esta fallando: no esta invocando a managedTerminal.notifyShipArrival
-//		@Test
-//		void testStartWorking() {	
-//			//set Up
-//			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
-//			bismarck.startTrip();	
-//			bismarck.setPosition(new Position(-34.90367464769443, -58.21226754075775));	// cambio a Inbound
-//			bismarck.setPosition(new Position(-34.5795823299825, -58.373877081937));	//cambio a Arrived
-//			//excercise
-//			verify(buenosAires, times(1)).notifyShipArrival(bismarck);
-//			bismarck.startWorking();			
-//			//assert
-//			assertEquals(Working.class, bismarck.getPhase().getClass());
-//		}
+		@Test
+		void testStartWorkingFail() {	
+			// Set Up
+			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
+			bismarck.startTrip();	
+			bismarck.setPosition(new Position(-34.90367464769443, -58.21226754075775));	// cambio a Inbound
+			bismarck.setPosition(new Position(-34.90367464769443, -58.373877081937));	// intento cambiar a Arrived, pero todavia no llego el buque a la terminal
+			
+			// Exercise
+			bismarck.startWorking();			
+			
+			// Assert
+			assertEquals(Inbound.class, bismarck.getPhase().getClass());
+		}
+		
+		@Test
+		void testDepart() {	
+			// Set Up
+			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
+			bismarck.startTrip();	
+			bismarck.setPosition(new Position(-34.90367464769443, -58.21226754075775));	// cambio a Inbound
+			bismarck.setPosition(new Position(-34.5795823299825, -58.373877081937));	//cambio a Arrived
+			bismarck.startWorking(); // cambio a Working
+			
+			// Exercise
+			bismarck.depart(); // cambio a Departing
+			
+			// Assert
+			assertEquals(Departing.class, bismarck.getPhase().getClass());
+		}
+		
+		@Test
+		void testDepartToOutbound() {	
+			// Set Up
+			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
+			when(tripOne.getNextTerminal(buenosAires)).thenReturn(valparaiso);
+			bismarck.startTrip();	
+			bismarck.setPosition(new Position(-34.90367464769443, -58.21226754075775));	// cambio a Inbound
+			bismarck.setPosition(new Position(-34.5795823299825, -58.373877081937)); // cambio a Arrived
+			bismarck.startWorking(); // cambio a Working
+			bismarck.depart(); // cambio a Departing
+			
+			// Exercise
+			bismarck.setPosition(new Position(-35.5795823299825, -58.373877081937)); // cambio a Outbound nuevamente
+			
+			// Assert
+			assertEquals(valparaiso, bismarck.getTerminal());
+			assertEquals(Outbound.class, bismarck.getPhase().getClass());
+			
+			// Verify
+			verify(buenosAires, times(1)).notifyShipDeparture(bismarck);
+		}
+		
+		@Test
+		void testDepartToOutboundFail() {	
+			// Set Up
+			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
+			when(tripOne.getNextTerminal(buenosAires)).thenReturn(valparaiso);
+			bismarck.startTrip();	
+			bismarck.setPosition(new Position(-34.90367464769443, -58.21226754075775));	// cambio a Inbound
+			bismarck.setPosition(new Position(-34.5795823299825, -58.373877081937)); // cambio a Arrived
+			bismarck.startWorking(); // cambio a Working
+			bismarck.depart(); // cambio a Departing
+			
+			// Exercise
+			bismarck.setPosition(new Position(-34.5795823299825, -58.373877081937)); // intento cambiar a Outbound nuevamente, pero sigue en la misma posicion que la terminal
+			
+			// Assert
+			assertEquals(Departing.class, bismarck.getPhase().getClass());
+
+		}
+		
 		
 		@Test
 		void getShipName() {	
@@ -175,27 +300,21 @@ class ShipTest {
 		}
 		
 		@Test
-		void setTrip() throws Exception {
-			when(tripOne.getNextTerminal(montevideo)).thenReturn(buenosAires);
+		void setTripWithException() throws Exception {
+			// Exercise
 			bismarck.startTrip();
-			try {
-				bismarck.setTrip(tripTwo);
-				fail("Se esperaba que se lanzara MiExcepcion");
-			} catch (RuntimeException e) {
-				assertEquals("The ship has already started a trip", e.getMessage());
-			}
+			
+			// Assert
+			assertThrows(RuntimeException.class, () -> bismarck.setTrip(tripTwo));
 		}
 		
 		@Test
-		void setTripNotFailed() throws Exception {
+		void setTripWithNoException() throws Exception {
+			// Exercise
 			bismarck.setTrip(tripOne);
+			
+			// Assert
 			assertEquals(tripOne, bismarck.getTrip());
 		}
-		
-		@Test
-		void getNotifyArrival() {
-
-		}
-		
 		
 }

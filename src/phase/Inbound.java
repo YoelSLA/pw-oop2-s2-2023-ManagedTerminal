@@ -11,11 +11,11 @@ public class Inbound extends Phase {
 	
 	/**
 	 * @author alejandrabesel
-	 * Delega la responsabilidad al buque de notificar sobre su inminente arribo a la terminal
+	 * Delega la responsabilidad al buque de notificar sobre su arribo a la terminal
 	 */
 	@Override
 	protected void communicateWithTerminal(Ship ship) {
-		ship.notifyInminentArrival();
+		ship.notifyArrival();
 	}
 	
 	/**
