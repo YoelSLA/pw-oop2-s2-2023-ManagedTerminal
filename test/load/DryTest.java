@@ -1,5 +1,6 @@
 package load;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -64,5 +65,9 @@ class DryTest {
 		// reeferB
 		Double expectedValueB = dryB.getWidth() * dryB.getLength() * dryB.getHeight();
 		assertEquals(expectedValueB, dryB.getVolume());
+	}
+	@Test
+	void testConsumesEnergyFalse() {
+		assertFalse(dryA.consumesElectricity());
 	}
 }

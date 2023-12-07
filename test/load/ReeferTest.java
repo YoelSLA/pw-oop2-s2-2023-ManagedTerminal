@@ -1,5 +1,6 @@
 package load;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -61,6 +62,17 @@ class ReeferTest {
 	void getConsumption() {
 		assertEquals(energyA, reeferA.getConsumptionkWh());
 		assertEquals(energyB, reeferB.getConsumptionkWh());
+	}
+	
+	@Test
+	void setConsumption() {
+		reeferA.setConsumption(energyA);
+		assertEquals(energyA, reeferA.getConsumptionkWh());
+	}
+	
+	@Test
+	void consumesEnergy() {
+		assertTrue(reeferA.consumesElectricity());
 	}
 
 	@Test

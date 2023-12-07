@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import maritimeCircuit.MaritimeCircuit;
 import phase.Arrived;
