@@ -138,38 +138,30 @@ class ServiceForClientsTest extends ManagedTerminalTest {
 		when(tripTwo.getOriginTerminal()).thenReturn(montevideo);
 
 		when(apmMaersk.getTrips()).thenReturn(List.of(tripOne, mock(Trip.class), tripTwo, mock(Trip.class)));
+		
 		// Assert
 		assertEquals(LocalDateTime.of(2023, Month.NOVEMBER, 01, 14, 00), buenosAires.nextDepartureDateTo(lima));
 
 	}
-
+	
 	@Test
-	void testNextDepartureDateTo_ThrowsException_WhenTripsNotAvailable() {
+	void shouldThrowExceptionWhenDestinationTerminalNotFound() {
 		// Set Up
 		when(tripOne.hasTerminal(buenosAires)).thenReturn(true);
-		when(tripOne.hasTerminal(lima)).thenReturn(true);
+		when(tripOne.hasTerminal(lima)).thenReturn(false);
 		when(tripOne.getOriginTerminal()).thenReturn(buenosAires);
 		
+		when(tripTwo.hasTerminal(buenosAires)).thenReturn(true);
+		when(tripTwo.hasTerminal(lima)).thenReturn(false);
+		when(tripTwo.getOriginTerminal()).thenReturn(montevideo);
+		
 		when(apmMaersk.getTrips()).thenReturn(List.of(tripOne));
-		
+		when(apmMaersk.hasTerminal(buenosAires)).thenReturn(true);
 		buenosAires.registerShippingLine(apmMaersk);
 
 		// Assert
 		assertThrows(RuntimeException.class, () -> {
-			buenosAires.nextDepartureDateTo(mock(Terminal.class));
-		}, "There is no estimated date for this destiny.");
-
-	}
-
-	@Test
-	void testNextDepartureDateTo_ThrowsException_WhenNoTripsAvailable() {
-		// Set Up
-		when(apmMaersk.getTrips()).thenReturn(List.of(mock(Trip.class)));
-		buenosAires.registerShippingLine(apmMaersk);
-		
-		// Assert
-		assertThrows(RuntimeException.class, () -> {
-			buenosAires.nextDepartureDateTo(mock(Terminal.class));
+			buenosAires.nextDepartureDateTo(lima);
 		}, "There is no estimated date for this destiny.");
 
 	}

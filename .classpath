@@ -2,11 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="service/|service/|service/" kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="C:/Users/yoelv/Downloads/objenesis-3.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yoelv/Downloads/mockito-core-3.6.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yoelv/Downloads/byte-buddy-agent-1.10.15.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yoelv/Downloads/byte-buddy-1.10.18.jar"/>
+	<classpathentry kind="lib" path="C:/Users/USUARIO/Downloads/byte-buddy-agent-1.10.15.jar"/>
+	<classpathentry kind="lib" path="C:/Users/USUARIO/Downloads/objenesis-3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/USUARIO/Downloads/byte-buddy-1.10.18.jar"/>
+	<classpathentry kind="lib" path="C:/Users/USUARIO/Downloads/mockito-core-3.6.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

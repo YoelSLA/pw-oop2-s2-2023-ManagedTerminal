@@ -124,11 +124,10 @@ class ProcessOfExportOrderTest extends ManagedTerminalTest {
 		buenosAires.truckArrivedWithLoad(exportOrder, alberto, volvo, arrivalDate);
 		// Assert
 		Electricity electricity = (Electricity) exportOrder.getServices().get(1);
-		
+
 		assertTrue("La orden de exportacion contiene el servicio de pesado.",
 				exportOrder.getServices().stream().anyMatch(Weigh.class::isInstance));
-		assertTrue(
-				"La orden de exportacion contiene el servicio electrico ya que dispone de una carga Reefer.",
+		assertTrue("La orden de exportacion contiene el servicio electrico ya que dispone de una carga Reefer.",
 				exportOrder.getServices().stream().anyMatch(Electricity.class::isInstance));
 		assertEquals("El servicio de electricidad tiene el mismo precio que el de la terminal gestionada.",
 				buenosAires.getCostPerKw(), electricity.getPrice());
@@ -136,14 +135,15 @@ class ProcessOfExportOrderTest extends ManagedTerminalTest {
 				"El servicio de electricidad tiene la misma fecha de ingreso que el camión a la terminal gestionada.",
 				arrivalDate, electricity.getStartConnection());
 	}
-	
 
 	@Test
 	void testTruckArrivedWithLoad_InvalidDriver_ThrowsException() {
 		// Set Up
-		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 12, 05, 00);
-		// 12-11-23 | 05:00 Hs.
+		buenosAires.hireExportService(exportOrder);
+
 		// Assert
+		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 12, 05, 00); // 12-11-23 | 05:00 Hs.
+
 		assertThrows(RuntimeException.class,
 				() -> buenosAires.truckArrivedWithLoad(exportOrder, mock(Driver.class), volvo, arrivalDate),
 				"Driver does not match the order.");
@@ -153,9 +153,11 @@ class ProcessOfExportOrderTest extends ManagedTerminalTest {
 	@Test
 	void testTruckArrivedWithLoad_InvalidTruck_ThrowsException() {
 		// Set Up
-		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 12, 05, 00);
-		// 12-11-23 | 05:00 Hs.
+		buenosAires.hireExportService(exportOrder);
+
 		// Assert
+		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 12, 05, 00); // 12-11-23 | 05:00 Hs.
+
 		assertThrows(RuntimeException.class,
 				() -> buenosAires.truckArrivedWithLoad(exportOrder, alberto, mock(Truck.class), arrivalDate),
 				"Truck does not match the order.");
@@ -164,9 +166,11 @@ class ProcessOfExportOrderTest extends ManagedTerminalTest {
 	@Test
 	void testTruckArrivedWithLoad_InvalidShiftTime_ThrowsException() {
 		// Set Up
-		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 12, 02, 00);
-		// 12-11-23 | 02:00 Hs.
+		buenosAires.hireExportService(exportOrder);
+
 		// Assert
+		LocalDateTime arrivalDate = LocalDateTime.of(2023, Month.NOVEMBER, 12, 02, 00); // 12-11-23 | 02:00 Hs.
+
 		assertThrows(RuntimeException.class,
 				() -> buenosAires.truckArrivedWithLoad(exportOrder, alberto, volvo, arrivalDate),
 				"Shift differs by more than 3 hours.");

@@ -17,8 +17,11 @@ public final class ExportValidation extends OrderValidation {
 	}
 
 	private static void validateShiftTiming(ManagedTerminal managedTerminal, ExportOrder exportOrder, LocalDateTime arrivalDate) {		
+		
+		System.out.println(arrivalDate);
 		Long hours = Duration.between(arrivalDate, managedTerminal.findTurnByOrder(exportOrder).getDate()).toHours();
-
+	
+		System.out.println(hours.intValue());
 		if (hours.intValue() > 3) {
 			throw new RuntimeException("Shift differs by more than 3 hours.");
 		}

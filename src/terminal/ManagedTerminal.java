@@ -185,7 +185,7 @@ public class ManagedTerminal implements Terminal {
 	 */
 	public LocalDateTime nextDepartureDateTo(Terminal destiny) {
 		return shippingLines.stream().flatMap(s -> s.getTrips().stream())
-				.filter(t -> t.hasTerminal(this) && t.hasTerminal(destiny))
+				.filter(t -> t.hasTerminal(destiny))
 				.map(t -> t.calculateEstimatedArrivalDateToTerminal(this)).min(LocalDateTime::compareTo)
 				.orElseThrow(() -> new RuntimeException("There is no estimated date for this destiny."));
 	}
@@ -507,10 +507,8 @@ public class ManagedTerminal implements Terminal {
 	 * @param dateToArrival Fecha estimada de llegada a la terminal gestionada.
 	 */
 	private void registerExcessStorageService(Order order, LocalDateTime dateToArrival) {
-		// Se busca el turno que esta asociado a la orden.
-		Turn turn = turns.stream().filter(t -> t.getOrder().equals(order)).findFirst().orElse(null);
 		// Se calcula las horas que estuvo la carga en la terminal gestionada.
-		Long hoursInTerminal = Math.abs(Duration.between(turn.getDate(), dateToArrival).toHours());
+		Long hoursInTerminal = Math.abs(Duration.between(findTurnByOrder(order).getDate(), dateToArrival).toHours());
 		// Si superó las 24 horas, se le añade le servicio a la orden.
 		if (hoursInTerminal.intValue() > 24) {
 			// Se calcula la cantidad de horas de almacenamiento excedido.
@@ -612,8 +610,7 @@ public class ManagedTerminal implements Terminal {
 	}
 
 	public Turn findTurnByOrder(Order order) {
-		return turns.stream().filter(t -> t.getOrder().equals(order)).findFirst()
-				.orElseThrow(() -> new RuntimeException("Turn not found."));
+		return turns.stream().filter(t -> t.getOrder().equals(order)).findFirst().orElseThrow();
 	}
 
 	/**
