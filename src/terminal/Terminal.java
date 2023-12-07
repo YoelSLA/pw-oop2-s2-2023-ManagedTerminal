@@ -1,36 +1,18 @@
 package terminal;
 
-import java.util.Objects;
+import position.Position;
+import ship.Ship;
 
-public abstract class Terminal {
+public interface Terminal {
 
-	private String name;
+	Position getPosition();
 
-	public Terminal(String name) {
-		this.name = name;
-	}
+	String getName();
 
-	public String getName() {
-		return name;
-	}
+	void notifyShipArrival(Ship ship);
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(name);
-	}
+	void notifyShipDeparture(Ship ship);
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Terminal other = (Terminal) obj;
-		return Objects.equals(name, other.name);
-	}
-	
-	
+	void notifyShipInminentArrival(Ship ship);
 
 }

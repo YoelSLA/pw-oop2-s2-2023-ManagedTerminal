@@ -1,46 +1,52 @@
 package orderValidation;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import driver.Driver;
+import order.Order;
+import terminal.ManagedTerminal;
 import truck.Truck;
-import truckTransportCompany.TruckTransportCompany;
 
-/**
- * Validador de órdenes.
- * 
- * Esta clase abstracta provee un molde para creación de subclases (validadores
- * de orden de importacion y exportacion). Requiere implementar el algoritmo del
- * método validation.
- * 
- * @author Gabriela Fascetta
- */
 public abstract class OrderValidation {
 
-	public static void validate(Truck truck, Driver driver, List<TruckTransportCompany> truckTransportCompanies) {
+	public static void runFullOrderValidations(ManagedTerminal managedTerminal, Order order, Driver driver,
+			Truck truck) {
+		validateOrderInTerminal(managedTerminal, order);
+		validateDriverAndTruckWithClientInfo(order, driver, truck);
 
-		validateDriverInTerminal(driver, truckTransportCompanies);
-		validateTruckInTerminal(truck, truckTransportCompanies);
-	}
-	
-	private static void validateDriverInTerminal(Driver driver, List<TruckTransportCompany> truckTransportCompanies) {
-		if (!isRegisteredIn(driver, truckTransportCompanies)) 
-			throw new RuntimeException("El chofer con la DNI " + driver.getDni() + "no está registrado en la terminal");
 	}
 
-	private static void validateTruckInTerminal(Truck truck, List<TruckTransportCompany> truckTransportCompanies) {
-		if (!isRegisteredIn(truck, truckTransportCompanies))
-			throw new RuntimeException(
-					"El camión con la patente " + truck.getPatent() + "no está registrado en la terminal");
+	public static void validateOrderInTerminal(ManagedTerminal managedTerminal, Order order) {
+		validateDriverInTerminal(managedTerminal, order.getDriver());
+		validateTruckInTerminal(managedTerminal, order.getTruck());
+
 	}
 
-	private static boolean isRegisteredIn(Driver driver, List<TruckTransportCompany> truckTransportCompanies) {
-		return truckTransportCompanies.stream().map(TruckTransportCompany::dnisOfDrivers).flatMap(List::stream)
-				.collect(Collectors.toList()).contains(driver.getDni());
+	private static void validateDriverInTerminal(ManagedTerminal managedTerminal, Driver driver) {
+		if (!managedTerminal.isDriverRegistered(driver)) {
+			throw new RuntimeException("Driver not registered in the Managed Teminal.");
+		}
 	}
 
-	private static boolean isRegisteredIn(Truck truck, List<TruckTransportCompany> truckTransportCompanies) {
-		return truckTransportCompanies.stream().map(TruckTransportCompany::patentsOfTrucks).flatMap(List::stream)
-				.collect(Collectors.toList()).contains(truck.getPatent());
+	private static void validateTruckInTerminal(ManagedTerminal managedTerminal, Truck truck) {
+		if (!managedTerminal.isTruckRegistered(truck)) {
+			throw new RuntimeException("Truck not registered in the Managed Teminal.");
+		}
 	}
+
+	private static void validateDriverAndTruckWithClientInfo(Order order, Driver driver, Truck truck) {
+		validateDriverInOrder(order, driver);
+		validateTruckInOrder(order, truck);
+	}
+
+	private static void validateDriverInOrder(Order order, Driver driver) {
+		if (!order.getDriver().equals(driver)) {
+			throw new RuntimeException("Driver does not match the order");
+		}
+	}
+
+	private static void validateTruckInOrder(Order order, Truck truck) {
+		if (!order.getTruck().equals(truck)) {
+			throw new RuntimeException("Truck does not match the order");
+		}
+	}
+
 }

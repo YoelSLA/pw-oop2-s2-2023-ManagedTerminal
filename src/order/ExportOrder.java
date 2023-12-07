@@ -3,21 +3,19 @@ package order;
 import client.Shipper;
 import driver.Driver;
 import load.Load;
+import terminal.Terminal;
 import trip.Trip;
 import truck.Truck;
 
 public class ExportOrder extends Order {
 
-	private Shipper shipper;
-
-	public ExportOrder(Driver driver, Load load, Shipper shipper, Trip trip, Truck truck) {
-		super(driver, load, trip, truck);
-		this.shipper = shipper;
-
+	public ExportOrder(Shipper shipper, Trip trip, Load load, Terminal destiny, Driver driver, Truck truck) {
+		super(shipper, trip, load, trip.getOriginTerminal(), destiny, driver, truck);
 	}
-
-	public Shipper getShipper() {
-		return shipper;
+	
+	@Override
+	public Double travelCost() {
+		return 0.0;
 	}
 
 }

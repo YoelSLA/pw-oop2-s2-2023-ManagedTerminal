@@ -3,89 +3,85 @@ package order;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import bill.Bill;
-import client.Consignee;
+import client.Client;
 import driver.Driver;
 import load.Load;
 import service.Service;
-import service.Washed;
+import terminal.Terminal;
 import trip.Trip;
 import truck.Truck;
 
 public abstract class Order {
-
-	private Bill bill;
-	private LocalDateTime dateTruck;
-	private Driver driver;
-	private Load load;
-	private static Integer number;
-	private List<Service> services;
+	
+	private Client client;
 	private Trip trip;
+	private Load load;
+	private Terminal origin;
+	private Terminal destiny;
+	private Driver driver;
 	private Truck truck;
-
-	public Order(Driver driver, Load load, Trip trip, Truck truck) {
-		this.bill = new Bill(this);
+	private List<Service> services;
+	
+	
+	public Order(Client client, Trip trip, Load load, Terminal origin, Terminal destiny, Driver driver, Truck truck) {
+		this.client = client;
+		this.trip = trip;
+		this.load = load;
+		this.origin = origin;
+		this.destiny = destiny;
 		this.driver = driver;
-		Order.number = (number != null) ? number + 1 : 0;
-		this.load = load;
-		this.services = new ArrayList<Service>(List.of(new Washed(100.0, 150.0)));
 		this.truck = truck;
-		this.trip = trip;
-	}
-	
-	public Order(List<Service> servicesList, Load load, Trip trip) {
-		this.services = servicesList;
-		this.load = load;
-		this.trip = trip;
-	}
-	
-	public Bill getBill() {
-		return bill;
+		this.services = new ArrayList<Service>();
 	}
 
-	public LocalDateTime getDateTruck() {
-		return dateTruck;
+	public Client getClient() {
+		return client;
+	}
+	
+	public Trip getTrip() {
+		return trip;
+	}
+	
+	public Load getLoad() {
+		return load;
+	}
+	
+	public Terminal getOrigin() {
+		return origin;
+	}
+
+	public Terminal getDestiny() {
+		return destiny;
 	}
 
 	public Driver getDriver() {
 		return driver;
 	}
 
-	public Load getLoad() {
-		return load;
+	public Truck getTruck() {
+		return truck;
 	}
 
 	public List<Service> getServices() {
 		return services;
 	}
 
-	public Trip getTrip() {
-		return trip;
-	}
-
-	public Truck getTruck() {
-		return truck;
-	}
-
-	public static Integer number() {
-		return number;
-	}
-
-	public void setDateTruck(LocalDateTime dateTruck) {
-		this.dateTruck = dateTruck;
-	}
-
-	public int getLoadEnergyConsumption() {
-		return load.getEnergyConsumption();
+	public LocalDateTime arrivalDate() {
+		return getTrip().calculateEstimatedArrivalDateToTerminal(getOrigin());
 	}
 	
-	public Double getLoadVolume() {
-		return load.getVolume();
+	public LocalDateTime departureDate() {
+		return getTrip().calculateEstimatedArrivalDateToTerminal(getDestiny());
 	}
 	
-	public Double getTripCost() {
-		return trip.getCost();
+	public Double priceOfServices() {
+		return services.stream().mapToDouble(s -> s.getPrice()).sum();
 	}
+	
+	public void registerService(Service service) {
+		services.add(service);
+	}
+	
+	public abstract Double travelCost();
 
 }
