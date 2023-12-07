@@ -12,12 +12,6 @@ import ship.Ship;
 
 public abstract class Phase {
 	
-	private Boolean status;
-	
-	public void setStatus(Boolean status) {
-		this.status = status;
-	}
-	
 	public abstract Phase nextPhase();
 	
 	/** 
@@ -40,7 +34,7 @@ public abstract class Phase {
 	protected void communicateWithTerminal(Ship ship) {};
 
 	protected boolean canItGoToTheNextPhase(Ship ship) {
-		return status;
+		return false;
 	};
 	
 	public void changePhase(Ship ship) {
